@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TestHelper;
-using ExhaustiveMatch;
+using ExhaustiveMatch.Analyzer;
 
-namespace ExhaustiveMatch.Test
+namespace ExhaustiveMatch.Analyzer.Test
 {
 	[TestClass]
 	public class UnitTest : CodeFixVerifier
@@ -41,7 +41,7 @@ namespace ExhaustiveMatch.Test
     }";
 			var expected = new DiagnosticResult
 			{
-				Id = "ExhaustiveMatch",
+				Id = "ExhaustiveMatchAnalyzer",
 				Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
 				Severity = DiagnosticSeverity.Warning,
 				Locations =
@@ -71,12 +71,12 @@ namespace ExhaustiveMatch.Test
 
 		protected override CodeFixProvider GetCSharpCodeFixProvider()
 		{
-			return new ExhaustiveMatchCodeFixProvider();
+			return new ExhaustiveMatchAnalyzerCodeFixProvider();
 		}
 
 		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
 		{
-			return new ExhaustiveMatchAnalyzer();
+			return new ExhaustiveMatchAnalyzerAnalyzer();
 		}
 	}
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="ExhaustiveMatch.09a15ca2-380f-49a9-bfe8-330a9e03447a" Version="1.0" Language="en-US" Publisher="jwalker"/>
-    <DisplayName>ExhaustiveMatch</DisplayName>
+    <Identity Id="ExhaustiveMatch.Analyzer.4069a622-3282-47a8-9524-cf0750a2f859" Version="1.0" Language="en-US" Publisher="jwalker"/>
+    <DisplayName>ExhaustiveMatch.Analyzer</DisplayName>
     <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
   </Metadata>
   <Installation>
@@ -12,8 +12,8 @@
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ExhaustiveMatch" Path="|ExhaustiveMatch|"/>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="ExhaustiveMatch" Path="|ExhaustiveMatch|"/>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ExhaustiveMatch.Analyzer" Path="|ExhaustiveMatch.Analyzer|"/>
+    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="ExhaustiveMatch.Analyzer" Path="|ExhaustiveMatch.Analyzer|"/>
   </Assets>
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />

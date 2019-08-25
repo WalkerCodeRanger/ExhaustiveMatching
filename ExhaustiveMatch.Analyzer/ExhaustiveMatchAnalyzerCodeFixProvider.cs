@@ -13,16 +13,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
 using Microsoft.CodeAnalysis.Text;
 
-namespace ExhaustiveMatch
+namespace ExhaustiveMatch.Analyzer
 {
-	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExhaustiveMatchCodeFixProvider)), Shared]
-	public class ExhaustiveMatchCodeFixProvider : CodeFixProvider
+	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExhaustiveMatchAnalyzerCodeFixProvider)), Shared]
+	public class ExhaustiveMatchAnalyzerCodeFixProvider : CodeFixProvider
 	{
 		private const string title = "Make uppercase";
 
 		public sealed override ImmutableArray<string> FixableDiagnosticIds
 		{
-			get { return ImmutableArray.Create(ExhaustiveMatchAnalyzer.DiagnosticId); }
+			get { return ImmutableArray.Create(ExhaustiveMatchAnalyzerAnalyzer.DiagnosticId); }
 		}
 
 		public sealed override FixAllProvider GetFixAllProvider()

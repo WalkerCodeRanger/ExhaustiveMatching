@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExhaustiveMatch
+namespace ExhaustiveMatch.Analyzer
 {
 	using System;
 	using System.Reflection;
@@ -46,7 +46,7 @@ namespace ExhaustiveMatch
 			{
 				if (object.ReferenceEquals(resourceMan, null))
 				{
-					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExhaustiveMatch.Resources", typeof(Resources).GetTypeInfo().Assembly);
+					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExhaustiveMatch.Analyzer.Resources", typeof(Resources).GetTypeInfo().Assembly);
 					resourceMan = temp;
 				}
 				return resourceMan;
