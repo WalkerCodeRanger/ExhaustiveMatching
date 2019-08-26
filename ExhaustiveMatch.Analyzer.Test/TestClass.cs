@@ -13,7 +13,7 @@ namespace ExhaustiveMatching.Analyzer.Test
 					Console.WriteLine("Square: " + square);
 					break;
 				case Circle circle:
-					Console.WriteLine("Square: " + circle);
+					Console.WriteLine("Circle: " + circle);
 					break;
 				default:
 					throw ExhaustiveMatch.Failed(shape);
@@ -37,7 +37,7 @@ namespace ExhaustiveMatching.Analyzer.Test
 					Console.WriteLine("Weekend");
 					break;
 				default:
-					throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
+					throw ExhaustiveMatch.Failed(dayOfWeek);
 			}
 		}
 	}

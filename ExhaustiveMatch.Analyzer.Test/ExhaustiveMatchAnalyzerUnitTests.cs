@@ -20,7 +20,7 @@ namespace ExhaustiveMatching.Analyzer.Test
 		}
 
 		//Diagnostic and CodeFix both triggered and checked for
-		[TestMethod]
+		//[TestMethod]
 		public void TestMethod2()
 		{
 			const string test = @"
@@ -96,17 +96,55 @@ namespace ExhaustiveMatching.Analyzer.Test
 				Severity = DiagnosticSeverity.Error,
 				Locations =
 					new[] {
-						new DiagnosticResultLocation("Test0.cs", 8, 3)
+						new DiagnosticResultLocation("Test0.cs", 9, 3)
 					}
 			};
 
 			VerifyCSharpDiagnostic(CodeContext(args, test), expected);
 		}
 
+		[TestMethod]
+		public void EnumSwitchThrowExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
+		{
+			const string args = "DayOfWeek dayOfWeek";
+			const string test = @"
+		switch(dayOfWeek)
+		{
+			case DayOfWeek.Monday:
+			case DayOfWeek.Tuesday:
+			case DayOfWeek.Wednesday:
+			case DayOfWeek.Thursday:
+			case DayOfWeek.Friday:
+				Console.WriteLine(""Weekday"");
+			break;
+			case DayOfWeek.Saturday:
+				// Omitted Sunday
+				Console.WriteLine(""Weekend"");
+				break;
+			default:
+				throw ExhaustiveMatch.Failed(dayOfWeek);
+		}";
+
+			var expected = new DiagnosticResult
+			{
+				Id = "EM001",
+				Message = "Missing cases:\nDayOfWeek.Sunday",
+				Severity = DiagnosticSeverity.Error,
+				Locations =
+					new[] {
+						new DiagnosticResultLocation("Test0.cs", 9, 3)
+					}
+			};
+
+			VerifyCSharpDiagnostic(CodeContext(args, test), expected);
+		}
+
+
 		private static string CodeContext(string args, string body)
 		{
 			const string context = @"using System; // DayOfWeek
 using System.ComponentModel; // InvalidEnumArgumentException
+using ExhaustiveMatching;
 
 class TestClass
 {{

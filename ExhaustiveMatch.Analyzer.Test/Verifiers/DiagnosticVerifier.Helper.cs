@@ -23,6 +23,7 @@ namespace ExhaustiveMatching.Analyzer.Test.Verifiers
 		private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
 		private static readonly MetadataReference SystemConsoleReference = MetadataReference.CreateFromFile(typeof(Console).Assembly.Location);
 		private static readonly MetadataReference ComponentModelReference = MetadataReference.CreateFromFile(typeof(InvalidEnumArgumentException).Assembly.Location);
+		private static readonly MetadataReference ExhaustiveMatchingReference = MetadataReference.CreateFromFile(typeof(ExhaustiveMatch).Assembly.Location);
 
 		internal static string DefaultFilePathPrefix = "Test";
 		internal static string CSharpDefaultFileExt = "cs";
@@ -154,6 +155,7 @@ namespace ExhaustiveMatching.Analyzer.Test.Verifiers
 
 			var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
 			var systemRuntimePath = MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll"));
+			var netstandardPath = MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "netstandard.dll"));
 
 			var solution = new AdhocWorkspace()
 				.CurrentSolution
@@ -164,9 +166,11 @@ namespace ExhaustiveMatching.Analyzer.Test.Verifiers
 				.AddMetadataReference(projectId, CodeAnalysisReference)
 				.AddMetadataReference(projectId, SystemConsoleReference)
 				.AddMetadataReference(projectId, ComponentModelReference)
-				.AddMetadataReference(projectId, systemRuntimePath);
+				.AddMetadataReference(projectId, systemRuntimePath)
+				.AddMetadataReference(projectId, netstandardPath)
+				.AddMetadataReference(projectId, ExhaustiveMatchingReference);
 
-			int count = 0;
+			var count = 0;
 			foreach (var source in sources)
 			{
 				var newFileName = fileNamePrefix + count + "." + fileExt;
