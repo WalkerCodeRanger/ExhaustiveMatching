@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -105,12 +106,47 @@ namespace ExhaustiveMatching.Analyzer
 					string.Join("\n", unusedSymbols));
 				context.ReportDiagnostic(diagnostic);
 			}
-
-			//throw new NotImplementedException();
 		}
 
 		private static void AnalyzeObjectSwitchStatement(SyntaxNodeAnalysisContext context, SwitchStatementSyntax switchStatement, ITypeSymbol type)
 		{
+			// TODO check for and report error for when clauses
+
+			// `case null:` is a CaseSwitchLabel with a NullLiteral
+			// `case var x when x is Square:` is a VarPattern
+
+
+			var casePatterns = switchStatement.Sections.SelectMany(s => s.Labels)
+				.OfType<CasePatternSwitchLabelSyntax>();
+
+			var errored = false;
+			var usedSymbols = new List<ITypeSymbol>();
+
+			foreach (var casePattern in casePatterns)
+			{
+				if (casePattern.Pattern is DeclarationPatternSyntax declarationPattern)
+				{
+					var typeInfo = context.SemanticModel.GetTypeInfo(declarationPattern.Type, context.CancellationToken);
+					usedSymbols.Add(typeInfo.Type);
+				}
+				else
+				{
+					// TODO add error about not supporting this kind of pattern
+					errored = true;
+				}
+
+				if (casePattern.WhenClause != null)
+				{
+					// TODO add error about not supporting when clauses
+					errored = true;
+				}
+			}
+
+			if (!errored)
+			{
+				// TODO get all subtypes and check that they are covered
+				// use `type.ContainingAssembly.Accept()` and make a symbol visitor to get all types (watch out for nested classes)
+			}
 			throw new NotImplementedException();
 		}
 

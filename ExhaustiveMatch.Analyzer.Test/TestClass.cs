@@ -9,11 +9,17 @@ namespace ExhaustiveMatching.Analyzer.Test
 		{
 			switch (shape)
 			{
-				case Square square:
-					Console.WriteLine("Square: " + square);
-					break;
+				//case Square square when true:
+				//	Console.WriteLine("Square: " + square);
+				//	break;
 				case Circle circle:
 					Console.WriteLine("Circle: " + circle);
+					break;
+				case var x when x is Square:
+					break;
+				case Square _:
+					break;
+				case null:
 					break;
 				default:
 					throw ExhaustiveMatch.Failed(shape);

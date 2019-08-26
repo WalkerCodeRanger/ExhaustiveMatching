@@ -96,7 +96,7 @@ namespace ExhaustiveMatching.Analyzer.Test
 				Severity = DiagnosticSeverity.Error,
 				Locations =
 					new[] {
-						new DiagnosticResultLocation("Test0.cs", 9, 3)
+						new DiagnosticResultLocation("Test0.cs", 10, 3)
 					}
 			};
 
@@ -132,6 +132,37 @@ namespace ExhaustiveMatching.Analyzer.Test
 				Severity = DiagnosticSeverity.Error,
 				Locations =
 					new[] {
+						new DiagnosticResultLocation("Test0.cs", 10, 3)
+					}
+			};
+
+			VerifyCSharpDiagnostic(CodeContext(args, test), expected);
+		}
+
+		[TestMethod]
+		public void ObjectSwitchThrowExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
+		{
+			const string args = "Shape shape";
+			const string test = @"
+		switch (shape)
+		{
+			case Square square:
+				Console.WriteLine(""Square: "" + square);
+				break;
+			case Circle circle:
+				Console.WriteLine(""Circle: "" + circle);
+				break;
+			default:
+				throw ExhaustiveMatch.Failed(shape);
+		}";
+
+			var expected = new DiagnosticResult
+			{
+				Id = "EM001",
+				Message = "Missing cases:\nDayOfWeek.Sunday",
+				Severity = DiagnosticSeverity.Error,
+				Locations =
+					new[] {
 						new DiagnosticResultLocation("Test0.cs", 9, 3)
 					}
 			};
@@ -139,18 +170,26 @@ namespace ExhaustiveMatching.Analyzer.Test
 			VerifyCSharpDiagnostic(CodeContext(args, test), expected);
 		}
 
-
 		private static string CodeContext(string args, string body)
 		{
 			const string context = @"using System; // DayOfWeek
 using System.ComponentModel; // InvalidEnumArgumentException
 using ExhaustiveMatching;
+using TestNamespace;
 
 class TestClass
 {{
 	void TestMethod({0})
 	{{{1}
 	}}
+}}
+
+namespace TestNamespace
+{{
+	abstract class Shape {{ }}
+	class Square : Shape {{ }}
+	class Circle : Shape {{ }}
+	class Triangle : Shape {{ }}
 }}";
 			return string.Format(context, args, body);
 		}
