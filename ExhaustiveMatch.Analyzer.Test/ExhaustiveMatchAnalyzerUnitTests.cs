@@ -1,22 +1,20 @@
+using System;
+using ExhaustiveMatch.Analyzer.Test.Helpers;
+using ExhaustiveMatch.Analyzer.Test.Verifiers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using TestHelper;
-using ExhaustiveMatch.Analyzer;
 
 namespace ExhaustiveMatch.Analyzer.Test
 {
 	[TestClass]
 	public class UnitTest : CodeFixVerifier
 	{
-
-		//No diagnostics expected to show up
 		[TestMethod]
-		public void TestMethod1()
+		public void EmptyFileReportsNoDiagnostics()
 		{
-			var test = @"";
+			const string test = @"";
 
 			VerifyCSharpDiagnostic(test);
 		}
@@ -25,7 +23,7 @@ namespace ExhaustiveMatch.Analyzer.Test
 		[TestMethod]
 		public void TestMethod2()
 		{
-			var test = @"
+			const string test = @"
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -69,6 +67,56 @@ namespace ExhaustiveMatch.Analyzer.Test
 			VerifyCSharpFix(test, fixtest);
 		}
 
+		[TestMethod]
+		public void EnumSwitchThrowInvalidEnumIsNotExhaustiveReportsDiagnostic()
+		{
+			const string args = "DayOfWeek dayOfWeek";
+			const string test = @"
+		switch(dayOfWeek)
+		{
+			case DayOfWeek.Monday:
+			case DayOfWeek.Tuesday:
+			case DayOfWeek.Wednesday:
+			case DayOfWeek.Thursday:
+			case DayOfWeek.Friday:
+				Console.WriteLine(""Weekday"");
+			break;
+			case DayOfWeek.Saturday:
+				// Omitted Sunday
+				Console.WriteLine(""Weekend"");
+				break;
+			default:
+				throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
+		}";
+
+			var expected = new DiagnosticResult
+			{
+				Id = "EM001",
+				Message = "Missing cases:\nDayOfWeek.Sunday",
+				Severity = DiagnosticSeverity.Error,
+				Locations =
+					new[] {
+						new DiagnosticResultLocation("Test0.cs", 8, 3)
+					}
+			};
+
+			VerifyCSharpDiagnostic(CodeContext(args, test), expected);
+		}
+
+		private static string CodeContext(string args, string body)
+		{
+			const string context = @"using System; // DayOfWeek
+using System.ComponentModel; // InvalidEnumArgumentException
+
+class TestClass
+{{
+	void TestMethod({0})
+	{{{1}
+	}}
+}}";
+			return string.Format(context, args, body);
+		}
+
 		protected override CodeFixProvider GetCSharpCodeFixProvider()
 		{
 			return new ExhaustiveMatchAnalyzerCodeFixProvider();
@@ -76,7 +124,7 @@ namespace ExhaustiveMatch.Analyzer.Test
 
 		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
 		{
-			return new ExhaustiveMatchAnalyzerAnalyzer();
+			return new ExhaustiveMatchAnalyzer();
 		}
 	}
 }

@@ -1,12 +1,12 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ExhaustiveMatch.Analyzer.Test.Helpers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TestHelper
+namespace ExhaustiveMatch.Analyzer.Test.Verifiers
 {
 	/// <summary>
 	/// Superclass of all Unit Tests for DiagnosticAnalyzers
@@ -87,7 +87,7 @@ namespace TestHelper
 		/// <param name="expected">DiagnosticResults that should appear after the analyzer is run on the sources</param>
 		private void VerifyDiagnostics(string[] sources, string language, DiagnosticAnalyzer analyzer, params DiagnosticResult[] expected)
 		{
-			var diagnostics = GetSortedDiagnostics(sources, language, analyzer);
+			var diagnostics = DiagnosticVerifier.GetSortedDiagnostics(sources, language, analyzer);
 			VerifyDiagnosticResults(diagnostics, analyzer, expected);
 		}
 

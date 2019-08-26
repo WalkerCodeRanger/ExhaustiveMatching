@@ -1,29 +1,23 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
 
 namespace ExhaustiveMatch.Analyzer
 {
 	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExhaustiveMatchAnalyzerCodeFixProvider)), Shared]
 	public class ExhaustiveMatchAnalyzerCodeFixProvider : CodeFixProvider
 	{
-		private const string title = "Make uppercase";
+		private const string Title = "Make uppercase";
 
-		public sealed override ImmutableArray<string> FixableDiagnosticIds
-		{
-			get { return ImmutableArray.Create(ExhaustiveMatchAnalyzerAnalyzer.DiagnosticId); }
-		}
+		public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ExhaustiveMatchAnalyzer.DiagnosticId);
 
 		public sealed override FixAllProvider GetFixAllProvider()
 		{
@@ -45,9 +39,9 @@ namespace ExhaustiveMatch.Analyzer
 			// Register a code action that will invoke the fix.
 			context.RegisterCodeFix(
 				CodeAction.Create(
-					title: title,
+					title: Title,
 					createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c),
-					equivalenceKey: title),
+					equivalenceKey: Title),
 				diagnostic);
 		}
 

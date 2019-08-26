@@ -1,13 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 
-namespace TestHelper
+namespace ExhaustiveMatch.Analyzer.Test.Verifiers
 {
 	/// <summary>
 	/// Class for turning strings into documents and getting the diagnostics on them
@@ -15,10 +17,12 @@ namespace TestHelper
 	/// </summary>
 	public abstract partial class DiagnosticVerifier
 	{
-		private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+		private static readonly MetadataReference CoreLibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
 		private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
 		private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
 		private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
+		private static readonly MetadataReference SystemConsoleReference = MetadataReference.CreateFromFile(typeof(Console).Assembly.Location);
+		private static readonly MetadataReference ComponentModelReference = MetadataReference.CreateFromFile(typeof(InvalidEnumArgumentException).Assembly.Location);
 
 		internal static string DefaultFilePathPrefix = "Test";
 		internal static string CSharpDefaultFileExt = "cs";
@@ -58,6 +62,8 @@ namespace TestHelper
 			foreach (var project in projects)
 			{
 				var compilationWithAnalyzers = project.GetCompilationAsync().Result.WithAnalyzers(ImmutableArray.Create(analyzer));
+				var allDiagnostics = compilationWithAnalyzers.GetAllDiagnosticsAsync().Result;
+				// TODO look for compile errors and report them
 				var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
 				foreach (var diag in diags)
 				{
@@ -146,13 +152,19 @@ namespace TestHelper
 
 			var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
 
+			var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
+			var systemRuntimePath = MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll"));
+
 			var solution = new AdhocWorkspace()
 				.CurrentSolution
 				.AddProject(projectId, TestProjectName, TestProjectName, language)
-				.AddMetadataReference(projectId, CorlibReference)
+				.AddMetadataReference(projectId, CoreLibReference)
 				.AddMetadataReference(projectId, SystemCoreReference)
 				.AddMetadataReference(projectId, CSharpSymbolsReference)
-				.AddMetadataReference(projectId, CodeAnalysisReference);
+				.AddMetadataReference(projectId, CodeAnalysisReference)
+				.AddMetadataReference(projectId, SystemConsoleReference)
+				.AddMetadataReference(projectId, ComponentModelReference)
+				.AddMetadataReference(projectId, systemRuntimePath);
 
 			int count = 0;
 			foreach (var source in sources)
