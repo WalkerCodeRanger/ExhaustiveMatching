@@ -1,7 +1,7 @@
 using System;
 using Microsoft.CodeAnalysis;
 
-namespace ExhaustiveMatch.Analyzer.Test.Helpers
+namespace ExhaustiveMatching.Analyzer.Test.Helpers
 {
 	/// <summary>
 	/// Location where the diagnostic appears, as determined by path, line number, and column number.

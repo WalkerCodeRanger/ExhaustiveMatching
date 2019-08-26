@@ -1,25 +1,50 @@
 using System;
 using System.ComponentModel;
 
-class TestClass
+namespace ExhaustiveMatching.Analyzer.Test
 {
-	void TestMethod(DayOfWeek dayOfWeek)
+	class TestClass
 	{
-		switch (dayOfWeek)
+		void TestMethod(Shape shape)
 		{
-			case DayOfWeek.Monday:
-			case DayOfWeek.Tuesday:
-			case DayOfWeek.Wednesday:
-			case DayOfWeek.Thursday:
-			case DayOfWeek.Friday:
-				Console.WriteLine("Weekday");
-				break;
-			case DayOfWeek.Saturday:
-				// Omitted Sunday
-				Console.WriteLine("Weekend");
-				break;
-			default:
-				throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
+			switch (shape)
+			{
+				case Square square:
+					Console.WriteLine("Square: " + square);
+					break;
+				case Circle circle:
+					Console.WriteLine("Square: " + circle);
+					break;
+				default:
+					throw ExhaustiveMatch.Failed(shape);
+			}
+		}
+
+
+		void TestMethod123(DayOfWeek dayOfWeek)
+		{
+			switch (dayOfWeek)
+			{
+				case DayOfWeek.Monday:
+				case DayOfWeek.Tuesday:
+				case DayOfWeek.Wednesday:
+				case DayOfWeek.Thursday:
+				case DayOfWeek.Friday:
+					Console.WriteLine("Weekday");
+					break;
+				case DayOfWeek.Saturday:
+					// Omitted Sunday
+					Console.WriteLine("Weekend");
+					break;
+				default:
+					throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
+			}
 		}
 	}
+
+	[Matchable]
+	abstract class Shape { }
+	class Square : Shape { }
+	class Circle : Shape { }
+	class Triangle : Shape { }
 }

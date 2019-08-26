@@ -54,9 +54,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExhaustiveMatch.Analyzer\ExhaustiveMatch.Analyzer.csproj">
+    <ProjectReference Include="..\ExhaustiveMatch.Analyzer\ExhaustiveMatching.Analyzer.csproj">
       <Project>{B6858B7F-9FE4-4047-A1C1-FEA6F4D22A78}</Project>
-      <Name>ExhaustiveMatch.Analyzer</Name>
+      <Name>ExhaustiveMatching.Analyzer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExhaustiveMatch.Analyzer.Test.Verifiers
+namespace ExhaustiveMatching.Analyzer.Test.Verifiers
 {
 	/// <summary>
 	/// Superclass of all Unit tests made for diagnostics with codefixes.
 	/// Contains methods used to verify correctness of codefixes
 	/// </summary>
-	public abstract partial class CodeFixVerifier : ExhaustiveMatch.Analyzer.Test.Verifiers.DiagnosticVerifier
+	public abstract partial class CodeFixVerifier : ExhaustiveMatching.Analyzer.Test.Verifiers.DiagnosticVerifier
 	{
 		/// <summary>
 		/// Returns the codefix being tested (C#) - to be implemented in non-abstract class

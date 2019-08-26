@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ExhaustiveMatch.Analyzer.Test.Helpers;
+using ExhaustiveMatching.Analyzer.Test.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExhaustiveMatch.Analyzer.Test.Verifiers
+namespace ExhaustiveMatching.Analyzer.Test.Verifiers
 {
 	/// <summary>
 	/// Superclass of all Unit Tests for DiagnosticAnalyzers

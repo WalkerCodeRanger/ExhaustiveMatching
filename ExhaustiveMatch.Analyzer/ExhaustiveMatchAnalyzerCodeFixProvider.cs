@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
 
-namespace ExhaustiveMatch.Analyzer
+namespace ExhaustiveMatching.Analyzer
 {
 	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExhaustiveMatchAnalyzerCodeFixProvider)), Shared]
 	public class ExhaustiveMatchAnalyzerCodeFixProvider : CodeFixProvider

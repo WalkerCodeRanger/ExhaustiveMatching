@@ -1,4 +1,4 @@
-﻿namespace ExhaustiveMatch
+﻿namespace ExhaustiveMatching
 {
 	public static class ExhaustiveMatch
 	{

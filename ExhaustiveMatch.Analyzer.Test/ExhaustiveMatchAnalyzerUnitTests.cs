@@ -1,12 +1,12 @@
 using System;
-using ExhaustiveMatch.Analyzer.Test.Helpers;
-using ExhaustiveMatch.Analyzer.Test.Verifiers;
+using ExhaustiveMatching.Analyzer.Test.Helpers;
+using ExhaustiveMatching.Analyzer.Test.Verifiers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExhaustiveMatch.Analyzer.Test
+namespace ExhaustiveMatching.Analyzer.Test
 {
 	[TestClass]
 	public class UnitTest : CodeFixVerifier

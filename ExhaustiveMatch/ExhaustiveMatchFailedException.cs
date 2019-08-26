@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace ExhaustiveMatch
+namespace ExhaustiveMatching
 {
 	[Serializable]
 	public sealed class ExhaustiveMatchFailedException : Exception
