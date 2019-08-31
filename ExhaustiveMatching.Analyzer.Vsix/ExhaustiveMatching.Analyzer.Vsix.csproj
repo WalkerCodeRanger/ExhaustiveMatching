@@ -15,8 +15,8 @@
     <ProjectGuid>{85C9CA38-1608-4E2F-AF08-E9DD79F7520C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExhaustiveMatch.Analyzer.Vsix</RootNamespace>
-    <AssemblyName>ExhaustiveMatch.Analyzer</AssemblyName>
+    <RootNamespace>ExhaustiveMatching.Analyzer.Vsix</RootNamespace>
+    <AssemblyName>ExhaustiveMatching.Analyzer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -54,7 +54,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExhaustiveMatch.Analyzer\ExhaustiveMatching.Analyzer.csproj">
+    <ProjectReference Include="..\ExhaustiveMatching.Analyzer\ExhaustiveMatching.Analyzer.csproj">
       <Project>{B6858B7F-9FE4-4047-A1C1-FEA6F4D22A78}</Project>
       <Name>ExhaustiveMatching.Analyzer</Name>
     </ProjectReference>

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExhaustiveMatch\ExhaustiveMatching.csproj" />
+    <ProjectReference Include="..\ExhaustiveMatching\ExhaustiveMatching.csproj" />
   </ItemGroup>
 
 </Project>
