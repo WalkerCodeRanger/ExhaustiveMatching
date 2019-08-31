@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 
-namespace ExhaustiveMatching.Analyzer.Test.Verifiers
+namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
 {
 	/// <summary>
 	/// Diagnostic Producer class with extra methods dealing with applying codefixes

@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace ExhaustiveMatching.Analyzer.Test.Verifiers
+namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
 {
 	/// <summary>
 	/// Class for turning strings into documents and getting the diagnostics on them
