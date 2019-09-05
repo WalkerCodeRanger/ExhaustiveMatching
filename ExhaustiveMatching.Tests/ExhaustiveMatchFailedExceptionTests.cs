@@ -1,4 +1,5 @@
 using System;
+using ExhaustiveMatching.Tests.Fakes;
 using Xunit;
 
 namespace ExhaustiveMatching.Tests

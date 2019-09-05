@@ -1,4 +1,4 @@
-namespace ExhaustiveMatching.Tests
+namespace ExhaustiveMatching.Tests.Fakes
 {
     internal enum ExampleEnum
     {

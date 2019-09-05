@@ -194,10 +194,10 @@ namespace TestNamespace
             return string.Format(context, args, body);
         }
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return new ExhaustiveMatchAnalyzerCodeFixProvider();
-        }
+        //protected override CodeFixProvider GetCSharpCodeFixProvider()
+        //{
+        //    return new ExhaustiveMatchAnalyzerCodeFixProvider();
+        //}
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {

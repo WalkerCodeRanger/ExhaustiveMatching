@@ -2,9 +2,9 @@ using System;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    class TestClass
+    public class TestClass
     {
-        void TestMethod(Shape shape)
+        public void TestMethod(Shape shape)
         {
             switch (shape)
             {
@@ -26,7 +26,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
 
-        void TestMethod123(DayOfWeek dayOfWeek)
+        public void TestMethod123(DayOfWeek dayOfWeek)
         {
             switch (dayOfWeek)
             {
@@ -47,7 +47,10 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
     }
 
-    [Matchable]
+    [EnumOfTypes(
+        typeof(Square),
+        typeof(Circle),
+        typeof(Triangle))]
     abstract class Shape { }
     class Square : Shape { }
     class Circle : Shape { }
