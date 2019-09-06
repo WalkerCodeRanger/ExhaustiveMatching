@@ -51,8 +51,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
         typeof(Square),
         typeof(Circle),
         typeof(Triangle))]
-    abstract class Shape { }
-    class Square : Shape { }
-    class Circle : Shape { }
-    class Triangle : Shape { }
+    public abstract class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+    public class Triangle : Shape { }
 }
