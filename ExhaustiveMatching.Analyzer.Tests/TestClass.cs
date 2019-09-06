@@ -47,7 +47,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
     }
 
-    [EnumOfTypes(
+    [UnionOfTypes(
         typeof(Square),
         typeof(Circle),
         typeof(Triangle))]

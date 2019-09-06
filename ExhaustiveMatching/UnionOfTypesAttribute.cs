@@ -5,11 +5,11 @@ using System.Linq;
 namespace ExhaustiveMatching
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
-    public class EnumOfTypesAttribute : Attribute
+    public class UnionOfTypesAttribute : Attribute
     {
         public IReadOnlyList<Type> CaseTypes { get; }
 
-        public EnumOfTypesAttribute(params Type[] caseTypes)
+        public UnionOfTypesAttribute(params Type[] caseTypes)
         {
             CaseTypes = caseTypes.ToList().AsReadOnly();
         }

@@ -1,6 +1,6 @@
 ﻿namespace ExhaustiveMatching.Analyzer.Tests.Fakes
 {
-    [EnumOfTypes(
+    [UnionOfTypes(
         typeof(ExampleCase1),
         typeof(ExampleCase2))]
     public abstract class ExampleBaseClass
