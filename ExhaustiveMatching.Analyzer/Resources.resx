@@ -130,4 +130,22 @@
     <value>Switch on enum is not exhaustive</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="EM100Description" xml:space="preserve">
+    <value>An exhustive switch statement does not support case clauses with "when" guards</value>
+  </data>
+  <data name="EM100Message" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="EM100Title" xml:space="preserve">
+    <value>When clauses are not supported</value>
+  </data>
+  <data name="EM101Description" xml:space="preserve">
+    <value>This type of case clause is not supported in exhustive switch statements. Only "case Type name:" and "case null:" are supported.</value>
+  </data>
+  <data name="EM101Message" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="EM101Title" xml:space="preserve">
+    <value>Unsupported Case Clause Type</value>
+  </data>
 </root>

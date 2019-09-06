@@ -2,7 +2,6 @@ using System;
 using ExhaustiveMatching.Analyzer.Tests.Helpers;
 using ExhaustiveMatching.Analyzer.Tests.Verifiers;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -186,6 +185,10 @@ class TestClass
 
 namespace TestNamespace
 {{
+    [UnionOfTypes(
+        typeof(Square),
+        typeof(Circle),
+        typeof(Triangle))]
 	abstract class Shape {{ }}
 	class Square : Shape {{ }}
 	class Circle : Shape {{ }}

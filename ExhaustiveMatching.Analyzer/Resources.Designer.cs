@@ -88,5 +88,59 @@ namespace ExhaustiveMatching.Analyzer {
                 return ResourceManager.GetString("EM001Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exhustive switch statement does not support case clauses with &quot;when&quot; guards.
+        /// </summary>
+        internal static string EM100Description {
+            get {
+                return ResourceManager.GetString("EM100Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}.
+        /// </summary>
+        internal static string EM100Message {
+            get {
+                return ResourceManager.GetString("EM100Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When clauses are not supported.
+        /// </summary>
+        internal static string EM100Title {
+            get {
+                return ResourceManager.GetString("EM100Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This type of case clause is not supported in exhustive switch statements. Only &quot;case Type name:&quot; and &quot;case null:&quot; are supported..
+        /// </summary>
+        internal static string EM101Description {
+            get {
+                return ResourceManager.GetString("EM101Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}.
+        /// </summary>
+        internal static string EM101Message {
+            get {
+                return ResourceManager.GetString("EM101Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported Case Clause Type.
+        /// </summary>
+        internal static string EM101Title {
+            get {
+                return ResourceManager.GetString("EM101Title", resourceCulture);
+            }
+        }
     }
 }
