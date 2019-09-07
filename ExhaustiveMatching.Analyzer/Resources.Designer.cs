@@ -62,7 +62,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An enum switch statement marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException.Failed() is not exhustive. It omits one or more enum values from the cases..
+        ///   Looks up a localized string similar to An enum switch statement marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
         /// </summary>
         internal static string EM001Description {
             get {
@@ -86,6 +86,34 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM001Title {
             get {
                 return ResourceManager.GetString("EM001Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An switch statement marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types..
+        /// </summary>
+        internal static string EM002Description {
+            get {
+                return ResourceManager.GetString("EM002Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing cases:
+        ///{0}.
+        /// </summary>
+        internal static string EM002Message {
+            get {
+                return ResourceManager.GetString("EM002Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch on union type is not exhaustive.
+        /// </summary>
+        internal static string EM002Title {
+            get {
+                return ResourceManager.GetString("EM002Title", resourceCulture);
             }
         }
         

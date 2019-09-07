@@ -157,12 +157,12 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected = new DiagnosticResult
             {
-                Id = "EM001",
-                Message = "Missing cases:\nDayOfWeek.Sunday",
+                Id = "EM002",
+                Message = "Missing cases:\nTriangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
-                        new DiagnosticResultLocation("Test0.cs", 9, 3)
+                        new DiagnosticResultLocation("Test0.cs", 10, 3)
                     }
             };
 

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EM001Description" xml:space="preserve">
-    <value>An enum switch statement marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException.Failed() is not exhustive. It omits one or more enum values from the cases.</value>
+    <value>An enum switch statement marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="EM001Message" xml:space="preserve">
@@ -129,6 +129,16 @@
   <data name="EM001Title" xml:space="preserve">
     <value>Switch on enum is not exhaustive</value>
     <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="EM002Description" xml:space="preserve">
+    <value>An switch statement marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types.</value>
+  </data>
+  <data name="EM002Message" xml:space="preserve">
+    <value>Missing cases:
+{0}</value>
+  </data>
+  <data name="EM002Title" xml:space="preserve">
+    <value>Switch on union type is not exhaustive</value>
   </data>
   <data name="EM100Description" xml:space="preserve">
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>

@@ -18,6 +18,10 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM001Message = LoadString(nameof(Resources.EM001Message));
         private static readonly LocalizableString EM001Description = LoadString(Resources.EM001Description);
 
+        private static readonly LocalizableString EM002Title = LoadString(nameof(Resources.EM001Title));
+        private static readonly LocalizableString EM002Message = LoadString(nameof(Resources.EM001Message));
+        private static readonly LocalizableString EM002Description = LoadString(Resources.EM001Description);
+
         private static readonly LocalizableString EM100Title = LoadString(nameof(Resources.EM100Title));
         private static readonly LocalizableString EM100Message = LoadString(nameof(Resources.EM100Message));
         private static readonly LocalizableString EM100Description = LoadString(Resources.EM100Description);
@@ -33,6 +37,10 @@ namespace ExhaustiveMatching.Analyzer
                 EM001Message, Category, DiagnosticSeverity.Error, isEnabledByDefault: true,
                 EM001Description);
 
+        private static readonly DiagnosticDescriptor NotExhaustiveObjectSwitchRule =
+            new DiagnosticDescriptor("EM002", EM002Title, EM002Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM002Description);
+
         private static readonly DiagnosticDescriptor WhenClauseNotSupported =
             new DiagnosticDescriptor("EM100", EM100Title, EM100Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM100Description);
@@ -42,7 +50,8 @@ namespace ExhaustiveMatching.Analyzer
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM101Description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(NotExhaustiveEnumSwitchRule, WhenClauseNotSupported,
+            ImmutableArray.Create(NotExhaustiveEnumSwitchRule,
+                NotExhaustiveObjectSwitchRule, WhenClauseNotSupported,
                 UnsupportedCaseClauseType);
 
         public override void Initialize(AnalysisContext context)
@@ -140,20 +149,27 @@ namespace ExhaustiveMatching.Analyzer
 
             CheckForNonPatternCases(context, switchLabels);
 
-            var symbolsUsed = switchLabels
+            var typesUsed = switchLabels
                 .OfType<CasePatternSwitchLabelSyntax>()
                 .Select(casePattern => GetTypeSymbolMatched(context, casePattern))
                 .ToImmutableHashSet();
 
             // GetTypeSymbolMatched returns null for fatal errors that prevent exhaustiveness checking
-            if (symbolsUsed.Contains(default))
+            if (typesUsed.Contains(default))
                 return;
 
-            var allSymbols = GetAllConcreteUnionTypeMembers(context, type);
-            // TODO get all subtypes and check that they are covered
-            // use `type.ContainingAssembly.Accept()` and make a symbol visitor to get all types (watch out for nested classes)
+            var allTypes = GetAllConcreteUnionTypeMembers(context, type);
 
-            throw new NotImplementedException();
+            var uncoveredTypes = allTypes
+                .Where(t => !typesUsed.Any(t.IsSubtypeOf))
+                .ToArray();
+
+            if (uncoveredTypes.Any())
+            {
+                var diagnostic = Diagnostic.Create(NotExhaustiveObjectSwitchRule,
+                    switchStatement.GetLocation(), string.Join("\n", uncoveredTypes.Select(t => t.Name)));
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private static void CheckForNonPatternCases(
@@ -205,22 +221,34 @@ namespace ExhaustiveMatching.Analyzer
             return symbolUsed;
         }
 
-        private static ITypeSymbol[] GetAllConcreteUnionTypeMembers(
+        private static HashSet<ITypeSymbol> GetAllConcreteUnionTypeMembers(
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type)
         {
             var unionOfTypesAttributeType
                 = context.Compilation.GetTypeByMetadataName("ExhaustiveMatching.UnionOfTypesAttribute");
-            var args = type.GetAttributes()
-                .Where(a => a.AttributeClass.Equals(unionOfTypesAttributeType))
-                .SelectMany(a => a.ConstructorArguments)
-                .SelectMany(arg => arg.Values)
-                .Select(arg => arg.Value)
-                .Cast<Type>()
-                .Select(t => context.Compilation.GetTypeByMetadataName(t.FullName))
-                .ToArray();
+            var concreteTypes = new HashSet<ITypeSymbol>();
+            var types = new Queue<ITypeSymbol>();
+            types.Enqueue(type);
 
-            throw new NotImplementedException();
+            while (types.Count > 0)
+            {
+                type = types.Dequeue();
+                if (!type.IsAbstract)
+                    concreteTypes.Add(type);
+
+                var unionOfTypes = type.GetAttributes()
+                    .Where(a => a.AttributeClass.Equals(unionOfTypesAttributeType))
+                    .SelectMany(a => a.ConstructorArguments)
+                    .SelectMany(arg => arg.Values)
+                    .Select(arg => arg.Value)
+                    .Cast<ITypeSymbol>();
+
+                foreach (var subtype in unionOfTypes)
+                    types.Enqueue(subtype);
+            }
+
+            return concreteTypes;
         }
 
         private static LocalizableResourceString LoadString(string name)
