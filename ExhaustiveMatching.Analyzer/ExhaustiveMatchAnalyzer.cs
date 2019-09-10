@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -33,20 +30,20 @@ namespace ExhaustiveMatching.Analyzer
 
         private const string Category = "Logic";
 
-        private static readonly DiagnosticDescriptor NotExhaustiveEnumSwitchRule =
+        public static readonly DiagnosticDescriptor NotExhaustiveEnumSwitchRule =
             new DiagnosticDescriptor("EM001", EM001Title,
                 EM001Message, Category, DiagnosticSeverity.Error, isEnabledByDefault: true,
                 EM001Description);
 
-        private static readonly DiagnosticDescriptor NotExhaustiveObjectSwitchRule =
+        public static readonly DiagnosticDescriptor NotExhaustiveObjectSwitchRule =
             new DiagnosticDescriptor("EM002", EM002Title, EM002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM002Description);
 
-        private static readonly DiagnosticDescriptor WhenClauseNotSupported =
+        public static readonly DiagnosticDescriptor WhenClauseNotSupported =
             new DiagnosticDescriptor("EM100", EM100Title, EM100Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM100Description);
 
-        private static readonly DiagnosticDescriptor UnsupportedCaseClauseType =
+        public static readonly DiagnosticDescriptor UnsupportedCaseClauseType =
             new DiagnosticDescriptor("EM101", EM101Title, EM101Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM101Description);
 
@@ -63,196 +60,13 @@ namespace ExhaustiveMatching.Analyzer
             // Any type inheriting from a union type must be listed in the union
         }
 
-        private static void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
             if (!(context.Node is SwitchStatementSyntax switchStatement))
                 throw new InvalidOperationException(
                     $"{nameof(AnalyzeSwitchStatement)} called with a non-switch statement context");
 
-            var switchKind = IsExhaustive(context, switchStatement);
-            if (!switchKind.IsExhaustive)
-                return;
-
-            var expressionTypeInfo = context.SemanticModel
-                .GetTypeInfo(switchStatement.Expression, context.CancellationToken);
-
-            if (expressionTypeInfo.Type?.TypeKind == TypeKind.Enum)
-                AnalyzeEnumSwitchStatement(context, switchStatement, expressionTypeInfo.Type);
-            else if (!switchKind.DefaultThrowsInvalidEnum)
-                AnalyzeObjectSwitchStatement(context, switchStatement, expressionTypeInfo.Type);
-        }
-
-        private static SwitchStatementKind IsExhaustive(SyntaxNodeAnalysisContext context, SwitchStatementSyntax switchStatement)
-        {
-            var defaultSection = switchStatement.Sections.FirstOrDefault(s =>
-                s.Labels.OfType<DefaultSwitchLabelSyntax>().Any());
-
-            var throwStatement = defaultSection?.Statements.OfType<ThrowStatementSyntax>().FirstOrDefault();
-
-            // If there is no default section or it doesn't throw, we assume the
-            // dev doesn't want an exhaustive match
-            if (throwStatement != null)
-            {
-                var exceptionType = context.SemanticModel.GetTypeInfo(throwStatement.Expression, context.CancellationToken).Type;
-                if (exceptionType != null)
-                {
-                    var exhaustiveMatchFailedExceptionType = context.Compilation.GetTypeByMetadataName(typeof(ExhaustiveMatchFailedException).FullName);
-                    var invalidEnumArgumentExceptionType = context.Compilation.GetTypeByMetadataName(typeof(InvalidEnumArgumentException).FullName);
-
-                    var isExhaustiveMatchFailedException = exceptionType.Equals(exhaustiveMatchFailedExceptionType);
-                    var isInvalidEnumArgumentException = exceptionType.Equals(invalidEnumArgumentExceptionType);
-                    var isExhaustive = isExhaustiveMatchFailedException || isInvalidEnumArgumentException;
-
-                    return new SwitchStatementKind(isExhaustive, isInvalidEnumArgumentException);
-                }
-            }
-
-            return new SwitchStatementKind(false, false);
-        }
-
-        private static void AnalyzeEnumSwitchStatement(
-            SyntaxNodeAnalysisContext context,
-            SwitchStatementSyntax switchStatement,
-            ITypeSymbol type)
-        {
-            var symbolsUsed = switchStatement
-                .Sections
-                .SelectMany(s => s.Labels)
-                .OfType<CaseSwitchLabelSyntax>()
-                .Select(l => context.SemanticModel.GetSymbolInfo(l.Value, context.CancellationToken).Symbol)
-                .ToImmutableHashSet();
-
-            var allSymbols = type.GetMembers()
-                .Where(m => m.Kind == SymbolKind.Field)
-                .ToArray();
-
-            var unusedSymbols = allSymbols
-                    .Where(m => !symbolsUsed.Contains(m))
-                    .Select(m => type.Name + "." + m.Name)
-                    .ToArray();
-
-            if (unusedSymbols.Any())
-            {
-                var diagnostic = Diagnostic.Create(NotExhaustiveEnumSwitchRule,
-                    switchStatement.GetLocation(),
-                    string.Join("\n", unusedSymbols));
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        private static void AnalyzeObjectSwitchStatement(
-            SyntaxNodeAnalysisContext context,
-            SwitchStatementSyntax switchStatement,
-            ITypeSymbol type)
-        {
-            // TODO check and report error for type does not have UnionOfTypes attribute
-            // `case var x when x is Square:` is a VarPattern
-
-            var switchLabels = switchStatement
-                .Sections.SelectMany(s => s.Labels).ToList();
-
-            CheckForNonPatternCases(context, switchLabels);
-
-            var typesUsed = switchLabels
-                .OfType<CasePatternSwitchLabelSyntax>()
-                .Select(casePattern => GetTypeSymbolMatched(context, casePattern))
-                .ToImmutableHashSet();
-
-            // GetTypeSymbolMatched returns null for fatal errors that prevent exhaustiveness checking
-            if (typesUsed.Contains(default))
-                return;
-
-            var allTypes = GetAllConcreteUnionTypeMembers(context, type);
-
-            var uncoveredTypes = allTypes
-                .Where(t => !typesUsed.Any(t.IsSubtypeOf))
-                .ToArray();
-
-            if (uncoveredTypes.Any())
-            {
-                var diagnostic = Diagnostic.Create(NotExhaustiveObjectSwitchRule,
-                    switchStatement.GetLocation(), string.Join("\n", uncoveredTypes.Select(t => t.Name)));
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        private static void CheckForNonPatternCases(
-            SyntaxNodeAnalysisContext context,
-            List<SwitchLabelSyntax> switchLabels)
-        {
-            foreach (var switchLabel in switchLabels.OfType<CaseSwitchLabelSyntax>())
-            {
-                if (switchLabel.Value is LiteralExpressionSyntax literalExpression
-                    && literalExpression.Kind() == SyntaxKind.NullLiteralExpression)
-                {
-                    // `case null:` is allowed
-                }
-                else
-                {
-                    var diagnostic = Diagnostic.Create(UnsupportedCaseClauseType,
-                        switchLabel.GetLocation(), switchLabel.ToString());
-                    context.ReportDiagnostic(diagnostic);
-                }
-            }
-        }
-
-        private static ITypeSymbol GetTypeSymbolMatched(
-            SyntaxNodeAnalysisContext context,
-            CasePatternSwitchLabelSyntax casePattern)
-        {
-            ITypeSymbol symbolUsed;
-            if (casePattern.Pattern is DeclarationPatternSyntax declarationPattern)
-            {
-                var typeInfo = context.SemanticModel.GetTypeInfo(declarationPattern.Type,
-                    context.CancellationToken);
-                symbolUsed = typeInfo.Type;
-            }
-            else
-            {
-                var diagnostic = Diagnostic.Create(UnsupportedCaseClauseType,
-                    casePattern.GetLocation(), casePattern.ToString());
-                context.ReportDiagnostic(diagnostic);
-                symbolUsed = null;
-            }
-
-            if (casePattern.WhenClause != null)
-            {
-                var diagnostic = Diagnostic.Create(WhenClauseNotSupported,
-                    casePattern.GetLocation(), casePattern.ToString());
-                context.ReportDiagnostic(diagnostic);
-            }
-
-            return symbolUsed;
-        }
-
-        private static HashSet<ITypeSymbol> GetAllConcreteUnionTypeMembers(
-            SyntaxNodeAnalysisContext context,
-            ITypeSymbol type)
-        {
-            var unionOfTypesAttributeType
-                = context.Compilation.GetTypeByMetadataName(typeof(ClosedAttribute).FullName);
-            var concreteTypes = new HashSet<ITypeSymbol>();
-            var types = new Queue<ITypeSymbol>();
-            types.Enqueue(type);
-
-            while (types.Count > 0)
-            {
-                type = types.Dequeue();
-                if (!type.IsAbstract)
-                    concreteTypes.Add(type);
-
-                var unionOfTypes = type.GetAttributes()
-                    .Where(a => a.AttributeClass.Equals(unionOfTypesAttributeType))
-                    .SelectMany(a => a.ConstructorArguments)
-                    .SelectMany(arg => arg.Values)
-                    .Select(arg => arg.Value)
-                    .Cast<ITypeSymbol>();
-
-                foreach (var subtype in unionOfTypes)
-                    types.Enqueue(subtype);
-            }
-
-            return concreteTypes;
+            SwitchStatementAnalyzer.Analyze(context, switchStatement);
         }
 
         private static LocalizableResourceString LoadString(string name)
