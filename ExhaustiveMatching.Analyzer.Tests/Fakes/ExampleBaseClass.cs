@@ -1,6 +1,6 @@
 ﻿namespace ExhaustiveMatching.Analyzer.Tests.Fakes
 {
-    [UnionOfTypes(
+    [Closed(
         typeof(ExampleCase1),
         typeof(ExampleCase2))]
     public abstract class ExampleBaseClass

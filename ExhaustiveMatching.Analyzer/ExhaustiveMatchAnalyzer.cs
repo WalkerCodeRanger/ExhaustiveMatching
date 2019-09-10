@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -66,7 +67,7 @@ namespace ExhaustiveMatching.Analyzer
         {
             if (!(context.Node is SwitchStatementSyntax switchStatement))
                 throw new InvalidOperationException(
-                    "Switch AnalyzeSwitchStatement called with a non-switch statement context");
+                    $"{nameof(AnalyzeSwitchStatement)} called with a non-switch statement context");
 
             var switchKind = IsExhaustive(context, switchStatement);
             if (!switchKind.IsExhaustive)
@@ -95,8 +96,8 @@ namespace ExhaustiveMatching.Analyzer
                 var exceptionType = context.SemanticModel.GetTypeInfo(throwStatement.Expression, context.CancellationToken).Type;
                 if (exceptionType != null)
                 {
-                    var exhaustiveMatchFailedExceptionType = context.Compilation.GetTypeByMetadataName("ExhaustiveMatching.ExhaustiveMatchFailedException");
-                    var invalidEnumArgumentExceptionType = context.Compilation.GetTypeByMetadataName("System.ComponentModel.InvalidEnumArgumentException");
+                    var exhaustiveMatchFailedExceptionType = context.Compilation.GetTypeByMetadataName(typeof(ExhaustiveMatchFailedException).FullName);
+                    var invalidEnumArgumentExceptionType = context.Compilation.GetTypeByMetadataName(typeof(InvalidEnumArgumentException).FullName);
 
                     var isExhaustiveMatchFailedException = exceptionType.Equals(exhaustiveMatchFailedExceptionType);
                     var isInvalidEnumArgumentException = exceptionType.Equals(invalidEnumArgumentExceptionType);
@@ -229,7 +230,7 @@ namespace ExhaustiveMatching.Analyzer
             ITypeSymbol type)
         {
             var unionOfTypesAttributeType
-                = context.Compilation.GetTypeByMetadataName("ExhaustiveMatching.UnionOfTypesAttribute");
+                = context.Compilation.GetTypeByMetadataName(typeof(ClosedAttribute).FullName);
             var concreteTypes = new HashSet<ITypeSymbol>();
             var types = new Queue<ITypeSymbol>();
             types.Enqueue(type);

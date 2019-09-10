@@ -62,7 +62,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An enum switch statement marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
+        ///   Looks up a localized string similar to An switch statement on an enum type marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
         /// </summary>
         internal static string EM001Description {
             get {
@@ -81,7 +81,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch on enum is not exhaustive.
+        ///   Looks up a localized string similar to Switch on an enum type is not exhaustive.
         /// </summary>
         internal static string EM001Title {
             get {
@@ -90,7 +90,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An switch statement marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types..
+        ///   Looks up a localized string similar to An switch statement on a closed type marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types..
         /// </summary>
         internal static string EM002Description {
             get {
@@ -109,7 +109,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch on union type is not exhaustive.
+        ///   Looks up a localized string similar to Switch on a closed type is not exhaustive.
         /// </summary>
         internal static string EM002Title {
             get {
@@ -136,7 +136,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When clauses are not supported.
+        ///   Looks up a localized string similar to When Clauses Are Not Supported.
         /// </summary>
         internal static string EM100Title {
             get {

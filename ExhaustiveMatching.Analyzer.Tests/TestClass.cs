@@ -47,7 +47,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
     }
 
-    [UnionOfTypes(
+    [Closed(
         typeof(Square),
         typeof(Circle),
         typeof(Triangle))]

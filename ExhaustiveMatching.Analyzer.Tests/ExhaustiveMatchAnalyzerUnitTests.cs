@@ -18,7 +18,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [TestMethod]
-        public void EnumSwitchThrowInvalidEnumIsNotExhaustiveReportsDiagnostic()
+        public void SwitchOnEnumThrowingInvalidEnumIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "DayOfWeek dayOfWeek";
             const string test = @"
@@ -54,7 +54,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [TestMethod]
-        public void EnumSwitchThrowExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
+        public void SwitchOnEnumThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "DayOfWeek dayOfWeek";
             const string test = @"
@@ -90,7 +90,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [TestMethod]
-        public void ObjectSwitchThrowExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
+        public void SwitchOnClosedThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "Shape shape";
             const string test = @"
@@ -200,7 +200,7 @@ class TestClass
 
 namespace TestNamespace
 {{
-    [UnionOfTypes(
+    [Closed(
         typeof(Square),
         typeof(Circle),
         typeof(Triangle))]
