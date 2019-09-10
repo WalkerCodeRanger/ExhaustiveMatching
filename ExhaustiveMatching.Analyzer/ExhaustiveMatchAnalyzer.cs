@@ -57,6 +57,9 @@ namespace ExhaustiveMatching.Analyzer
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
+            // TODO Analyze Class, Interface and Struct Declarations
+            // A members of a Union Type must either be sealed/struct or union types
+            // Any type inheriting from a union type must be listed in the union
         }
 
         private static void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
