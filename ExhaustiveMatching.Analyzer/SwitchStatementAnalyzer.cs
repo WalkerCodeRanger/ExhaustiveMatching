@@ -102,7 +102,7 @@ namespace ExhaustiveMatching.Analyzer
 
             var typesUsed = switchLabels
                 .OfType<CasePatternSwitchLabelSyntax>()
-                .Select<CasePatternSwitchLabelSyntax, ITypeSymbol>(casePattern => GetTypeSymbolMatched(context, casePattern))
+                .Select(casePattern => GetTypeSymbolMatched(context, casePattern))
                 .ToImmutableHashSet();
 
             // GetTypeSymbolMatched returns null for fatal errors that prevent exhaustiveness checking
@@ -111,7 +111,7 @@ namespace ExhaustiveMatching.Analyzer
 
             var allTypes = GetAllConcreteClosedTypeMembers(context, type);
 
-            var uncoveredTypes = Enumerable.Where<ITypeSymbol>(allTypes, t => !typesUsed.Any(t.IsSubtypeOf))
+            var uncoveredTypes = allTypes.Where(t => !typesUsed.Any(t.IsSubtypeOf))
                 .ToArray();
 
             if (uncoveredTypes.Any())
