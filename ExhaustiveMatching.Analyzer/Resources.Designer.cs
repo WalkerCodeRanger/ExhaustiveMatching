@@ -172,6 +172,33 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A closed type&apos;s member types must all be direct subtypes of the closed type. That is, they must inherit from the class or implement the interface..
+        /// </summary>
+        internal static string EM012Description {
+            get {
+                return ResourceManager.GetString("EM012Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Member Type: {0}.
+        /// </summary>
+        internal static string EM012Message {
+            get {
+                return ResourceManager.GetString("EM012Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed Type Member Must Be a Direct Subtype.
+        /// </summary>
+        internal static string EM012Title {
+            get {
+                return ResourceManager.GetString("EM012Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exhustive switch statement does not support case clauses with &quot;when&quot; guards.
         /// </summary>
         internal static string EM100Description {

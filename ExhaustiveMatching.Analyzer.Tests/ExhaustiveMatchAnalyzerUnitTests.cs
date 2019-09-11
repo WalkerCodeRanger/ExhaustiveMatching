@@ -194,7 +194,7 @@ namespace TestNamespace
         typeof(Square),
         typeof(Circle),
         typeof(Triangle))]
-    public abstract class Shape { }
+    public interface Shape { }
     public sealed class Square : Shape { }
     public struct Circle : Shape { }
     [Closed(typeof(EquilateralTriangle))]
@@ -213,7 +213,6 @@ namespace TestNamespace
 
             VerifyCSharpDiagnostic(test, expected);
         }
-
 
         [TestMethod]
         public void SubtypeOfTypeClosedTypeMustBeMember()
@@ -237,6 +236,34 @@ namespace TestNamespace
                     "Type: TestNamespace.Triangle\nBase Type: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 25) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void MemberTypesMustBeDirectSubtype()
+        {
+            const string test = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(Circle),
+        typeof(String))]
+    public abstract class Shape { }
+    public sealed class Square : Shape { }
+    public sealed class Circle : Shape { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM012",
+                Message = "Member Type: System.String",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 27) }
             };
 
             VerifyCSharpDiagnostic(test, expected);

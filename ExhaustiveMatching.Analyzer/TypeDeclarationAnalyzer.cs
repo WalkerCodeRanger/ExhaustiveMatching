@@ -24,9 +24,7 @@ namespace ExhaustiveMatching.Analyzer
             }
 
             if (IsClosedType(typeSymbol, closedAttribute))
-            {
-                // All type members must be direct subtypes
-            }
+                AllMemberTypesMustBeDirectSubtypes(context, typeDeclaration, typeSymbol, closedAttribute);
         }
 
         private static bool IsSubtypeOfClosedType(
@@ -60,7 +58,7 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttribute)
         {
             // Any type inheriting from a union type must be listed in the union
-            var closedBaseTypes = typeSymbol.AllInterfaces.Append(typeSymbol.BaseType)
+            var closedBaseTypes = typeSymbol.Interfaces.Append(typeSymbol.BaseType)
                 .Where(t => t.HasAttribute(closedAttribute));
 
             foreach (var baseType in closedBaseTypes)
@@ -81,6 +79,25 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttribute)
         {
             return typeSymbol.HasAttribute(closedAttribute);
+        }
+
+        private static void AllMemberTypesMustBeDirectSubtypes(
+            SyntaxNodeAnalysisContext context,
+            TypeDeclarationSyntax typeDeclaration,
+            ITypeSymbol typeSymbol,
+            INamedTypeSymbol closedAttribute)
+        {
+            var unionOfTypes = typeSymbol.UnionOfTypes(closedAttribute);
+            foreach (var memberType in unionOfTypes)
+            {
+                if (memberType.BaseType.Equals(typeSymbol)
+                || memberType.Interfaces.Any(i => i.Equals(typeSymbol)))
+                    continue;
+
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
+                    typeDeclaration.Identifier.GetLocation(), memberType.GetFullName());
+                context.ReportDiagnostic(diagnostic);
+            }
         }
     }
 }
