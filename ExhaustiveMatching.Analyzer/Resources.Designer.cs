@@ -10,7 +10,6 @@
 
 namespace ExhaustiveMatching.Analyzer {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace ExhaustiveMatching.Analyzer {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExhaustiveMatching.Analyzer.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExhaustiveMatching.Analyzer.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -114,6 +113,61 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM002Title {
             get {
                 return ResourceManager.GetString("EM002Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A subtype of a type marked with the &quot;Closed&quot; attribute must either be closed (with the Closed attribute), sealed, or structs..
+        /// </summary>
+        internal static string EM010Description {
+            get {
+                return ResourceManager.GetString("EM010Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type: {0}.
+        /// </summary>
+        internal static string EM010Message {
+            get {
+                return ResourceManager.GetString("EM010Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtypes of Closed Types Must Be Closed.
+        /// </summary>
+        internal static string EM010Title {
+            get {
+                return ResourceManager.GetString("EM010Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A subtype of a type marked with the &quot;Closed&quot; attribute must be a member of the closed type..
+        /// </summary>
+        internal static string EM011Description {
+            get {
+                return ResourceManager.GetString("EM011Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type: {0}
+        ///Base Type: {1}.
+        /// </summary>
+        internal static string EM011Message {
+            get {
+                return ResourceManager.GetString("EM011Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtype of a Closed Type Must Be a Member of the Closed Type.
+        /// </summary>
+        internal static string EM011Title {
+            get {
+                return ResourceManager.GetString("EM011Title", resourceCulture);
             }
         }
         

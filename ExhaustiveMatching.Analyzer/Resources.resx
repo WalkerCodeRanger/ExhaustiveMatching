@@ -140,6 +140,25 @@
   <data name="EM002Title" xml:space="preserve">
     <value>Switch on a closed type is not exhaustive</value>
   </data>
+  <data name="EM010Description" xml:space="preserve">
+    <value>A subtype of a type marked with the "Closed" attribute must either be closed (with the Closed attribute), sealed, or structs.</value>
+  </data>
+  <data name="EM010Message" xml:space="preserve">
+    <value>Type: {0}</value>
+  </data>
+  <data name="EM010Title" xml:space="preserve">
+    <value>Subtypes of Closed Types Must Be Closed</value>
+  </data>
+  <data name="EM011Description" xml:space="preserve">
+    <value>A subtype of a type marked with the "Closed" attribute must be a member of the closed type.</value>
+  </data>
+  <data name="EM011Message" xml:space="preserve">
+    <value>Type: {0}
+Base Type: {1}</value>
+  </data>
+  <data name="EM011Title" xml:space="preserve">
+    <value>Subtype of a Closed Type Must Be a Member of the Closed Type</value>
+  </data>
   <data name="EM100Description" xml:space="preserve">
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>
   </data>

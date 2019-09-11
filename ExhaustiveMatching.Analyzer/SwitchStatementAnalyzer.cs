@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
@@ -92,7 +91,7 @@ namespace ExhaustiveMatching.Analyzer
             SwitchStatementSyntax switchStatement,
             ITypeSymbol type)
         {
-            // TODO check and report error for type does not have UnionOfTypes attribute
+            // TODO check and report error for type does not have Closed attribute
             // `case var x when x is Square:` is a VarPattern
 
             var switchLabels = switchStatement
@@ -175,8 +174,7 @@ namespace ExhaustiveMatching.Analyzer
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type)
         {
-            var unionOfTypesAttributeType
-                = context.Compilation.GetTypeByMetadataName(typeof(ClosedAttribute).FullName);
+            var closedAttribute = context.Compilation.GetTypeByMetadataName(typeof(ClosedAttribute).FullName);
             var concreteTypes = new HashSet<ITypeSymbol>();
             var types = new Queue<ITypeSymbol>();
             types.Enqueue(type);
@@ -187,12 +185,7 @@ namespace ExhaustiveMatching.Analyzer
                 if (!type.IsAbstract)
                     concreteTypes.Add(type);
 
-                var unionOfTypes = type.GetAttributes()
-                    .Where(a => a.AttributeClass.Equals(unionOfTypesAttributeType))
-                    .SelectMany(a => a.ConstructorArguments)
-                    .SelectMany(arg => arg.Values)
-                    .Select(arg => arg.Value)
-                    .Cast<ITypeSymbol>();
+                var unionOfTypes = type.UnionOfTypes(closedAttribute);
 
                 foreach (var subtype in unionOfTypes)
                     types.Enqueue(subtype);

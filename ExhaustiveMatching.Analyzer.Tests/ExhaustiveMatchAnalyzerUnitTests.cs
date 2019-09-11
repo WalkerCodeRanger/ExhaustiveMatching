@@ -184,6 +184,64 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
         }
 
+        [TestMethod]
+        public void SubtypeOfTypeClosedTypeMustBeClosed()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(Circle),
+        typeof(Triangle))]
+    public abstract class Shape { }
+    public sealed class Square : Shape { }
+    public struct Circle : Shape { }
+    [Closed(typeof(EquilateralTriangle))]
+    public class Triangle : Shape { }
+
+    public class EquilateralTriangle : Triangle { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM010",
+                Message = "Type: TestNamespace.EquilateralTriangle",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 18) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+
+        [TestMethod]
+        public void SubtypeOfTypeClosedTypeMustBeMember()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(Circle))]
+    public abstract class Shape { }
+    public sealed class Square : Shape { }
+    public sealed class Circle : Shape { }
+    public sealed class Triangle : Shape { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM011",
+                Message =
+                    "Type: TestNamespace.Triangle\nBase Type: TestNamespace.Shape",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 25) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
         private static string CodeContext(string args, string body)
         {
             const string context = @"using System; // DayOfWeek
@@ -204,10 +262,10 @@ namespace TestNamespace
         typeof(Square),
         typeof(Circle),
         typeof(Triangle))]
-    abstract class Shape {{ }}
-    class Square : Shape {{ }}
-    class Circle : Shape {{ }}
-    class Triangle : Shape {{ }}
+    public abstract class Shape {{ }}
+    public sealed class Square : Shape {{ }}
+    public sealed class Circle : Shape {{ }}
+    public sealed class Triangle : Shape {{ }}
 }}";
             return string.Format(context, args, body);
         }
