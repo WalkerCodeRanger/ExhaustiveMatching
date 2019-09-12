@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching", "Exhau
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Tests", "ExhaustiveMatching.Tests\ExhaustiveMatching.Tests.csproj", "{323446E3-422F-42A7-9A38-E3BEBE6EE5A2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3244C1B5-79FB-4F75-AB2A-4877904D1A95}"
+	ProjectSection(SolutionItems) = preProject
+		pack.bat = pack.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

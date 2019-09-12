@@ -1,0 +1,1 @@
+.\tools\nuget.exe pack ExhaustiveMatching.Analyzer\ExhaustiveMatching.Analyzer.nuspec

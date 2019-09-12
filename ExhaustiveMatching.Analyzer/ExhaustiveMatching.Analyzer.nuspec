@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>ExhaustiveMatching.Analyzer</id>
+    <version>0.1.0</version>
+    <authors>Jeff Walker</authors>
+    <owners>Jeff Walker</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Exhaustive matching for switch statements over enums or over types marked as closed. Closed types are types that act as discriminated unions by limiting their subtypes to a fixed set.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2019 Jeff Walker</copyright>
+    <tags>analyzers, switch, discriminated union</tags>
+    <contentFiles>
+      <files include="tools\*.ps1" buildAction="None" copyToOutput="true" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="bin/Release/netstandard2.0/ExhaustiveMatching.dll" target="lib/netstandard2.0" />
+    <file src="bin/Release/netstandard2.0/ExhaustiveMatching.pdb" target="lib/netstandard2.0" />
+    <file src="bin/Release/netstandard2.0/ExhaustiveMatching.Analyzer.dll" target="analyzers/netstandard2.0/cs" />
+  </files>
+</package>
