@@ -1,1 +1,2 @@
-.\tools\nuget.exe pack ExhaustiveMatching.Analyzer\ExhaustiveMatching.Analyzer.nuspec
+.\tools\nuget.exe pack ExhaustiveMatching.Analyzer.nuspec
+PAUSE
