@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -42,8 +41,8 @@ namespace ExhaustiveMatching.Analyzer
                 var exceptionType = context.SemanticModel.GetTypeInfo(throwStatement.Expression, context.CancellationToken).Type;
                 if (exceptionType != null)
                 {
-                    var exhaustiveMatchFailedExceptionType = context.Compilation.GetTypeByMetadataName(typeof(ExhaustiveMatchFailedException).FullName);
-                    var invalidEnumArgumentExceptionType = context.Compilation.GetTypeByMetadataName(typeof(InvalidEnumArgumentException).FullName);
+                    var exhaustiveMatchFailedExceptionType = context.Compilation.GetTypeByMetadataName(TypeNames.ExhaustiveMatchFailedException);
+                    var invalidEnumArgumentExceptionType = context.Compilation.GetTypeByMetadataName(TypeNames.InvalidEnumArgumentException);
 
                     var isExhaustiveMatchFailedException = exceptionType.Equals(exhaustiveMatchFailedExceptionType);
                     var isInvalidEnumArgumentException = exceptionType.Equals(invalidEnumArgumentExceptionType);
@@ -174,7 +173,7 @@ namespace ExhaustiveMatching.Analyzer
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type)
         {
-            var closedAttribute = context.Compilation.GetTypeByMetadataName(typeof(ClosedAttribute).FullName);
+            var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
             var concreteTypes = new HashSet<ITypeSymbol>();
             var types = new Queue<ITypeSymbol>();
             types.Enqueue(type);

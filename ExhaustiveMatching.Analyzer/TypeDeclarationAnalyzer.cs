@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,13 +8,11 @@ namespace ExhaustiveMatching.Analyzer
 {
     public class TypeDeclarationAnalyzer
     {
-        private static readonly Type ClosedAttributeType = typeof(ClosedAttribute);
-
         public static void Analyze(
             SyntaxNodeAnalysisContext context,
             TypeDeclarationSyntax typeDeclaration)
         {
-            var closedAttribute = context.Compilation.GetTypeByMetadataName(ClosedAttributeType.FullName);
+            var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
             var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
             if (IsSubtypeOfClosedType(typeSymbol, closedAttribute))
             {
