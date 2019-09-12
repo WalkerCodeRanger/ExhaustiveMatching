@@ -42,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Missing cases:\nDayOfWeek.Sunday",
+                Message = "Some values of the enum are not processed by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -78,7 +78,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Missing cases:\nDayOfWeek.Sunday",
+                Message = "Some values of the enum are not processed by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -109,7 +109,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected = new DiagnosticResult
             {
                 Id = "EM002",
-                Message = "Missing cases:\nTriangle",
+                Message = "Some subtypes are not processed by switch: TestNamespace.Triangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -168,7 +168,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected1 = new DiagnosticResult
             {
                 Id = "EM100",
-                Message = "case Triangle triangle when true:",
+                Message = "When clauses are not supported in exhaustive switch: case Triangle triangle when true:",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 13) }
             };
@@ -176,7 +176,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected2 = new DiagnosticResult
             {
                 Id = "EM101",
-                Message = "case 12:",
+                Message = "Case clause type not supported in exhaustive switch: case 12:",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 21, 13) }
             };
@@ -206,7 +206,7 @@ namespace TestNamespace
             var expected = new DiagnosticResult
             {
                 Id = "EM010",
-                Message = "Type: TestNamespace.EquilateralTriangle",
+                Message = "Subtype of closed type must be closed or sealed: TestNamespace.EquilateralTriangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 18) }
             };
@@ -233,7 +233,7 @@ namespace TestNamespace
             {
                 Id = "EM011",
                 Message =
-                    "Type: TestNamespace.Triangle\nBase Type: TestNamespace.Shape",
+                    "TestNamespace.Triangle is not a member of its closed supertype: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 25) }
             };
@@ -261,7 +261,7 @@ namespace TestNamespace
             var expected = new DiagnosticResult
             {
                 Id = "EM012",
-                Message = "Member Type: System.String",
+                Message = "Closed type member is not a direct subtype: System.String",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 27) }
             };

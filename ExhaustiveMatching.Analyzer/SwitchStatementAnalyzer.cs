@@ -74,14 +74,14 @@ namespace ExhaustiveMatching.Analyzer
 
             var unusedSymbols = allSymbols
                 .Where(m => !symbolsUsed.Contains(m))
-                .Select(m => type.Name + "." + m.Name)
+                .Select(m => m.Name)
                 .ToArray();
 
             if (unusedSymbols.Any())
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.NotExhaustiveEnumSwitchRule,
                     switchStatement.GetLocation(),
-                    string.Join("\n", unusedSymbols));
+                    string.Join(", ", unusedSymbols));
                 context.ReportDiagnostic(diagnostic);
             }
         }
@@ -116,7 +116,7 @@ namespace ExhaustiveMatching.Analyzer
             if (uncoveredTypes.Any())
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.NotExhaustiveObjectSwitchRule,
-                    switchStatement.GetLocation(), string.Join("\n", uncoveredTypes.Select(t => t.Name)));
+                    switchStatement.GetLocation(), string.Join(", ", uncoveredTypes.Select(t => t.GetFullName())));
                 context.ReportDiagnostic(diagnostic);
             }
         }

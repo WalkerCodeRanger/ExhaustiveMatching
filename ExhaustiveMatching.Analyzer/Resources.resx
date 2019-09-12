@@ -119,32 +119,27 @@
   </resheader>
   <data name="EM001Description" xml:space="preserve">
     <value>An switch statement on an enum type marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="EM001Message" xml:space="preserve">
-    <value>Missing cases:
-{0}</value>
-    <comment>The format-able message the diagnostic displays.</comment>
+    <value>Some values of the enum are not processed by switch: {0}</value>
   </data>
   <data name="EM001Title" xml:space="preserve">
-    <value>Switch on an enum type is not exhaustive</value>
-    <comment>The title of the diagnostic.</comment>
+    <value>Switch on Enum Not Exhaustive</value>
   </data>
   <data name="EM002Description" xml:space="preserve">
     <value>An switch statement on a closed type marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types.</value>
   </data>
   <data name="EM002Message" xml:space="preserve">
-    <value>Missing cases:
-{0}</value>
+    <value>Some subtypes are not processed by switch: {0}</value>
   </data>
   <data name="EM002Title" xml:space="preserve">
-    <value>Switch on a closed type is not exhaustive</value>
+    <value>Switch on Closed Type Not Exhaustive</value>
   </data>
   <data name="EM010Description" xml:space="preserve">
     <value>A subtype of a type marked with the "Closed" attribute must either be closed (with the Closed attribute), sealed, or structs.</value>
   </data>
   <data name="EM010Message" xml:space="preserve">
-    <value>Type: {0}</value>
+    <value>Subtype of closed type must be closed or sealed: {0}</value>
   </data>
   <data name="EM010Title" xml:space="preserve">
     <value>Subtypes of Closed Types Must Be Closed</value>
@@ -153,17 +148,16 @@
     <value>A subtype of a type marked with the "Closed" attribute must be a member of the closed type.</value>
   </data>
   <data name="EM011Message" xml:space="preserve">
-    <value>Type: {0}
-Base Type: {1}</value>
+    <value>{0} is not a member of its closed supertype: {1}</value>
   </data>
   <data name="EM011Title" xml:space="preserve">
-    <value>Subtype of a Closed Type Must Be a Member of the Closed Type</value>
+    <value>Subtype of a Closed Type Must Be a Member</value>
   </data>
   <data name="EM012Description" xml:space="preserve">
     <value>A closed type's member types must all be direct subtypes of the closed type. That is, they must inherit from the class or implement the interface.</value>
   </data>
   <data name="EM012Message" xml:space="preserve">
-    <value>Member Type: {0}</value>
+    <value>Closed type member is not a direct subtype: {0}</value>
   </data>
   <data name="EM012Title" xml:space="preserve">
     <value>Closed Type Member Must Be a Direct Subtype</value>
@@ -172,7 +166,7 @@ Base Type: {1}</value>
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>
   </data>
   <data name="EM100Message" xml:space="preserve">
-    <value>{0}</value>
+    <value>When clauses are not supported in exhaustive switch: {0}</value>
   </data>
   <data name="EM100Title" xml:space="preserve">
     <value>When Clauses Are Not Supported</value>
@@ -181,7 +175,7 @@ Base Type: {1}</value>
     <value>This type of case clause is not supported in exhustive switch statements. Only "case Type name:" and "case null:" are supported.</value>
   </data>
   <data name="EM101Message" xml:space="preserve">
-    <value>{0}</value>
+    <value>Case clause type not supported in exhaustive switch: {0}</value>
   </data>
   <data name="EM101Title" xml:space="preserve">
     <value>Unsupported Case Clause Type</value>
