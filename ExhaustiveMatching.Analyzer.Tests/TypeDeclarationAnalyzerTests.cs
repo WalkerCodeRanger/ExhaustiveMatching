@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
+    [TestClass]
     public class TypeDeclarationAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
@@ -61,6 +62,22 @@ namespace TestNamespace
             };
 
             VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void SingleCaseTypeSupported()
+        {
+            const string test = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof(Square))]
+    public abstract class Shape { }
+    public sealed class Square : Shape { }
+}";
+
+            VerifyCSharpDiagnostic(test);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

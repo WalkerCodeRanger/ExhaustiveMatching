@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
+    [TestClass]
     public class ExhaustiveMatchAnalyzer : CodeFixVerifier
     {
         [TestMethod]
