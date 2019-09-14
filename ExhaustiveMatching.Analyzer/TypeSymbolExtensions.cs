@@ -44,12 +44,14 @@ namespace ExhaustiveMatching.Analyzer
             return symbol.GetAttributes().Any(a => a.AttributeClass.Equals(attributeType));
         }
 
-        public static IEnumerable<ITypeSymbol> UnionOfTypes(
+        public static IEnumerable<ITypeSymbol> GetCaseTypes(
             this ITypeSymbol type,
             INamedTypeSymbol closedAttributeType)
         {
-            return type.GetAttributes().Where(a => a.AttributeClass.Equals(closedAttributeType))
-                .SelectMany(a => a.ConstructorArguments).SelectMany(arg => arg.Values)
+            return type.GetAttributes()
+                .Where(a => a.AttributeClass.Equals(closedAttributeType))
+                .SelectMany(a => a.ConstructorArguments)
+                .SelectMany(arg => arg.Values)
                 .Select(arg => arg.Value).Cast<ITypeSymbol>();
         }
 

@@ -186,7 +186,7 @@ namespace ExhaustiveMatching.Analyzer
                 if (!type.IsAbstract)
                     concreteTypes.Add(type);
 
-                var unionOfTypes = type.UnionOfTypes(closedAttribute);
+                var unionOfTypes = type.GetCaseTypes(closedAttribute);
 
                 foreach (var subtype in unionOfTypes)
                     types.Enqueue(subtype);

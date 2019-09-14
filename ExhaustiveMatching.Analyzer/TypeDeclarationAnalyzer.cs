@@ -42,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer
 
             foreach (var baseType in closedBaseTypes)
             {
-                var isMember = baseType.UnionOfTypes(closedAttribute)
+                var isMember = baseType.GetCaseTypes(closedAttribute)
                                 .Any(t => t.Equals(typeSymbol));
                 if (isMember)
                     continue;
@@ -66,7 +66,7 @@ namespace ExhaustiveMatching.Analyzer
             ITypeSymbol typeSymbol,
             INamedTypeSymbol closedAttribute)
         {
-            var unionOfTypes = typeSymbol.UnionOfTypes(closedAttribute);
+            var unionOfTypes = typeSymbol.GetCaseTypes(closedAttribute);
             foreach (var memberType in unionOfTypes)
             {
                 if (memberType.BaseType.Equals(typeSymbol)
