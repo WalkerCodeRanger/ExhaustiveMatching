@@ -80,6 +80,26 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
+        /// <summary>
+        /// Previous versions of the analyzer would throw an exception when encountering
+        /// invalid arguments to <see cref="ClosedAttribute"/>.
+        /// </summary>
+        [TestMethod]
+        public void EmptyTypeofHandled()
+        {
+            const string test = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof())]
+    public abstract class Shape { }
+    public sealed class Square : Shape { }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new Analyzer.ExhaustiveMatchAnalyzer();
