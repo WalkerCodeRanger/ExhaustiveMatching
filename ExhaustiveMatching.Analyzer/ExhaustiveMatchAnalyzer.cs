@@ -19,10 +19,6 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM002Message = LoadString(nameof(Resources.EM002Message));
         private static readonly LocalizableString EM002Description = LoadString(Resources.EM002Description);
 
-        private static readonly LocalizableString EM010Title = LoadString(nameof(Resources.EM010Title));
-        private static readonly LocalizableString EM010Message = LoadString(nameof(Resources.EM010Message));
-        private static readonly LocalizableString EM010Description = LoadString(Resources.EM010Description);
-
         private static readonly LocalizableString EM011Title = LoadString(nameof(Resources.EM011Title));
         private static readonly LocalizableString EM011Message = LoadString(nameof(Resources.EM011Message));
         private static readonly LocalizableString EM011Description = LoadString(Resources.EM011Description);
@@ -50,10 +46,6 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM002", EM002Title, EM002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM002Description);
 
-        public static readonly DiagnosticDescriptor MustBeClosedType =
-            new DiagnosticDescriptor("EM010", EM010Title, EM010Message, Category,
-                DiagnosticSeverity.Error, isEnabledByDefault: true, EM010Description);
-
         public static readonly DiagnosticDescriptor MustBeUnionMember =
             new DiagnosticDescriptor("EM011", EM011Title, EM011Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM011Description);
@@ -72,7 +64,7 @@ namespace ExhaustiveMatching.Analyzer
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitchRule,
-                NotExhaustiveObjectSwitchRule, MustBeClosedType,
+                NotExhaustiveObjectSwitchRule,
                 MustBeUnionMember, MustBeDirectSubtype, WhenClauseNotSupported,
                 UnsupportedCaseClauseType);
 

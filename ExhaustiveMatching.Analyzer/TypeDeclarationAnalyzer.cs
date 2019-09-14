@@ -16,7 +16,6 @@ namespace ExhaustiveMatching.Analyzer
             var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
             if (IsSubtypeOfClosedType(typeSymbol, closedAttribute))
             {
-                MustBeClosed(context, typeDeclaration, typeSymbol, closedAttribute);
                 MustBeUnionMember(context, typeDeclaration, typeSymbol, closedAttribute);
             }
 
@@ -29,23 +28,6 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttribute)
         {
             return typeSymbol.InheritsFromTypeWithAttribute(closedAttribute);
-        }
-
-        private static void MustBeClosed(
-            SyntaxNodeAnalysisContext context,
-            TypeDeclarationSyntax typeDeclaration,
-            ITypeSymbol typeSymbol,
-            INamedTypeSymbol closedAttribute)
-        {
-            // must either be sealed/struct or union types
-            if (typeSymbol.IsSealed
-                || typeSymbol.IsValueType // i.e. `struct`
-                || typeSymbol.HasAttribute(closedAttribute))
-                return;
-
-            var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeClosedType,
-                typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName());
-            context.ReportDiagnostic(diagnostic);
         }
 
         private static void MustBeUnionMember(
