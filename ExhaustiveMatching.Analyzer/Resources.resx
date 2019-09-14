@@ -157,10 +157,10 @@
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>
   </data>
   <data name="EM100Message" xml:space="preserve">
-    <value>When clauses are not supported in exhaustive switch: {0}</value>
+    <value>When clauses are not supported in an exhaustive switch</value>
   </data>
   <data name="EM100Title" xml:space="preserve">
-    <value>When Clauses Are Not Supported</value>
+    <value>When Clauses Not Supported</value>
   </data>
   <data name="EM101Description" xml:space="preserve">
     <value>This type of case clause is not supported in exhustive switch statements. Only "case Type name:" and "case null:" are supported.</value>

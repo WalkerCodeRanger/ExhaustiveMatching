@@ -178,7 +178,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When clauses are not supported in exhaustive switch: {0}.
+        ///   Looks up a localized string similar to When clauses are not supported in an exhaustive switch.
         /// </summary>
         internal static string EM100Message {
             get {
@@ -187,7 +187,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Clauses Are Not Supported.
+        ///   Looks up a localized string similar to When Clauses Not Supported.
         /// </summary>
         internal static string EM100Title {
             get {

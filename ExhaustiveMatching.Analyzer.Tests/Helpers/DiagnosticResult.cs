@@ -3,52 +3,57 @@ using Microsoft.CodeAnalysis;
 
 namespace ExhaustiveMatching.Analyzer.Tests.Helpers
 {
-	/// <summary>
-	/// Location where the diagnostic appears, as determined by path, line number, and column number.
-	/// </summary>
-	public struct DiagnosticResultLocation
-	{
-		public DiagnosticResultLocation(string path, int line, int column)
-		{
-			if (line < -1)
-				throw new ArgumentOutOfRangeException(nameof(line), "line must be >= -1");
+    /// <summary>
+    /// Location where the diagnostic appears, as determined by path, line number, and column number.
+    /// </summary>
+    public struct DiagnosticResultLocation
+    {
+        public DiagnosticResultLocation(string path, int line, int column, int length = -1)
+        {
+            if (line < -1)
+                throw new ArgumentOutOfRangeException(nameof(line), "line must be >= -1");
 
-			if (column < -1)
-				throw new ArgumentOutOfRangeException(nameof(column), "column must be >= -1");
+            if (column < -1)
+                throw new ArgumentOutOfRangeException(nameof(column), "column must be >= -1");
 
-			Path = path;
-			Line = line;
-			Column = column;
-		}
+            if (length < -1)
+                throw new ArgumentOutOfRangeException(nameof(length), "length must be >= -1");
 
-		public string Path { get; }
-		public int Line { get; }
-		public int Column { get; }
-	}
+            Path = path;
+            Line = line;
+            Column = column;
+            Length = length;
+        }
 
-	/// <summary>
-	/// Struct that stores information about a Diagnostic appearing in a source
-	/// </summary>
-	public struct DiagnosticResult
-	{
-		private DiagnosticResultLocation[] locations;
+        public string Path { get; }
+        public int Line { get; }
+        public int Column { get; }
+        public int Length { get; }
+    }
 
-		public DiagnosticResultLocation[] Locations
-		{
-			get => locations ?? (locations = new DiagnosticResultLocation[] { });
-			set => locations = value;
-		}
+    /// <summary>
+    /// Struct that stores information about a Diagnostic appearing in a source
+    /// </summary>
+    public struct DiagnosticResult
+    {
+        private DiagnosticResultLocation[] locations;
 
-		public DiagnosticSeverity Severity { get; set; }
+        public DiagnosticResultLocation[] Locations
+        {
+            get => locations ?? (locations = new DiagnosticResultLocation[] { });
+            set => locations = value;
+        }
 
-		public string Id { get; set; }
+        public DiagnosticSeverity Severity { get; set; }
 
-		public string Message { get; set; }
+        public string Id { get; set; }
 
-		public string Path => Locations.Length > 0 ? Locations[0].Path : "";
+        public string Message { get; set; }
 
-		public int Line => Locations.Length > 0 ? Locations[0].Line : -1;
+        public string Path => Locations.Length > 0 ? Locations[0].Path : "";
 
-		public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
-	}
+        public int Line => Locations.Length > 0 ? Locations[0].Line : -1;
+
+        public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
+    }
 }

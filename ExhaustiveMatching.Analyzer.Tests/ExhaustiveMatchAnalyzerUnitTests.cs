@@ -168,9 +168,9 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected1 = new DiagnosticResult
             {
                 Id = "EM100",
-                Message = "When clauses are not supported in exhaustive switch: case Triangle triangle when true:",
+                Message = "When clauses are not supported in an exhaustive switch",
                 Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 13) }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 36, 9) }
             };
 
             var expected2 = new DiagnosticResult

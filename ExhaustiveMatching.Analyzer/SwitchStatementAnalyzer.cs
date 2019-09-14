@@ -103,6 +103,8 @@ namespace ExhaustiveMatching.Analyzer
                 .Select(casePattern => GetTypeSymbolMatched(context, casePattern))
                 .ToImmutableHashSet();
 
+            // TODO add error for trying to switch on type that isn't closed
+
             // GetTypeSymbolMatched returns null for fatal errors that prevent exhaustiveness checking
             if (typesUsed.Contains(default))
                 return;
@@ -162,7 +164,7 @@ namespace ExhaustiveMatching.Analyzer
             if (casePattern.WhenClause != null)
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.WhenClauseNotSupported,
-                    casePattern.GetLocation(), casePattern.ToString());
+                    casePattern.WhenClause.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
 
