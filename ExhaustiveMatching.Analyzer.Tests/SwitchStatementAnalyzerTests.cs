@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ExhaustiveMatching.Analyzer.Tests
 {
     [TestClass]
-    public class UnitTest : CodeFixVerifier
+    public class SwitchStatementAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
         public void EmptyFileReportsNoDiagnostics()
