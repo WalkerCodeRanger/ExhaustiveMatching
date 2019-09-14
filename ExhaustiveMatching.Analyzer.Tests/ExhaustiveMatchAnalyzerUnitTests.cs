@@ -185,36 +185,6 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [TestMethod]
-        public void SubtypeOfTypeClosedTypeMustBeClosed()
-        {
-            const string test = @"using ExhaustiveMatching;
-namespace TestNamespace
-{
-    [Closed(
-        typeof(Square),
-        typeof(Circle),
-        typeof(Triangle))]
-    public interface Shape { }
-    public sealed class Square : Shape { }
-    public struct Circle : Shape { }
-    [Closed(typeof(EquilateralTriangle))]
-    public class Triangle : Shape { }
-
-    public class EquilateralTriangle : Triangle { }
-}";
-
-            var expected = new DiagnosticResult
-            {
-                Id = "EM010",
-                Message = "Subtype of closed type must be closed or sealed: TestNamespace.EquilateralTriangle",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 18) }
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
-        }
-
-        [TestMethod]
         public void SubtypeOfTypeClosedTypeMustBeMember()
         {
             const string test = @"using ExhaustiveMatching;
