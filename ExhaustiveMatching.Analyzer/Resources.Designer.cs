@@ -97,7 +97,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtypes not processed by switch: {0}.
+        ///   Looks up a localized string similar to Subtype not processed by switch: {0}.
         /// </summary>
         internal static string EM002Message {
             get {

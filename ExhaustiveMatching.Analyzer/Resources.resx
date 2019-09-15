@@ -130,7 +130,7 @@
     <value>An switch statement on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types.</value>
   </data>
   <data name="EM002Message" xml:space="preserve">
-    <value>Subtypes not processed by switch: {0}</value>
+    <value>Subtype not processed by switch: {0}</value>
   </data>
   <data name="EM002Title" xml:space="preserve">
     <value>Switch on Closed Type Not Exhaustive</value>

@@ -108,14 +108,14 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expectedCircle = new DiagnosticResult
             {
                 Id = "EM002",
-                Message = "Subtypes not processed by switch: TestNamespace.Circle",
+                Message = "Subtype not processed by switch: TestNamespace.Circle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
             var expectedTriangle = new DiagnosticResult
             {
                 Id = "EM002",
-                Message = "Subtypes not processed by switch: TestNamespace.Triangle",
+                Message = "Subtype not processed by switch: TestNamespace.Triangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };

@@ -10,15 +10,15 @@
     <repository type="git" url="https://github.com/WalkerCodeRanger/ExhaustiveMatching.git" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-	    ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements.
+        ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements.
 
-	    Get compiler errors when you leave out a case in a switch statement. Mark
-	    which switch statements should have exhaustive matching by throwing an
-	    exception in the default case. Exhaustive matching works not just for enums,
-	    but for classes and interfaces. Turn them into discriminated unions
-	    (aka sum types) by marking them with the "Closed" attribute and listing the
-	    cases. Exhaustive matching goes beyond what other languages support by handling
-	    full inheritance hierarchies.
+        Get compiler errors when you leave out a case in a switch statement. Mark
+        which switch statements should have exhaustive matching by throwing an
+        exception in the default case. Exhaustive matching works not just for enums,
+        but for classes and interfaces. Turn them into discriminated unions
+        (aka sum types) by marking them with the "Closed" attribute and listing the
+        cases. ExhaustiveMatching.Analyzer goes beyond what other languages support by handling
+        full inheritance hierarchies.
     </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2019 Jeff Walker</copyright>
