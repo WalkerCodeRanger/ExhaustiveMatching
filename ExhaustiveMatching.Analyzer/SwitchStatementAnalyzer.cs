@@ -79,11 +79,11 @@ namespace ExhaustiveMatching.Analyzer
                 .Select(m => m.Name)
                 .ToArray();
 
-            if (unusedSymbols.Any())
+            foreach (var unusedSymbol in unusedSymbols.OrderBy(s => s))
             {
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.NotExhaustiveEnumSwitchRule,
-                    switchStatement.GetLocation(),
-                    string.Join(", ", unusedSymbols));
+                var diagnostic = Diagnostic.Create(
+                    ExhaustiveMatchAnalyzer.NotExhaustiveEnumSwitchRule,
+                    switchStatement.SwitchKeyword.GetLocation(), unusedSymbol);
                 context.ReportDiagnostic(diagnostic);
             }
         }
@@ -118,10 +118,11 @@ namespace ExhaustiveMatching.Analyzer
                 .Where(t => !typesUsed.Any(t.IsSubtypeOf))
                 .ToArray();
 
-            if (uncoveredTypes.Any())
+            foreach (var uncoveredType in uncoveredTypes.OrderBy(t => t.Name))
             {
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.NotExhaustiveObjectSwitchRule,
-                    switchStatement.GetLocation(), string.Join(", ", uncoveredTypes.Select(t => t.GetFullName())));
+                var diagnostic = Diagnostic.Create(
+                    ExhaustiveMatchAnalyzer.NotExhaustiveObjectSwitchRule,
+                    switchStatement.SwitchKeyword.GetLocation(), uncoveredType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
         }
@@ -140,7 +141,7 @@ namespace ExhaustiveMatching.Analyzer
                 else
                 {
                     var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.UnsupportedCaseClauseType,
-                        switchLabel.GetLocation(), switchLabel.ToString());
+                        switchLabel.Value.GetLocation(), switchLabel.ToString());
                     context.ReportDiagnostic(diagnostic);
                 }
             }

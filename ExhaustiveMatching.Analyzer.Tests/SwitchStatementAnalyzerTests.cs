@@ -20,7 +20,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case DayOfWeek.Tuesday:
             case DayOfWeek.Wednesday:
             case DayOfWeek.Thursday:
-            case DayOfWeek.Friday:
+                // Omitted Friday
                 Console.WriteLine(""Weekday"");
             break;
             case DayOfWeek.Saturday:
@@ -31,18 +31,23 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
         }";
 
-            var expected = new DiagnosticResult
+            var expectedFriday = new DiagnosticResult
+            {
+                Id = "EM001",
+                Message = "Enum value not processed by switch: Friday",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+
+            var expectedSunday = new DiagnosticResult
             {
                 Id = "EM001",
                 Message = "Enum value not processed by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
-                Locations =
-                    new[] {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
-                    }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
 
-            VerifyCSharpDiagnostic(CodeContext(args, test), expected);
+            VerifyCSharpDiagnostic(CodeContext(args, test), expectedFriday, expectedSunday);
         }
 
         [TestMethod]
@@ -56,7 +61,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case DayOfWeek.Tuesday:
             case DayOfWeek.Wednesday:
             case DayOfWeek.Thursday:
-            case DayOfWeek.Friday:
+                // Omitted Friday
                 Console.WriteLine(""Weekday"");
             break;
             case DayOfWeek.Saturday:
@@ -67,18 +72,23 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 throw ExhaustiveMatch.Failed(dayOfWeek);
         }";
 
-            var expected = new DiagnosticResult
+            var expectedFriday = new DiagnosticResult
+            {
+                Id = "EM001",
+                Message = "Enum value not processed by switch: Friday",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+
+            var expectedSunday = new DiagnosticResult
             {
                 Id = "EM001",
                 Message = "Enum value not processed by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
-                Locations =
-                    new[] {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
-                    }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
 
-            VerifyCSharpDiagnostic(CodeContext(args, test), expected);
+            VerifyCSharpDiagnostic(CodeContext(args, test), expectedFriday, expectedSunday);
         }
 
         [TestMethod]
@@ -91,25 +101,26 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case Square square:
                 Console.WriteLine(""Square: "" + square);
                 break;
-            case Circle circle:
-                Console.WriteLine(""Circle: "" + circle);
-                break;
             default:
                 throw ExhaustiveMatch.Failed(shape);
         }";
 
-            var expected = new DiagnosticResult
+            var expectedCircle = new DiagnosticResult
+            {
+                Id = "EM002",
+                Message = "Subtypes not processed by switch: TestNamespace.Circle",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+            var expectedTriangle = new DiagnosticResult
             {
                 Id = "EM002",
                 Message = "Subtypes not processed by switch: TestNamespace.Triangle",
                 Severity = DiagnosticSeverity.Error,
-                Locations =
-                    new[] {
-                        new DiagnosticResultLocation("Test0.cs", 10, 9)
-                    }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
 
-            VerifyCSharpDiagnostic(CodeContext(args, test), expected);
+            VerifyCSharpDiagnostic(CodeContext(args, test), expectedCircle, expectedTriangle);
         }
 
         [TestMethod]
@@ -170,7 +181,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 Id = "EM101",
                 Message = "Case clause type not supported in exhaustive switch: case 12:",
                 Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 21, 13) }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 21, 18, 2) }
             };
 
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
