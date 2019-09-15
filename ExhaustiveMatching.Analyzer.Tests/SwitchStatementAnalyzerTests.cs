@@ -305,7 +305,7 @@ namespace TestNamespace
     public abstract class Shape {{ }}
     public class Square : Shape {{ }}
     public class Circle : Shape {{ }}
-    public class Triangle : Shape {{ }}
+    public abstract class Triangle : Shape {{ }} // abstract to show abstract leaf types are checked
     public class EquilateralTriangle : Triangle {{ }}
     public class IsoscelesTriangle : Triangle {{ }}
 }}";

@@ -123,7 +123,7 @@ switch(answer)
 
 **TODO**
 
-## Rules for Matching on Type
+### Rules for Matching on Type
 
 **TODO**
 
