@@ -85,7 +85,7 @@ namespace TestNamespace
         /// invalid arguments to <see cref="ClosedAttribute"/>.
         /// </summary>
         [TestMethod]
-        public void EmptyTypeofHandled()
+        public void EmptyTypeofArgumentToClosedAttributeHandled()
         {
             const string test = @"using ExhaustiveMatching;
 using System;
@@ -93,6 +93,21 @@ using System;
 namespace TestNamespace
 {
     [Closed(typeof())]
+    public abstract class Shape { }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void PrimitiveArgumentToClosedAttributeHandled()
+        {
+            const string test = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(5)]
     public abstract class Shape { }
 }";
 
