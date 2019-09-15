@@ -6,12 +6,22 @@
     <authors>Jeff Walker</authors>
     <owners>Jeff Walker</owners>
     <license type="expression">MIT</license>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <projectUrl>https://github.com/WalkerCodeRanger/ExhaustiveMatching</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Exhaustive matching for switch statements over enums or over types marked as closed. Closed types are types that act as discriminated unions by limiting their subtypes to a fixed set.</description>
+    <description>
+	    ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements.
+
+	    Get compiler errors when you leave out a case in a switch statement. Mark
+	    which switch statements should have exhaustive matching by throwing an
+	    exception in the default case. Exhaustive matching works not just for enums,
+	    but for classes and interfaces. Turn them into discriminated unions
+	    (aka sum types) by marking them with the "Closed" attribute and listing the
+	    cases. Exhaustive matching goes beyond what other languages support by handling
+	    full inheritance hierarchies.
+    </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2019 Jeff Walker</copyright>
-    <tags>analyzers, switch, discriminated union</tags>
+    <tags>analyzers, switch, exhaustive, match, discriminated, union, sum-type</tags>
   </metadata>
   <files>
     <file src="ExhaustiveMatching/bin/Release/netstandard2.0/ExhaustiveMatching.dll" target="lib/netstandard2.0" />
