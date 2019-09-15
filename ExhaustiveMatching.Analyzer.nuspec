@@ -7,6 +7,7 @@
     <owners>Jeff Walker</owners>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/WalkerCodeRanger/ExhaustiveMatching</projectUrl>
+    <repository type="git" url="https://github.com/WalkerCodeRanger/ExhaustiveMatching.git" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
 	    ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements.
