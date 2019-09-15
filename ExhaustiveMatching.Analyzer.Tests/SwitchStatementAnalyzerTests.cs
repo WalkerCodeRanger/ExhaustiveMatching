@@ -34,7 +34,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Some values of the enum are not processed by switch: Sunday",
+                Message = "Enum value not processed by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -70,7 +70,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Some values of the enum are not processed by switch: Sunday",
+                Message = "Enum value not processed by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -101,7 +101,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected = new DiagnosticResult
             {
                 Id = "EM002",
-                Message = "Some subtypes are not processed by switch: TestNamespace.Triangle",
+                Message = "Subtypes not processed by switch: TestNamespace.Triangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -160,7 +160,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected1 = new DiagnosticResult
             {
                 Id = "EM100",
-                Message = "When clauses are not supported in an exhaustive switch",
+                Message = "When guard is not supported in an exhaustive switch",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 36, 9) }
             };

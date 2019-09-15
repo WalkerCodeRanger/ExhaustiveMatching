@@ -15,9 +15,7 @@ namespace ExhaustiveMatching.Analyzer
             var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
             var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
             if (IsSubtypeOfClosedType(typeSymbol, closedAttribute))
-            {
-                MustBeUnionMember(context, typeDeclaration, typeSymbol, closedAttribute);
-            }
+                MustBeCase(context, typeDeclaration, typeSymbol, closedAttribute);
 
             if (IsClosedType(typeSymbol, closedAttribute))
                 AllMemberTypesMustBeDirectSubtypes(context, typeDeclaration, typeSymbol, closedAttribute);
@@ -30,13 +28,13 @@ namespace ExhaustiveMatching.Analyzer
             return typeSymbol.InheritsFromTypeWithAttribute(closedAttribute);
         }
 
-        private static void MustBeUnionMember(
+        private static void MustBeCase(
             SyntaxNodeAnalysisContext context,
             TypeDeclarationSyntax typeDeclaration,
             ITypeSymbol typeSymbol,
             INamedTypeSymbol closedAttribute)
         {
-            // Any type inheriting from a union type must be listed in the union
+            // Any type inheriting from a closed type must be listed in the cases
             var closedBaseTypes = typeSymbol.Interfaces.Append(typeSymbol.BaseType)
                 .Where(t => t.HasAttribute(closedAttribute));
 
@@ -47,7 +45,7 @@ namespace ExhaustiveMatching.Analyzer
                 if (isMember)
                     continue;
 
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeUnionMember,
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeCaseOfClosedType,
                     typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), baseType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }

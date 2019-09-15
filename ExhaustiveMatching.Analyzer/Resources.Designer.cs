@@ -70,7 +70,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some values of the enum are not processed by switch: {0}.
+        ///   Looks up a localized string similar to Enum value not processed by switch: {0}.
         /// </summary>
         internal static string EM001Message {
             get {
@@ -88,7 +88,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An switch statement on a closed type marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types..
+        ///   Looks up a localized string similar to An switch statement on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types..
         /// </summary>
         internal static string EM002Description {
             get {
@@ -97,7 +97,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some subtypes are not processed by switch: {0}.
+        ///   Looks up a localized string similar to Subtypes not processed by switch: {0}.
         /// </summary>
         internal static string EM002Message {
             get {
@@ -115,7 +115,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A subtype of a type marked with the &quot;Closed&quot; attribute must be a member of the closed type..
+        ///   Looks up a localized string similar to A subtype of a type marked with the &quot;Closed&quot; attribute must be a case of the closed type..
         /// </summary>
         internal static string EM011Description {
             get {
@@ -124,7 +124,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is not a member of its closed supertype: {1}.
+        ///   Looks up a localized string similar to {0} is not a case of its closed supertype: {1}.
         /// </summary>
         internal static string EM011Message {
             get {
@@ -133,7 +133,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtype of a Closed Type Must Be a Member.
+        ///   Looks up a localized string similar to Subtype of a Closed Type Must Be a Case.
         /// </summary>
         internal static string EM011Title {
             get {
@@ -142,7 +142,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A closed type&apos;s member types must all be direct subtypes of the closed type. That is, they must inherit from the class or implement the interface..
+        ///   Looks up a localized string similar to A closed type&apos;s case must all be direct subtypes of the closed type. That is, it must inherit from the class or implement the interface..
         /// </summary>
         internal static string EM012Description {
             get {
@@ -151,7 +151,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Closed type member is not a direct subtype: {0}.
+        ///   Looks up a localized string similar to Closed type case is not a direct subtype: {0}.
         /// </summary>
         internal static string EM012Message {
             get {
@@ -160,7 +160,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Closed Type Member Must Be a Direct Subtype.
+        ///   Looks up a localized string similar to Closed Type Case Must Be a Direct Subtype.
         /// </summary>
         internal static string EM012Title {
             get {
@@ -178,7 +178,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When clauses are not supported in an exhaustive switch.
+        ///   Looks up a localized string similar to When guard is not supported in an exhaustive switch.
         /// </summary>
         internal static string EM100Message {
             get {
@@ -187,7 +187,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Clauses Not Supported.
+        ///   Looks up a localized string similar to When Guards Not Supported.
         /// </summary>
         internal static string EM100Title {
             get {
@@ -196,7 +196,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This type of case clause is not supported in exhustive switch statements. Only &quot;case Type name:&quot; and &quot;case null:&quot; are supported..
+        ///   Looks up a localized string similar to This type of case clause is not supported in exhaustive switch statements. Only &quot;case Type name:&quot; and &quot;case null:&quot; are supported..
         /// </summary>
         internal static string EM101Description {
             get {

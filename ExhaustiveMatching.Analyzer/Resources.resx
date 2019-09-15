@@ -121,49 +121,49 @@
     <value>An switch statement on an enum type marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases.</value>
   </data>
   <data name="EM001Message" xml:space="preserve">
-    <value>Some values of the enum are not processed by switch: {0}</value>
+    <value>Enum value not processed by switch: {0}</value>
   </data>
   <data name="EM001Title" xml:space="preserve">
     <value>Switch on Enum Not Exhaustive</value>
   </data>
   <data name="EM002Description" xml:space="preserve">
-    <value>An switch statement on a closed type marked as exhustive by throwing ExhaustiveMatchFailedException is not exhustive. It will fail to match one or more possible types.</value>
+    <value>An switch statement on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types.</value>
   </data>
   <data name="EM002Message" xml:space="preserve">
-    <value>Some subtypes are not processed by switch: {0}</value>
+    <value>Subtypes not processed by switch: {0}</value>
   </data>
   <data name="EM002Title" xml:space="preserve">
     <value>Switch on Closed Type Not Exhaustive</value>
   </data>
   <data name="EM011Description" xml:space="preserve">
-    <value>A subtype of a type marked with the "Closed" attribute must be a member of the closed type.</value>
+    <value>A subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
   </data>
   <data name="EM011Message" xml:space="preserve">
-    <value>{0} is not a member of its closed supertype: {1}</value>
+    <value>{0} is not a case of its closed supertype: {1}</value>
   </data>
   <data name="EM011Title" xml:space="preserve">
-    <value>Subtype of a Closed Type Must Be a Member</value>
+    <value>Subtype of a Closed Type Must Be a Case</value>
   </data>
   <data name="EM012Description" xml:space="preserve">
-    <value>A closed type's member types must all be direct subtypes of the closed type. That is, they must inherit from the class or implement the interface.</value>
+    <value>A closed type's case must all be direct subtypes of the closed type. That is, it must inherit from the class or implement the interface.</value>
   </data>
   <data name="EM012Message" xml:space="preserve">
-    <value>Closed type member is not a direct subtype: {0}</value>
+    <value>Closed type case is not a direct subtype: {0}</value>
   </data>
   <data name="EM012Title" xml:space="preserve">
-    <value>Closed Type Member Must Be a Direct Subtype</value>
+    <value>Closed Type Case Must Be a Direct Subtype</value>
   </data>
   <data name="EM100Description" xml:space="preserve">
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>
   </data>
   <data name="EM100Message" xml:space="preserve">
-    <value>When clauses are not supported in an exhaustive switch</value>
+    <value>When guard is not supported in an exhaustive switch</value>
   </data>
   <data name="EM100Title" xml:space="preserve">
-    <value>When Clauses Not Supported</value>
+    <value>When Guards Not Supported</value>
   </data>
   <data name="EM101Description" xml:space="preserve">
-    <value>This type of case clause is not supported in exhustive switch statements. Only "case Type name:" and "case null:" are supported.</value>
+    <value>This type of case clause is not supported in exhaustive switch statements. Only "case Type name:" and "case null:" are supported.</value>
   </data>
   <data name="EM101Message" xml:space="preserve">
     <value>Case clause type not supported in exhaustive switch: {0}</value>

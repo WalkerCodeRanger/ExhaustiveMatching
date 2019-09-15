@@ -10,7 +10,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
     public class TypeDeclarationAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
-        public void SubtypeOfTypeClosedTypeMustBeMember()
+        public void SubtypeOfClosedTypeMustBeCase()
         {
             const string test = @"using ExhaustiveMatching;
 namespace TestNamespace
@@ -27,10 +27,9 @@ namespace TestNamespace
             var expected = new DiagnosticResult
             {
                 Id = "EM011",
-                Message =
-                    "TestNamespace.Triangle is not a member of its closed supertype: TestNamespace.Shape",
+                Message = "TestNamespace.Triangle is not a case of its closed supertype: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 25) }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 25, 8) }
             };
 
             VerifyCSharpDiagnostic(test, expected);
@@ -56,7 +55,7 @@ namespace TestNamespace
             var expected = new DiagnosticResult
             {
                 Id = "EM012",
-                Message = "Closed type member is not a direct subtype: System.String",
+                Message = "Closed type case is not a direct subtype: System.String",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 16, 6) }
             };

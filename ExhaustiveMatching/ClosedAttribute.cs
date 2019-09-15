@@ -7,11 +7,11 @@ namespace ExhaustiveMatching
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class ClosedAttribute : Attribute
     {
-        public IReadOnlyList<Type> CaseTypes { get; }
+        public IReadOnlyList<Type> Cases { get; }
 
-        public ClosedAttribute(params Type[] caseTypes)
+        public ClosedAttribute(params Type[] cases)
         {
-            CaseTypes = caseTypes.ToList().AsReadOnly();
+            Cases = cases.ToList().AsReadOnly();
         }
     }
 }

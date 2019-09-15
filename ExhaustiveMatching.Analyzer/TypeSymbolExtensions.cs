@@ -72,7 +72,8 @@ namespace ExhaustiveMatching.Analyzer
 
         private static IEnumerable<TypedConstant> GetTypeConstants(TypedConstant constant)
         {
-            // Ignore anything that isn't a type or type in a single array
+            // Ignore anything that isn't a type or type in a single array. The compiler will report
+            // them as type errors.
             switch (constant.Kind)
             {
                 case TypedConstantKind.Type:

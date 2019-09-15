@@ -46,7 +46,7 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM002", EM002Title, EM002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM002Description);
 
-        public static readonly DiagnosticDescriptor MustBeUnionMember =
+        public static readonly DiagnosticDescriptor MustBeCaseOfClosedType =
             new DiagnosticDescriptor("EM011", EM011Title, EM011Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM011Description);
 
@@ -54,7 +54,7 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM012", EM012Title, EM012Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM012Description);
 
-        public static readonly DiagnosticDescriptor WhenClauseNotSupported =
+        public static readonly DiagnosticDescriptor WhenGuardNotSupported =
             new DiagnosticDescriptor("EM100", EM100Title, EM100Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM100Description);
 
@@ -65,7 +65,7 @@ namespace ExhaustiveMatching.Analyzer
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitchRule,
                 NotExhaustiveObjectSwitchRule,
-                MustBeUnionMember, MustBeDirectSubtype, WhenClauseNotSupported,
+                MustBeCaseOfClosedType, MustBeDirectSubtype, WhenGuardNotSupported,
                 UnsupportedCaseClauseType);
 
         public override void Initialize(AnalysisContext context)

@@ -14,12 +14,12 @@ namespace ExhaustiveMatching
         private const string NUllObjectValueMessage = "The value 'null' was not matched when matching a '{0}'. Match is supposed to be exhaustive.";
 
         /// <summary>
-        /// The type of value that was being matched on,
+        /// The type of value that was being matched on
         /// </summary>
         public Type MatchingType { get; }
 
         /// <summary>
-        /// The value that 
+        /// The value that failed to match
         /// </summary>
         public object FailedValue { get; }
 
@@ -33,7 +33,6 @@ namespace ExhaustiveMatching
         {
             MatchingType = matchingType;
             FailedValue = failedValue;
-            // TODO calculate a message
         }
 
         private ExhaustiveMatchFailedException(SerializationInfo info, StreamingContext context)

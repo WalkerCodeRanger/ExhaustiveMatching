@@ -18,19 +18,22 @@ namespace ExhaustiveMatching.Analyzer
             if (!switchKind.IsExhaustive)
                 return;
 
-            var expressionTypeInfo = context.SemanticModel
-                .GetTypeInfo(switchStatement.Expression, context.CancellationToken);
+            var expressionType = context.SemanticModel
+                .GetTypeInfo(switchStatement.Expression, context.CancellationToken)
+                .Type;
 
-            if (expressionTypeInfo.Type?.TypeKind == TypeKind.Enum)
-                AnalyzeSwitchOnEnum(context, switchStatement, expressionTypeInfo.Type);
+            if (expressionType?.TypeKind == TypeKind.Enum)
+                AnalyzeSwitchOnEnum(context, switchStatement, expressionType);
             else if (!switchKind.DefaultThrowsInvalidEnum)
-                AnalyzeSwitchOnClosed(context, switchStatement, expressionTypeInfo.Type);
+                AnalyzeSwitchOnClosed(context, switchStatement, expressionType);
         }
 
-        private static SwitchStatementKind IsExhaustive(SyntaxNodeAnalysisContext context, SwitchStatementSyntax switchStatement)
+        private static SwitchStatementKind IsExhaustive(
+            SyntaxNodeAnalysisContext context,
+            SwitchStatementSyntax switchStatement)
         {
-            var defaultSection = switchStatement.Sections.FirstOrDefault(s =>
-                s.Labels.OfType<DefaultSwitchLabelSyntax>().Any());
+            var defaultSection = switchStatement.Sections
+                .FirstOrDefault(s => s.Labels.OfType<DefaultSwitchLabelSyntax>().Any());
 
             var throwStatement = defaultSection?.Statements.OfType<ThrowStatementSyntax>().FirstOrDefault();
 
@@ -111,7 +114,8 @@ namespace ExhaustiveMatching.Analyzer
 
             var allTypes = GetAllConcreteClosedTypeMembers(context, type);
 
-            var uncoveredTypes = allTypes.Where(t => !typesUsed.Any(t.IsSubtypeOf))
+            var uncoveredTypes = allTypes
+                .Where(t => !typesUsed.Any(t.IsSubtypeOf))
                 .ToArray();
 
             if (uncoveredTypes.Any())
@@ -163,7 +167,7 @@ namespace ExhaustiveMatching.Analyzer
 
             if (casePattern.WhenClause != null)
             {
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.WhenClauseNotSupported,
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.WhenGuardNotSupported,
                     casePattern.WhenClause.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
@@ -186,9 +190,9 @@ namespace ExhaustiveMatching.Analyzer
                 if (!type.IsAbstract)
                     concreteTypes.Add(type);
 
-                var unionOfTypes = type.GetCaseTypes(closedAttribute);
+                var caseTypes = type.GetCaseTypes(closedAttribute);
 
-                foreach (var subtype in unionOfTypes)
+                foreach (var subtype in caseTypes)
                     types.Enqueue(subtype);
             }
 
