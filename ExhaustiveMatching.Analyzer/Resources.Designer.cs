@@ -241,7 +241,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unsupported Case Clause Type.
+        ///   Looks up a localized string similar to Case Clause Type Not Supported.
         /// </summary>
         internal static string EM101Title {
             get {
@@ -273,6 +273,33 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM102Title {
             get {
                 return ResourceManager.GetString("EM102Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Case clauses must match on types that are case types inheriting from the type being matched on.
+        /// </summary>
+        internal static string EM103Description {
+            get {
+                return ResourceManager.GetString("EM103Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type is not a case type inheriting from type being matched: {0}.
+        /// </summary>
+        internal static string EM103Message {
+            get {
+                return ResourceManager.GetString("EM103Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match Must Be On Case Type.
+        /// </summary>
+        internal static string EM103Title {
+            get {
+                return ResourceManager.GetString("EM103Title", resourceCulture);
             }
         }
     }

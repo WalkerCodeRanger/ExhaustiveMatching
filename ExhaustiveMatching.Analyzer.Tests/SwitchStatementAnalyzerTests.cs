@@ -139,6 +139,9 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case Triangle triangle:
                 Console.WriteLine(""Triangle: "" + triangle);
                 break;
+            case null: // checking this is allowed
+                Console.WriteLine(""null"");
+                break;
             default:
                 throw ExhaustiveMatch.Failed(shape);
         }";
@@ -234,6 +237,51 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2, expected3);
         }
 
+        [TestMethod]
+        public void ErrorForMatchOnTypesOutsideOfHierarchy()
+        {
+            const string args = "Shape shape";
+            const string test = @"
+        switch (shape)
+        {
+            case Square square:
+                Console.WriteLine(""Square: "" + square);
+                break;
+            case Circle circle:
+                Console.WriteLine(""Circle: "" + circle);
+                break;
+            case EquilateralTriangle equilateralTriangle:
+                Console.WriteLine(""EquilateralTriangle: "" + equilateralTriangle);
+                break;
+            case Triangle triangle:
+                Console.WriteLine(""Triangle: "" + triangle);
+                break;
+            case string s:
+                Console.WriteLine(""string: "" + s);
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(shape);
+        }";
+
+            var expected1 = new DiagnosticResult
+            {
+                Id = "EM103",
+                Message = "Type is not a case type inheriting from type being matched: TestNamespace.EquilateralTriangle",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 18, 39) }
+            };
+
+            var expected2 = new DiagnosticResult
+            {
+                Id = "EM103",
+                Message = "Type is not a case type inheriting from type being matched: System.String",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 24, 18, 8) }
+            };
+
+            VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
+        }
+
         private static string CodeContext(string args, string body)
         {
             const string context = @"using System; // DayOfWeek
@@ -258,6 +306,8 @@ namespace TestNamespace
     public class Square : Shape {{ }}
     public class Circle : Shape {{ }}
     public class Triangle : Shape {{ }}
+    public class EquilateralTriangle : Triangle {{ }}
+    public class IsoscelesTriangle : Triangle {{ }}
 }}";
             return string.Format(context, args, body);
         }

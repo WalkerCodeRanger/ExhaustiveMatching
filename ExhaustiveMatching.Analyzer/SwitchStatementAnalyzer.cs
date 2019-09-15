@@ -98,22 +98,25 @@ namespace ExhaustiveMatching.Analyzer
 
             CheckForNonPatternCases(context, switchLabels);
 
+            var closedAttributeType = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
+            var isClosed = type.HasAttribute(closedAttributeType);
+
+            var allTypes = GetAllConcreteClosedTypeMembers(type, closedAttributeType);
+
             var typesUsed = switchLabels
                 .OfType<CasePatternSwitchLabelSyntax>()
-                .Select(casePattern => GetTypeSymbolMatched(context, casePattern))
-                .Where(t => t!=null) // returns null for invalid case clauses
+                .Select(casePattern => GetTypeSymbolMatched(context, casePattern, allTypes, isClosed))
+                .Where(t => t != null) // returns null for invalid case clauses
                 .ToImmutableHashSet();
 
-            var closedAttributeType = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
-            if (!type.HasAttribute(closedAttributeType))
+            // If it is an open type, we don't want to actually check for uncovered types
+            if (!isClosed)
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.OpenTypeNotSupported,
                     switchStatement.Expression.GetLocation(), type.GetFullName());
                 context.ReportDiagnostic(diagnostic);
                 return; // No point in trying to check for uncovered types, this isn't closed
             }
-
-            var allTypes = GetAllConcreteClosedTypeMembers(type, closedAttributeType);
 
             var uncoveredTypes = allTypes
                 .Where(t => !typesUsed.Any(t.IsSubtypeOf))
@@ -141,7 +144,7 @@ namespace ExhaustiveMatching.Analyzer
                 }
                 else
                 {
-                    var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.UnsupportedCaseClauseType,
+                    var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.CaseClauseTypeNotSupported,
                         switchLabel.Value.GetLocation(), switchLabel.Value.ToString());
                     context.ReportDiagnostic(diagnostic);
                 }
@@ -150,7 +153,9 @@ namespace ExhaustiveMatching.Analyzer
 
         private static ITypeSymbol GetTypeSymbolMatched(
             SyntaxNodeAnalysisContext context,
-            CasePatternSwitchLabelSyntax casePattern)
+            CasePatternSwitchLabelSyntax casePattern,
+            HashSet<ITypeSymbol> allTypes,
+            bool isClosed)
         {
             ITypeSymbol symbolUsed;
             if (casePattern.Pattern is DeclarationPatternSyntax declarationPattern)
@@ -161,10 +166,17 @@ namespace ExhaustiveMatching.Analyzer
             }
             else
             {
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.UnsupportedCaseClauseType,
-                    casePattern.GetLocation(), casePattern.ToString());
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.CaseClauseTypeNotSupported,
+                    casePattern.Pattern.GetLocation(), casePattern.Pattern.ToString());
                 context.ReportDiagnostic(diagnostic);
                 symbolUsed = null;
+            }
+
+            if (isClosed && !allTypes.Contains(symbolUsed))
+            {
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MatchMustBeOnCaseType,
+                    casePattern.Pattern.GetLocation(), symbolUsed.GetFullName());
+                context.ReportDiagnostic(diagnostic);
             }
 
             if (casePattern.WhenClause != null)

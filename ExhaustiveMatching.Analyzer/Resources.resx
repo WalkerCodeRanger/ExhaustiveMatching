@@ -178,7 +178,7 @@
     <value>Case clause type not supported in exhaustive switch: {0}</value>
   </data>
   <data name="EM101Title" xml:space="preserve">
-    <value>Unsupported Case Clause Type</value>
+    <value>Case Clause Type Not Supported</value>
   </data>
   <data name="EM102Description" xml:space="preserve">
     <value>An exhuastive switch on an open type is not supported. The expression being switched on must be an enum or closed.</value>
@@ -188,5 +188,14 @@
   </data>
   <data name="EM102Title" xml:space="preserve">
     <value>Open Type Not Supported</value>
+  </data>
+  <data name="EM103Description" xml:space="preserve">
+    <value>Case clauses must match on types that are case types inheriting from the type being matched on</value>
+  </data>
+  <data name="EM103Message" xml:space="preserve">
+    <value>Type is not a case type inheriting from type being matched: {0}</value>
+  </data>
+  <data name="EM103Title" xml:space="preserve">
+    <value>Match Must Be On Case Type</value>
   </data>
 </root>
