@@ -58,7 +58,7 @@ namespace TestNamespace
                 Id = "EM012",
                 Message = "Closed type member is not a direct subtype: System.String",
                 Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 27) }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 16, 6) }
             };
 
             VerifyCSharpDiagnostic(test, expected);

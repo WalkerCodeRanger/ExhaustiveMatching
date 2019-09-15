@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExhaustiveMatching.Analyzer
 {
@@ -44,6 +45,19 @@ namespace ExhaustiveMatching.Analyzer
             return symbol.GetAttributes().Any(a => a.AttributeClass.Equals(attributeType));
         }
 
+        public static IEnumerable<TypeSyntax> GetCaseTypeSyntaxes(
+            this ITypeSymbol type,
+            INamedTypeSymbol closedAttributeType)
+        {
+            return type.GetAttributes()
+                .Where(attr => attr.AttributeClass.Equals(closedAttributeType))
+                .Select(attr => attr.ApplicationSyntaxReference.GetSyntax()).Cast<AttributeSyntax>()
+                .SelectMany(attr => attr.ArgumentList.Arguments)
+                .Select(arg => arg.Expression)
+                .OfType<TypeOfExpressionSyntax>()
+                .Select(s => s.Type);
+        }
+
         public static IEnumerable<ITypeSymbol> GetCaseTypes(
             this ITypeSymbol type,
             INamedTypeSymbol closedAttributeType)
@@ -52,7 +66,8 @@ namespace ExhaustiveMatching.Analyzer
                 .Where(a => a.AttributeClass.Equals(closedAttributeType))
                 .SelectMany(a => a.ConstructorArguments)
                 .SelectMany(arg => arg.Values)
-                .Select(arg => arg.Value).Cast<ITypeSymbol>();
+                .Select(arg => arg.Value)
+                .Cast<ITypeSymbol>();
         }
 
         public static string GetFullName(this ISymbol symbol)

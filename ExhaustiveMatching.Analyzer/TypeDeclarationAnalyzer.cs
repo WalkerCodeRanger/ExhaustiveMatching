@@ -66,15 +66,16 @@ namespace ExhaustiveMatching.Analyzer
             ITypeSymbol typeSymbol,
             INamedTypeSymbol closedAttribute)
         {
-            var unionOfTypes = typeSymbol.GetCaseTypes(closedAttribute);
-            foreach (var memberType in unionOfTypes)
+            var caseTypeSyntaxes = typeSymbol.GetCaseTypeSyntaxes(closedAttribute);
+            foreach (var caseTypeSyntax in caseTypeSyntaxes)
             {
-                if (memberType.BaseType.Equals(typeSymbol)
-                || memberType.Interfaces.Any(i => i.Equals(typeSymbol)))
+                var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
+                if (caseType.BaseType.Equals(typeSymbol)
+                || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
                     continue;
 
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
-                    typeDeclaration.Identifier.GetLocation(), memberType.GetFullName());
+                    caseTypeSyntax.GetLocation(), caseType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
         }
