@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExhaustiveMatching.Analyzer</id>
-    <version>0.1.2</version>
+    <version>0.2.0</version>
     <authors>Jeff Walker</authors>
     <owners>Jeff Walker</owners>
     <license type="expression">MIT</license>
