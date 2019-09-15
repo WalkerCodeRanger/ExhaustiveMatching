@@ -34,7 +34,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expectedFriday = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Enum value not processed by switch: Friday",
+                Message = "Enum value not handled by switch: Friday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
@@ -42,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expectedSunday = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Enum value not processed by switch: Sunday",
+                Message = "Enum value not handled by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
@@ -75,7 +75,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expectedFriday = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Enum value not processed by switch: Friday",
+                Message = "Enum value not handled by switch: Friday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
@@ -83,7 +83,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expectedSunday = new DiagnosticResult
             {
                 Id = "EM001",
-                Message = "Enum value not processed by switch: Sunday",
+                Message = "Enum value not handled by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
@@ -108,14 +108,14 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expectedCircle = new DiagnosticResult
             {
                 Id = "EM002",
-                Message = "Subtype not processed by switch: TestNamespace.Circle",
+                Message = "Subtype not handled by switch: TestNamespace.Circle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
             var expectedTriangle = new DiagnosticResult
             {
                 Id = "EM002",
-                Message = "Subtype not processed by switch: TestNamespace.Triangle",
+                Message = "Subtype not handled by switch: TestNamespace.Triangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };

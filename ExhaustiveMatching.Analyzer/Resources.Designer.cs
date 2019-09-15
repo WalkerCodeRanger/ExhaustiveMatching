@@ -70,7 +70,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum value not processed by switch: {0}.
+        ///   Looks up a localized string similar to Enum value not handled by switch: {0}.
         /// </summary>
         internal static string EM001Message {
             get {
@@ -97,7 +97,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtype not processed by switch: {0}.
+        ///   Looks up a localized string similar to Subtype not handled by switch: {0}.
         /// </summary>
         internal static string EM002Message {
             get {
