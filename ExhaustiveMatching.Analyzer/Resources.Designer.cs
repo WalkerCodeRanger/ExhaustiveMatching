@@ -142,7 +142,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A closed type&apos;s case must all be direct subtypes of the closed type. That is, it must inherit from the class or implement the interface..
+        ///   Looks up a localized string similar to A closed type&apos;s case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface..
         /// </summary>
         internal static string EM012Description {
             get {
@@ -165,6 +165,33 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM012Title {
             get {
                 return ResourceManager.GetString("EM012Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A closed type&apos;s case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface..
+        /// </summary>
+        internal static string EM013Description {
+            get {
+                return ResourceManager.GetString("EM013Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed type case is not a subtype: {0}.
+        /// </summary>
+        internal static string EM013Message {
+            get {
+                return ResourceManager.GetString("EM013Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed Type Case Must Be a Subtype.
+        /// </summary>
+        internal static string EM013Title {
+            get {
+                return ResourceManager.GetString("EM013Title", resourceCulture);
             }
         }
         

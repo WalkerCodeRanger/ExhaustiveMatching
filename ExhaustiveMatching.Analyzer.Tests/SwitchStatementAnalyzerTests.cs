@@ -208,9 +208,9 @@ namespace TestNamespace
         typeof(Circle),
         typeof(Triangle))]
     public abstract class Shape {{ }}
-    public sealed class Square : Shape {{ }}
-    public sealed class Circle : Shape {{ }}
-    public sealed class Triangle : Shape {{ }}
+    public class Square : Shape {{ }}
+    public class Circle : Shape {{ }}
+    public class Triangle : Shape {{ }}
 }}";
             return string.Format(context, args, body);
         }

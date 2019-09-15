@@ -27,6 +27,10 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM012Message = LoadString(nameof(Resources.EM012Message));
         private static readonly LocalizableString EM012Description = LoadString(Resources.EM012Description);
 
+        private static readonly LocalizableString EM013Title = LoadString(nameof(Resources.EM013Title));
+        private static readonly LocalizableString EM013Message = LoadString(nameof(Resources.EM013Message));
+        private static readonly LocalizableString EM013Description = LoadString(Resources.EM013Description);
+
         private static readonly LocalizableString EM100Title = LoadString(nameof(Resources.EM100Title));
         private static readonly LocalizableString EM100Message = LoadString(nameof(Resources.EM100Message));
         private static readonly LocalizableString EM100Description = LoadString(Resources.EM100Description);
@@ -54,6 +58,10 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM012", EM012Title, EM012Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM012Description);
 
+        public static readonly DiagnosticDescriptor MustBeSubtype =
+            new DiagnosticDescriptor("EM013", EM013Title, EM013Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM013Description);
+
         public static readonly DiagnosticDescriptor WhenGuardNotSupported =
             new DiagnosticDescriptor("EM100", EM100Title, EM100Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM100Description);
@@ -64,8 +72,8 @@ namespace ExhaustiveMatching.Analyzer
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitchRule,
-                NotExhaustiveObjectSwitchRule,
-                MustBeCaseOfClosedType, MustBeDirectSubtype, WhenGuardNotSupported,
+                NotExhaustiveObjectSwitchRule, MustBeCaseOfClosedType,
+                MustBeDirectSubtype, MustBeSubtype, WhenGuardNotSupported,
                 UnsupportedCaseClauseType);
 
         public override void Initialize(AnalysisContext context)

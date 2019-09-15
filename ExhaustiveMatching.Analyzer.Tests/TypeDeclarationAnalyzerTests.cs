@@ -19,9 +19,9 @@ namespace TestNamespace
         typeof(Square),
         typeof(Circle))]
     public abstract class Shape { }
-    public sealed class Square : Shape { }
-    public sealed class Circle : Shape { }
-    public sealed class Triangle : Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+    public class Triangle : Shape { }
 }";
 
             var expected = new DiagnosticResult
@@ -29,14 +29,14 @@ namespace TestNamespace
                 Id = "EM011",
                 Message = "TestNamespace.Triangle is not a case of its closed supertype: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 25, 8) }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 18, 8) }
             };
 
             VerifyCSharpDiagnostic(test, expected);
         }
 
         [TestMethod]
-        public void MemberTypesMustBeDirectSubtype()
+        public void CaseTypeMustBeSubtype()
         {
             const string test = @"using ExhaustiveMatching;
 using System;
@@ -48,16 +48,43 @@ namespace TestNamespace
         typeof(Circle),
         typeof(String))]
     public abstract class Shape { }
-    public sealed class Square : Shape { }
-    public sealed class Circle : Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM013",
+                Message = "Closed type case is not a subtype: System.String",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 16, 6) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void CaseTypeMustBeDirectSubtype()
+        {
+            const string test = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Rectangle),
+        typeof(Square))]
+    public abstract class Shape { }
+    public class Rectangle : Shape { }
+    public class Square : Rectangle { }
 }";
 
             var expected = new DiagnosticResult
             {
                 Id = "EM012",
-                Message = "Closed type case is not a direct subtype: System.String",
+                Message = "Closed type case is not a direct subtype: TestNamespace.Square",
                 Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 16, 6) }
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 16, 6) }
             };
 
             VerifyCSharpDiagnostic(test, expected);
@@ -73,7 +100,7 @@ namespace TestNamespace
 {
     [Closed(typeof(Square))]
     public abstract class Shape { }
-    public sealed class Square : Shape { }
+    public class Square : Shape { }
 }";
 
             VerifyCSharpDiagnostic(test);

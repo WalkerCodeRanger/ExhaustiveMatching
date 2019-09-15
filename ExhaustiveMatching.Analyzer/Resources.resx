@@ -145,13 +145,22 @@
     <value>Subtype of a Closed Type Must Be a Case</value>
   </data>
   <data name="EM012Description" xml:space="preserve">
-    <value>A closed type's case must all be direct subtypes of the closed type. That is, it must inherit from the class or implement the interface.</value>
+    <value>A closed type's case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface.</value>
   </data>
   <data name="EM012Message" xml:space="preserve">
     <value>Closed type case is not a direct subtype: {0}</value>
   </data>
   <data name="EM012Title" xml:space="preserve">
     <value>Closed Type Case Must Be a Direct Subtype</value>
+  </data>
+  <data name="EM013Description" xml:space="preserve">
+    <value>A closed type's case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface.</value>
+  </data>
+  <data name="EM013Message" xml:space="preserve">
+    <value>Closed type case is not a subtype: {0}</value>
+  </data>
+  <data name="EM013Title" xml:space="preserve">
+    <value>Closed Type Case Must Be a Subtype</value>
   </data>
   <data name="EM100Description" xml:space="preserve">
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>

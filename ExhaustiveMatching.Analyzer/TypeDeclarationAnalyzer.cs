@@ -73,9 +73,21 @@ namespace ExhaustiveMatching.Analyzer
                     || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
                     continue;
 
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
-                    caseTypeSyntax.GetLocation(), caseType.GetFullName());
-                context.ReportDiagnostic(diagnostic);
+                if (caseType.InheritsFrom(typeSymbol)
+                    || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol)))
+                {
+                    // It's a subtype, just not a direct one
+                    var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
+                        caseTypeSyntax.GetLocation(), caseType.GetFullName());
+                    context.ReportDiagnostic(diagnostic);
+                }
+                else
+                {
+                    // Not even a subtype
+                    var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeSubtype,
+                        caseTypeSyntax.GetLocation(), caseType.GetFullName());
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
         }
     }

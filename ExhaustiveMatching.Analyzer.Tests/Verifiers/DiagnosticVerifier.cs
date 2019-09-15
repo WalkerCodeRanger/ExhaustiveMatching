@@ -111,7 +111,7 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                 string diagnosticsOutput = actualResults.Any() ? FormatDiagnostics(analyzer, actualResults.ToArray()) : "    NONE.";
 
                 Assert.IsTrue(false,
-                    string.Format("Mismatch between number of diagnostics returned, expected \"{0}\" actual \"{1}\"\r\n\r\nDiagnostics:\r\n{2}\r\n", expectedCount, actualCount, diagnosticsOutput));
+                    $"Mismatch between number of diagnostics returned, expected \"{expectedCount}\" actual \"{actualCount}\"\r\n\r\nDiagnostics:\r\n{diagnosticsOutput}\r\n");
             }
 
             for (int i = 0; i < expectedResults.Length; i++)
@@ -124,8 +124,7 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                     if (actual.Location != Location.None)
                     {
                         Assert.IsTrue(false,
-                            string.Format("Expected:\nA project diagnostic with No location\nActual:\n{0}",
-                            FormatDiagnostics(analyzer, actual)));
+                            $"Expected:\nA project diagnostic with No location\nActual:\n{FormatDiagnostics(analyzer, actual)}");
                     }
                 }
                 else
@@ -136,9 +135,7 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                     if (additionalLocations.Length != expected.Locations.Length - 1)
                     {
                         Assert.IsTrue(false,
-                            string.Format("Expected {0} additional locations but got {1} for Diagnostic:\r\n    {2}\r\n",
-                                expected.Locations.Length - 1, additionalLocations.Length,
-                                FormatDiagnostics(analyzer, actual)));
+                            $"Expected {expected.Locations.Length - 1} additional locations but got {additionalLocations.Length} for Diagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
                     }
 
                     for (int j = 0; j < additionalLocations.Length; ++j)
@@ -150,22 +147,19 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                 if (actual.Id != expected.Id)
                 {
                     Assert.IsTrue(false,
-                        string.Format("Expected diagnostic id to be \"{0}\" was \"{1}\"\r\n\r\nDiagnostic:\r\n    {2}\r\n",
-                            expected.Id, actual.Id, FormatDiagnostics(analyzer, actual)));
+                        $"Expected diagnostic id to be \"{expected.Id}\" was \"{actual.Id}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
                 }
 
                 if (actual.Severity != expected.Severity)
                 {
                     Assert.IsTrue(false,
-                        string.Format("Expected diagnostic severity to be \"{0}\" was \"{1}\"\r\n\r\nDiagnostic:\r\n    {2}\r\n",
-                            expected.Severity, actual.Severity, FormatDiagnostics(analyzer, actual)));
+                        $"Expected diagnostic severity to be \"{expected.Severity}\" was \"{actual.Severity}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
                 }
 
                 if (actual.GetMessage() != expected.Message)
                 {
                     Assert.IsTrue(false,
-                        string.Format("Expected diagnostic message to be \"{0}\" was \"{1}\"\r\n\r\nDiagnostic:\r\n    {2}\r\n",
-                            expected.Message, actual.GetMessage(), FormatDiagnostics(analyzer, actual)));
+                        $"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
                 }
             }
         }
