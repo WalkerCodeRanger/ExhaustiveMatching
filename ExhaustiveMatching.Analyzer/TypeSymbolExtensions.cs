@@ -65,9 +65,25 @@ namespace ExhaustiveMatching.Analyzer
             return type.GetAttributes()
                 .Where(a => a.AttributeClass.Equals(closedAttributeType))
                 .SelectMany(a => a.ConstructorArguments)
-                .SelectMany(arg => arg.Values)
+                .SelectMany(GetTypeConstants)
                 .Select(arg => arg.Value)
                 .Cast<ITypeSymbol>();
+        }
+
+        private static IEnumerable<TypedConstant> GetTypeConstants(TypedConstant constant)
+        {
+            // Ignore anything that isn't a type or type in a single array
+            switch (constant.Kind)
+            {
+                case TypedConstantKind.Type:
+                    yield return constant;
+                    break;
+                case TypedConstantKind.Array:
+                    foreach (var constantValue in constant.Values)
+                        if (constantValue.Kind == TypedConstantKind.Type)
+                            yield return constantValue;
+                    break;
+            }
         }
 
         public static string GetFullName(this ISymbol symbol)

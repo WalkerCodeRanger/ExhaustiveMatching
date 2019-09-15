@@ -94,7 +94,6 @@ namespace TestNamespace
 {
     [Closed(typeof())]
     public abstract class Shape { }
-    public sealed class Square : Shape { }
 }";
 
             VerifyCSharpDiagnostic(test);

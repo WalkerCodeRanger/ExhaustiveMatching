@@ -70,8 +70,9 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var caseTypeSyntax in caseTypeSyntaxes)
             {
                 var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
-                if (caseType.BaseType.Equals(typeSymbol)
-                || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
+                if (caseType == null
+                    || caseType.BaseType.Equals(typeSymbol)
+                    || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
                     continue;
 
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
