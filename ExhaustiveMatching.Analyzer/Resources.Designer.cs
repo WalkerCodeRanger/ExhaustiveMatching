@@ -248,5 +248,32 @@ namespace ExhaustiveMatching.Analyzer {
                 return ResourceManager.GetString("EM101Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exhuastive switch on an open type is not supported. The expression being switched on must be an enum or closed..
+        /// </summary>
+        internal static string EM102Description {
+            get {
+                return ResourceManager.GetString("EM102Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exhaustive switch must be on enum or closed type, was on: {0}.
+        /// </summary>
+        internal static string EM102Message {
+            get {
+                return ResourceManager.GetString("EM102Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Type Not Supported.
+        /// </summary>
+        internal static string EM102Title {
+            get {
+                return ResourceManager.GetString("EM102Title", resourceCulture);
+            }
+        }
     }
 }

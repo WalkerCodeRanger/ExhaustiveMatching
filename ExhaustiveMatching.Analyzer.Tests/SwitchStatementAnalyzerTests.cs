@@ -179,12 +179,59 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected2 = new DiagnosticResult
             {
                 Id = "EM101",
-                Message = "Case clause type not supported in exhaustive switch: case 12:",
+                Message = "Case clause type not supported in exhaustive switch: 12",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 21, 18, 2) }
             };
 
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
+        }
+
+        [TestMethod]
+        public void SwitchOnNonClosedType()
+        {
+            const string args = "object o";
+            const string test = @"
+        switch (o)
+        {
+            case string s:
+                Console.WriteLine(""string: "" + s);
+                break;
+            case Triangle triangle when true:
+                Console.WriteLine(""Triangle: "" + triangle);
+                break;
+            case 12:
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(shape);
+        }";
+
+            var expected1 = new DiagnosticResult
+            {
+                Id = "EM102",
+                Message = "Exhaustive switch must be on enum or closed type, was on: System.Object",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 17, 1) }
+            };
+
+            // Still reports these errors
+            var expected2 = new DiagnosticResult
+            {
+                Id = "EM100",
+                Message = "When guard is not supported in an exhaustive switch",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 15, 36, 9) }
+            };
+
+            var expected3 = new DiagnosticResult
+            {
+                Id = "EM101",
+                Message = "Case clause type not supported in exhaustive switch: 12",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 18, 2) }
+            };
+
+            VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2, expected3);
         }
 
         private static string CodeContext(string args, string body)

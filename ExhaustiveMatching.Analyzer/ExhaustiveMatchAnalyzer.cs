@@ -39,6 +39,10 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM101Message = LoadString(nameof(Resources.EM101Message));
         private static readonly LocalizableString EM101Description = LoadString(Resources.EM101Description);
 
+        private static readonly LocalizableString EM102Title = LoadString(nameof(Resources.EM102Title));
+        private static readonly LocalizableString EM102Message = LoadString(nameof(Resources.EM102Message));
+        private static readonly LocalizableString EM102Description = LoadString(Resources.EM102Description);
+
         private const string Category = "Logic";
 
         public static readonly DiagnosticDescriptor NotExhaustiveEnumSwitchRule =
@@ -70,11 +74,15 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM101", EM101Title, EM101Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM101Description);
 
+        public static readonly DiagnosticDescriptor OpenTypeNotSupported =
+            new DiagnosticDescriptor("EM102", EM102Title, EM102Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM102Description);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitchRule,
                 NotExhaustiveObjectSwitchRule, MustBeCaseOfClosedType,
                 MustBeDirectSubtype, MustBeSubtype, WhenGuardNotSupported,
-                UnsupportedCaseClauseType);
+                UnsupportedCaseClauseType, OpenTypeNotSupported);
 
         public override void Initialize(AnalysisContext context)
         {

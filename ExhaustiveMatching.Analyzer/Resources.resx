@@ -180,4 +180,13 @@
   <data name="EM101Title" xml:space="preserve">
     <value>Unsupported Case Clause Type</value>
   </data>
+  <data name="EM102Description" xml:space="preserve">
+    <value>An exhuastive switch on an open type is not supported. The expression being switched on must be an enum or closed.</value>
+  </data>
+  <data name="EM102Message" xml:space="preserve">
+    <value>Exhaustive switch must be on enum or closed type, was on: {0}</value>
+  </data>
+  <data name="EM102Title" xml:space="preserve">
+    <value>Open Type Not Supported</value>
+  </data>
 </root>
