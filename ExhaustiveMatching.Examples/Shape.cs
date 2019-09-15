@@ -14,15 +14,15 @@ class ShapeExample
             case Circle circle:
                 Console.WriteLine("Circle: " + circle);
                 break;
-            case EquilateralTriangle equilateralTriangle:
-                Console.WriteLine("EquilateralTriangle: " + equilateralTriangle);
-                break;
+            //case EquilateralTriangle equilateralTriangle:
+            //    Console.WriteLine("EquilateralTriangle: " + equilateralTriangle);
+            //    break;
             case Triangle triangle:
                 Console.WriteLine("Triangle: " + triangle);
                 break;
-            case string s:
-                Console.WriteLine("string: " + s);
-                break;
+            //case string s:
+            //    Console.WriteLine("string: " + s);
+            //    break;
             default:
                 throw ExhaustiveMatch.Failed(shape);
         }
