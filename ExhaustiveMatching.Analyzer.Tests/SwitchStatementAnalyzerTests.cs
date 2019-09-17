@@ -282,6 +282,46 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
         }
 
+        /// <summary>
+        /// There was a bug where `typeof()` as a case type would cause all switches
+        /// on that type to report a missing case with no type listed. (It was the error type)
+        /// </summary>
+        [TestMethod]
+        public void EmptyTypeofDoesNotCauseMissingCase()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(),
+        typeof(Circle))]
+    public abstract class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+
+    class TestClass
+    {
+        void TestMethod(Shape shape)
+        {
+            switch (shape)
+            {
+                case Square square:
+                    Console.WriteLine(""Square: "" + square);
+                    break;
+                case Circle circle:
+                    Console.WriteLine(""Circle: "" + circle);
+                    break;
+                default:
+                    throw ExhaustiveMatch.Failed(shape);
+            }
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
         private static string CodeContext(string args, string body)
         {
             const string context = @"using System; // DayOfWeek

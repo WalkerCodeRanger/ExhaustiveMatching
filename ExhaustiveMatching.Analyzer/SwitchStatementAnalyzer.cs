@@ -200,6 +200,10 @@ namespace ExhaustiveMatching.Analyzer
             while (types.Count > 0)
             {
                 type = types.Dequeue();
+
+                if (type.TypeKind==TypeKind.Error)
+                    continue;
+
                 // Concrete types but also leaf types even if they are abstract
                 // must be covered.
                 if (!type.IsAbstract || !type.HasAttribute(closedAttributeType))
