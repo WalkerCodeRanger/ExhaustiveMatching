@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ExhaustiveMatching
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
     public class ClosedAttribute : Attribute
     {
         public IReadOnlyList<Type> Cases { get; }
