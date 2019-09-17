@@ -274,7 +274,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected2 = new DiagnosticResult
             {
                 Id = "EM0103",
-                Message = "Type is not a case type inheriting from type being matched: System.String",
+                Message = "System.String is not a case type inheriting from type being matched: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 24, 18, 8) }
             };
