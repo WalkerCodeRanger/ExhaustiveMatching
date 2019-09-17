@@ -33,7 +33,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expectedFriday = new DiagnosticResult
             {
-                Id = "EM001",
+                Id = "EM0001",
                 Message = "Enum value not handled by switch: Friday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
@@ -41,7 +41,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expectedSunday = new DiagnosticResult
             {
-                Id = "EM001",
+                Id = "EM0001",
                 Message = "Enum value not handled by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
@@ -74,7 +74,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expectedFriday = new DiagnosticResult
             {
-                Id = "EM001",
+                Id = "EM0001",
                 Message = "Enum value not handled by switch: Friday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
@@ -82,7 +82,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expectedSunday = new DiagnosticResult
             {
-                Id = "EM001",
+                Id = "EM0001",
                 Message = "Enum value not handled by switch: Sunday",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
@@ -107,14 +107,14 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expectedCircle = new DiagnosticResult
             {
-                Id = "EM002",
+                Id = "EM0002",
                 Message = "Subtype not handled by switch: TestNamespace.Circle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
             var expectedTriangle = new DiagnosticResult
             {
-                Id = "EM002",
+                Id = "EM0002",
                 Message = "Subtype not handled by switch: TestNamespace.Triangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
@@ -173,7 +173,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected1 = new DiagnosticResult
             {
-                Id = "EM100",
+                Id = "EM0100",
                 Message = "When guard is not supported in an exhaustive switch",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 36, 9) }
@@ -181,7 +181,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected2 = new DiagnosticResult
             {
-                Id = "EM101",
+                Id = "EM0101",
                 Message = "Case clause type not supported in exhaustive switch: 12",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 21, 18, 2) }
@@ -211,7 +211,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected1 = new DiagnosticResult
             {
-                Id = "EM102",
+                Id = "EM0102",
                 Message = "Exhaustive switch must be on enum or closed type, was on: System.Object",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 17, 1) }
@@ -220,7 +220,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             // Still reports these errors
             var expected2 = new DiagnosticResult
             {
-                Id = "EM100",
+                Id = "EM0100",
                 Message = "When guard is not supported in an exhaustive switch",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 15, 36, 9) }
@@ -228,7 +228,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected3 = new DiagnosticResult
             {
-                Id = "EM101",
+                Id = "EM0101",
                 Message = "Case clause type not supported in exhaustive switch: 12",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 18, 2) }
@@ -265,7 +265,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected1 = new DiagnosticResult
             {
-                Id = "EM103",
+                Id = "EM0103",
                 Message = "Type is not a case type inheriting from type being matched: TestNamespace.EquilateralTriangle",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 18, 39) }
@@ -273,7 +273,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var expected2 = new DiagnosticResult
             {
-                Id = "EM103",
+                Id = "EM0103",
                 Message = "Type is not a case type inheriting from type being matched: System.String",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 24, 18, 8) }
@@ -314,7 +314,7 @@ namespace TestNamespace
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new Analyzer.ExhaustiveMatchAnalyzer();
+            return new ExhaustiveMatchAnalyzer();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace TestNamespace
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new Analyzer.ExhaustiveMatchAnalyzer();
+            return new ExhaustiveMatchAnalyzer();
         }
     }
 }

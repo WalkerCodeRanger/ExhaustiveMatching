@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ExhaustiveMatching.Analyzer.Tests
 {
     [TestClass]
-    public class ExhaustiveMatchAnalyzer : CodeFixVerifier
+    public class ExhaustiveMatchAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
         public void EmptyFileReportsNoDiagnostics()
@@ -17,7 +17,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new Analyzer.ExhaustiveMatchAnalyzer();
+            return new ExhaustiveMatchAnalyzer();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace TestNamespace
 
             var expected = new DiagnosticResult
             {
-                Id = "EM011",
+                Id = "EM0011",
                 Message = "TestNamespace.Triangle is not a case of its closed supertype: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 18, 8) }
@@ -54,7 +54,7 @@ namespace TestNamespace
 
             var expected = new DiagnosticResult
             {
-                Id = "EM013",
+                Id = "EM0013",
                 Message = "Closed type case is not a subtype: System.String",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 16, 6) }
@@ -81,7 +81,7 @@ namespace TestNamespace
 
             var expected = new DiagnosticResult
             {
-                Id = "EM012",
+                Id = "EM0012",
                 Message = "Closed type case is not a direct subtype: TestNamespace.Square",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 16, 6) }
@@ -142,7 +142,7 @@ namespace TestNamespace
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new Analyzer.ExhaustiveMatchAnalyzer();
+            return new ExhaustiveMatchAnalyzer();
         }
     }
 }
