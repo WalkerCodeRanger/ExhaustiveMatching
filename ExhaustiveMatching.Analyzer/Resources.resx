@@ -193,7 +193,7 @@
     <value>Case clauses must match on types that are case types inheriting from the type being matched on</value>
   </data>
   <data name="EM0103Message" xml:space="preserve">
-    <value>Type is not a case type inheriting from type being matched: {0}</value>
+    <value>{0} is not a case type inheriting from type being matched: {1}</value>
   </data>
   <data name="EM0103Title" xml:space="preserve">
     <value>Match Must Be On Case Type</value>

@@ -105,7 +105,7 @@ namespace ExhaustiveMatching.Analyzer
 
             var typesUsed = switchLabels
                 .OfType<CasePatternSwitchLabelSyntax>()
-                .Select(casePattern => GetTypeSymbolMatched(context, casePattern, allTypes, isClosed))
+                .Select(casePattern => GetTypeSymbolMatched(context, type, casePattern, allTypes, isClosed))
                 .Where(t => t != null) // returns null for invalid case clauses
                 .ToImmutableHashSet();
 
@@ -153,6 +153,7 @@ namespace ExhaustiveMatching.Analyzer
 
         private static ITypeSymbol GetTypeSymbolMatched(
             SyntaxNodeAnalysisContext context,
+            ITypeSymbol type,
             CasePatternSwitchLabelSyntax casePattern,
             HashSet<ITypeSymbol> allTypes,
             bool isClosed)
@@ -175,7 +176,7 @@ namespace ExhaustiveMatching.Analyzer
             if (isClosed && !allTypes.Contains(symbolUsed))
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MatchMustBeOnCaseType,
-                    casePattern.Pattern.GetLocation(), symbolUsed.GetFullName());
+                    casePattern.Pattern.GetLocation(), symbolUsed.GetFullName(), type.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
 

@@ -266,7 +266,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var expected1 = new DiagnosticResult
             {
                 Id = "EM0103",
-                Message = "Type is not a case type inheriting from type being matched: TestNamespace.EquilateralTriangle",
+                Message = "TestNamespace.EquilateralTriangle is not a case type inheriting from type being matched: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 18, 39) }
             };

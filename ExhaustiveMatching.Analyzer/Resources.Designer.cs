@@ -286,7 +286,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type is not a case type inheriting from type being matched: {0}.
+        ///   Looks up a localized string similar to {0} is not a case type inheriting from type being matched: {1}.
         /// </summary>
         internal static string EM0103Message {
             get {
