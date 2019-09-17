@@ -282,9 +282,51 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
         }
 
+
+        [TestMethod]
+        public void HandlesMultipleClosedAttributes()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(Circle))]
+    [Closed(typeof(Triangle))]
+    public abstract class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+    public class Triangle : Shape { }
+
+    class TestClass
+    {
+        void TestMethod(Shape shape)
+        {
+            switch (shape)
+            {
+                case Square square:
+                    Console.WriteLine(""Square: "" + square);
+                    break;
+                case Circle circle:
+                    Console.WriteLine(""Circle: "" + circle);
+                    break;
+                case Triangle triangle:
+                    Console.WriteLine(""Triangle: "" + triangle);
+                    break;
+                default:
+                    throw ExhaustiveMatch.Failed(shape);
+            }
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
         /// <summary>
-        /// There was a bug where `typeof()` as a case type would cause all switches
-        /// on that type to report a missing case with no type listed. (It was the error type)
+        /// Regression test for an issue where `typeof()` as a case type would
+        /// cause all switches on that type to report a missing case with no
+        /// type listed. (It was the error type.)
         /// </summary>
         [TestMethod]
         public void EmptyTypeofDoesNotCauseMissingCase()
@@ -314,6 +356,79 @@ namespace TestNamespace
                     break;
                 default:
                     throw ExhaustiveMatch.Failed(shape);
+            }
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        /// <summary>
+        /// Regression test for an issue where using a closed interface type in
+        /// the middle of a case hierarchy gave EM013 that the type was not a
+        /// case type.
+        /// </summary>
+        [TestMethod]
+        public void MultipleInterfaceLevels()
+        {
+            const string test = @"using System;
+using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(typeof(IKeywordToken))]
+    public interface IToken { }
+    [Closed(typeof(IForeachKeyword))]
+    public interface IKeywordToken : IToken { }
+    public interface IForeachKeyword : IKeywordToken { }
+
+    class TestClass
+    {
+        void TestMethod(IToken token)
+        {
+            switch (token)
+            {
+                case IKeywordToken _:
+                    Console.WriteLine(""foreach"");
+                    break;
+                default:
+                    throw ExhaustiveMatch.Failed(token);
+            }
+        }
+    }
+}";
+
+            VerifyCSharpDiagnostic(test);
+
+            Assert.Fail("Test not yet reproducing fail case");
+        }
+
+        /// <summary>
+        /// Regression test for infinite loop when a type listed itself as one
+        /// of its case types.
+        /// </summary>
+        [TestMethod]
+        public void SelfTypeAsCaseType()
+        {
+            const string test = @"using System;
+using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(typeof(IToken))]
+    public interface IToken { }
+    public interface IKeywordToken : IToken { }
+
+    class TestClass
+    {
+        void TestMethod(IToken token)
+        {
+            switch (token)
+            {
+                case IKeywordToken _:
+                    Console.WriteLine(""foreach"");
+                    break;
+                default:
+                    throw ExhaustiveMatch.Failed(token);
             }
         }
     }

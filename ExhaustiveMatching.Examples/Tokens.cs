@@ -27,14 +27,20 @@ public partial interface IFalseKeywordToken : IKeywordToken { }
 #region handwritten
 
 [Closed(
+    typeof(IOperatorToken),
+    typeof(IKeywordToken))]
+public partial interface IToken { }
+
+[Closed(
     typeof(IBooleanLiteralToken),
-    typeof(IOperatorToken))]
-public partial interface IKeywordToken { }
+    typeof(IOperatorToken)
+    )]
+public partial interface IKeywordToken : IToken { }
 
 [Closed(
     typeof(ITrueKeywordToken),
     typeof(IFalseKeywordToken))]
-public partial interface IBooleanLiteralToken : IKeywordToken { }
+public interface IBooleanLiteralToken : IKeywordToken { }
 
 public partial interface ITrueKeywordToken : IBooleanLiteralToken { }
 
@@ -43,7 +49,7 @@ public partial interface IFalseKeywordToken : IBooleanLiteralToken { }
 [Closed(
     typeof(IPlusToken),
     typeof(IMinusToken))]
-public partial interface IOperatorToken : IToken { }
+public interface IOperatorToken : IToken { }
 
 public partial interface IPlusToken : IOperatorToken { }
 public partial interface IMinusToken : IOperatorToken { }

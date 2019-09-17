@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -35,7 +36,10 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttribute)
         {
             // Any type inheriting from a closed type must be listed in the cases
-            var closedBaseTypes = typeSymbol.Interfaces.Append(typeSymbol.BaseType)
+            IEnumerable<ITypeSymbol> baseTypes = typeSymbol.Interfaces;
+            if (typeSymbol.BaseType != null)
+                baseTypes = baseTypes.Append(typeSymbol.BaseType);
+            var closedBaseTypes = baseTypes
                 .Where(t => t.HasAttribute(closedAttribute));
 
             foreach (var baseType in closedBaseTypes)
@@ -69,7 +73,7 @@ namespace ExhaustiveMatching.Analyzer
             {
                 var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
                 if (caseType == null
-                    || caseType.BaseType.Equals(typeSymbol)
+                    || typeSymbol.Equals(caseType.BaseType) // BaseType is null for interfaces, avoid calling method on it
                     || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
                     continue;
 
