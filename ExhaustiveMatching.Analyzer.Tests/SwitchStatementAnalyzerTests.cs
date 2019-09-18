@@ -399,8 +399,6 @@ namespace TestNamespace
 }";
 
             VerifyCSharpDiagnostic(test);
-
-            Assert.Fail("Test not yet reproducing fail case");
         }
 
         /// <summary>
