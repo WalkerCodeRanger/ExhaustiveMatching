@@ -32,8 +32,8 @@ public partial interface IFalseKeywordToken : IKeywordToken { }
 public partial interface IToken { }
 
 [Closed(
-    typeof(IBooleanLiteralToken),
-    typeof(IOperatorToken)
+    typeof(IOperatorToken),
+    typeof(IBooleanLiteralToken)
     )]
 public partial interface IKeywordToken : IToken { }
 
@@ -49,7 +49,7 @@ public partial interface IFalseKeywordToken : IBooleanLiteralToken { }
 [Closed(
     typeof(IPlusToken),
     typeof(IMinusToken))]
-public interface IOperatorToken : IToken { }
+public partial interface IOperatorToken : IToken { }
 
 public partial interface IPlusToken : IOperatorToken { }
 public partial interface IMinusToken : IOperatorToken { }
@@ -61,7 +61,7 @@ class TokensExample
     {
         switch (token)
         {
-            case IBooleanLiteralToken _:
+            case IKeywordToken _:
                 Console.WriteLine("boolean literal");
                 break;
             case IPlusToken _:
