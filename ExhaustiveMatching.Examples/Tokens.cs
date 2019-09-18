@@ -31,10 +31,7 @@ public partial interface IFalseKeywordToken : IKeywordToken { }
     typeof(IKeywordToken))]
 public partial interface IToken { }
 
-[Closed(
-    typeof(IOperatorToken),
-    typeof(IBooleanLiteralToken)
-    )]
+[Closed(typeof(IBooleanLiteralToken))]
 public partial interface IKeywordToken : IToken { }
 
 [Closed(
