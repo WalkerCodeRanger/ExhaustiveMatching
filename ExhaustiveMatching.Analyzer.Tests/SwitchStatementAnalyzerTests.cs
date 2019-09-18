@@ -91,6 +91,57 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expectedFriday, expectedSunday);
         }
 
+
+        [TestMethod]
+        public void SwitchOnNullableEnum()
+        {
+            const string args = "DayOfWeek? dayOfWeek";
+            const string test = @"
+        switch(dayOfWeek)
+        {
+            case DayOfWeek.Monday:
+            case DayOfWeek.Tuesday:
+            case DayOfWeek.Wednesday:
+            case DayOfWeek.Thursday:
+                // Omitted Friday
+                Console.WriteLine(""Weekday"");
+            break;
+            case DayOfWeek.Saturday:
+                // Omitted Sunday
+                Console.WriteLine(""Weekend"");
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(dayOfWeek);
+        }";
+
+            var expectedFriday = new DiagnosticResult
+            {
+                Id = "EM0001",
+                Message = "Enum value not handled by switch: Friday",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+
+            var expectedSunday = new DiagnosticResult
+            {
+                Id = "EM0001",
+                Message = "Enum value not handled by switch: Sunday",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+
+            var expectedNull = new DiagnosticResult
+            {
+                Id = "EM0001",
+                Message = "Enum value not handled by switch: null",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+
+            VerifyCSharpDiagnostic(CodeContext(args, test), expectedFriday, expectedSunday, expectedNull);
+        }
+
+
         [TestMethod]
         public void SwitchOnClosedThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
         {
