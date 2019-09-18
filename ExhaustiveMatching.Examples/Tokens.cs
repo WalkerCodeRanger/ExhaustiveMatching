@@ -49,7 +49,7 @@ public partial interface IFalseKeywordToken : IBooleanLiteralToken { }
 [Closed(
     typeof(IPlusToken),
     typeof(IMinusToken))]
-public partial interface IOperatorToken : IToken { }
+public interface IOperatorToken : IToken { }
 
 public partial interface IPlusToken : IOperatorToken { }
 public partial interface IMinusToken : IOperatorToken { }

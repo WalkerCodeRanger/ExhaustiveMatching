@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,18 +14,11 @@ namespace ExhaustiveMatching.Analyzer
         {
             var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
             var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
-            if (IsSubtypeOfClosedType(typeSymbol, closedAttribute))
+            if (typeSymbol.IaDirectSubtypeOfTypeWithAttribute(closedAttribute))
                 MustBeCase(context, typeDeclaration, typeSymbol, closedAttribute);
 
             if (IsClosedType(typeSymbol, closedAttribute))
                 AllMemberTypesMustBeDirectSubtypes(context, typeDeclaration, typeSymbol, closedAttribute);
-        }
-
-        private static bool IsSubtypeOfClosedType(
-            ITypeSymbol typeSymbol,
-            INamedTypeSymbol closedAttribute)
-        {
-            return typeSymbol.InheritsFromTypeWithAttribute(closedAttribute);
         }
 
         private static void MustBeCase(
@@ -36,9 +28,7 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttribute)
         {
             // Any type inheriting from a closed type must be listed in the cases
-            IEnumerable<ITypeSymbol> baseTypes = typeSymbol.Interfaces;
-            if (typeSymbol.BaseType != null)
-                baseTypes = baseTypes.Append(typeSymbol.BaseType);
+            var baseTypes = typeSymbol.DirectSuperTypes();
             var closedBaseTypes = baseTypes
                 .Where(t => t.HasAttribute(closedAttribute));
 

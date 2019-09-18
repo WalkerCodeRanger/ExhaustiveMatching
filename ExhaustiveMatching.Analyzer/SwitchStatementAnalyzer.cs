@@ -42,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer
             if (throwStatement != null)
             {
                 var exceptionType = context.SemanticModel.GetTypeInfo(throwStatement.Expression, context.CancellationToken).Type;
-                if (exceptionType != null)
+                if (exceptionType != null && exceptionType.TypeKind != TypeKind.Error)
                 {
                     var exhaustiveMatchFailedExceptionType = context.Compilation.GetTypeByMetadataName(TypeNames.ExhaustiveMatchFailedException);
                     var invalidEnumArgumentExceptionType = context.Compilation.GetTypeByMetadataName(TypeNames.InvalidEnumArgumentException);
@@ -101,15 +101,16 @@ namespace ExhaustiveMatching.Analyzer
             var closedAttributeType = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
             var isClosed = type.HasAttribute(closedAttributeType);
 
-            var allTypes = GetAllConcreteClosedTypeMembers(type, closedAttributeType);
+            var allCases = GetClosedTypeCases(type, closedAttributeType);
 
             var typesUsed = switchLabels
                 .OfType<CasePatternSwitchLabelSyntax>()
-                .Select(casePattern => GetTypeSymbolMatched(context, type, casePattern, allTypes, isClosed))
+                .Select(casePattern => GetTypeSymbolMatched(context, type, casePattern, allCases, isClosed))
                 .Where(t => t != null) // returns null for invalid case clauses
                 .ToImmutableHashSet();
 
-            // If it is an open type, we don't want to actually check for uncovered types
+            // If it is an open type, we don't want to actually check for uncovered types, but
+            // we still needed to check the switch cases
             if (!isClosed)
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.OpenTypeNotSupported,
@@ -118,7 +119,8 @@ namespace ExhaustiveMatching.Analyzer
                 return; // No point in trying to check for uncovered types, this isn't closed
             }
 
-            var uncoveredTypes = allTypes
+            var uncoveredTypes = allCases
+                .Where(t => IsConcreteOrLeaf(t, closedAttributeType))
                 .Where(t => !typesUsed.Any(t.IsSubtypeOf))
                 .ToArray();
 
@@ -155,7 +157,7 @@ namespace ExhaustiveMatching.Analyzer
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type,
             CasePatternSwitchLabelSyntax casePattern,
-            HashSet<ITypeSymbol> allTypes,
+            HashSet<ITypeSymbol> allCases,
             bool isClosed)
         {
             ITypeSymbol symbolUsed;
@@ -173,7 +175,7 @@ namespace ExhaustiveMatching.Analyzer
                 symbolUsed = null;
             }
 
-            if (isClosed && !allTypes.Contains(symbolUsed))
+            if (isClosed && !allCases.Contains(symbolUsed))
             {
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MatchMustBeOnCaseType,
                     casePattern.Pattern.GetLocation(), symbolUsed.GetFullName(), type.GetFullName());
@@ -190,33 +192,42 @@ namespace ExhaustiveMatching.Analyzer
             return symbolUsed;
         }
 
-        private static HashSet<ITypeSymbol> GetAllConcreteClosedTypeMembers(
-            ITypeSymbol type,
+        private static HashSet<ITypeSymbol> GetClosedTypeCases(
+            ITypeSymbol rootType,
             INamedTypeSymbol closedAttributeType)
         {
-            var concreteTypes = new HashSet<ITypeSymbol>();
-            var types = new Queue<ITypeSymbol>();
-            types.Enqueue(type);
+            var types = new HashSet<ITypeSymbol>();
+            var queue = new Queue<ITypeSymbol>();
+            queue.Enqueue(rootType);
 
-            while (types.Count > 0)
+            while (queue.Count > 0)
             {
-                type = types.Dequeue();
+                var caseType = queue.Dequeue();
 
-                if (type.TypeKind==TypeKind.Error)
+                // Skip over errors or things that aren't subtypes at all
+                if (rootType.TypeKind == TypeKind.Error
+                    || !caseType.IsSubtypeOf(rootType))
                     continue;
 
-                // Concrete types but also leaf types even if they are abstract
-                // must be covered.
-                if (!type.IsAbstract || !type.HasAttribute(closedAttributeType))
-                    concreteTypes.Add(type);
+                types.Add(caseType);
 
-                var caseTypes = type.GetCaseTypes(closedAttributeType);
+                var caseTypes = caseType.GetValidCaseTypes(closedAttributeType);
 
                 foreach (var subtype in caseTypes)
-                    types.Enqueue(subtype);
+                    // don't process a type more than once to avoid cycles
+                    if (!types.Contains(subtype))
+                        queue.Enqueue(subtype);
             }
 
-            return concreteTypes;
+            return types;
+        }
+
+        private static bool IsConcreteOrLeaf(ITypeSymbol type, INamedTypeSymbol closedAttributeType)
+        {
+            return type != null
+                     && type.TypeKind != TypeKind.Error
+                     && (!type.IsAbstract
+                        || !type.HasAttribute(closedAttributeType));
         }
     }
 }

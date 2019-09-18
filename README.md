@@ -45,7 +45,9 @@ switch (ipAddress)
 
 ## Why\?
 
-## Installation
+## Download
+
+The latest stable release of ExhaustiveMatching.Analyzer is [available on NuGet](https://www.nuget.org/packages/ExhaustiveMatching.Analyzer/).
 
 ## Features
 

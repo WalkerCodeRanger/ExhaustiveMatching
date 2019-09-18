@@ -412,7 +412,7 @@ namespace TestNamespace
 using ExhaustiveMatching;
 namespace TestNamespace
 {
-    [Closed(typeof(IToken))]
+    [Closed(typeof(IToken), typeof(IKeywordToken)]
     public interface IToken { }
     public interface IKeywordToken : IToken { }
 
@@ -431,8 +431,15 @@ namespace TestNamespace
         }
     }
 }";
+            var expected = new DiagnosticResult
+            {
+                Id = "EM0013",
+                Message = "Closed type case is not a subtype: TestNamespace.IToken",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 5, 20, 6) }
+            };
 
-            VerifyCSharpDiagnostic(test);
+            VerifyCSharpDiagnostic(test, expected);
         }
 
         private static string CodeContext(string args, string body)

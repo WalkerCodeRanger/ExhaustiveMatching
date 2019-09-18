@@ -12,6 +12,16 @@ namespace ExhaustiveMatching.Analyzer
             return symbol.Equals(type) || symbol.Implements(type) || symbol.InheritsFrom(type);
         }
 
+        public static bool IsDirectSubtypeOf(this ITypeSymbol symbol, ITypeSymbol type)
+        {
+            return symbol.DirectlyImplements(type) || Equals(symbol.BaseType, type);
+        }
+
+        public static bool DirectlyImplements(this ITypeSymbol symbol, ITypeSymbol type)
+        {
+            return symbol.Interfaces.Any(type.Equals);
+        }
+
         public static bool Implements(this ITypeSymbol symbol, ITypeSymbol type)
         {
             return symbol.AllInterfaces.Any(type.Equals);
@@ -32,12 +42,12 @@ namespace ExhaustiveMatching.Analyzer
             return symbol.BaseClasses().Any(t => t.Equals(type));
         }
 
-        public static bool InheritsFromTypeWithAttribute(
+        public static bool IaDirectSubtypeOfTypeWithAttribute(
             this ITypeSymbol symbol,
             INamedTypeSymbol attributeType)
         {
-            return symbol.AllInterfaces.Any(i => i.HasAttribute(attributeType))
-                   || symbol.BaseClasses().Any(t => t.HasAttribute(attributeType));
+            return symbol.Interfaces.Any(i => i.HasAttribute(attributeType))
+                   || (symbol.BaseType?.HasAttribute(attributeType) ?? false);
         }
 
         public static bool HasAttribute(this ITypeSymbol symbol, INamedTypeSymbol attributeType)
@@ -70,6 +80,14 @@ namespace ExhaustiveMatching.Analyzer
                 .Cast<ITypeSymbol>();
         }
 
+        public static IEnumerable<ITypeSymbol> GetValidCaseTypes(
+            this ITypeSymbol type,
+            INamedTypeSymbol closedAttributeType)
+        {
+            return type.GetCaseTypes(closedAttributeType)
+                .Where(t => t.TypeKind != TypeKind.Error && t.IsDirectSubtypeOf(type));
+        }
+
         private static IEnumerable<TypedConstant> GetTypeConstants(TypedConstant constant)
         {
             // Ignore anything that isn't a type or type in a single array. The compiler will report
@@ -91,6 +109,14 @@ namespace ExhaustiveMatching.Analyzer
         {
             var ns = symbol.ContainingNamespace;
             return ns != null && !ns.IsGlobalNamespace ? $"{ns.GetFullName()}.{symbol.Name}" : symbol.Name;
+        }
+
+        public static IEnumerable<ITypeSymbol> DirectSuperTypes(this ITypeSymbol type)
+        {
+            IEnumerable<ITypeSymbol> baseTypes = type.Interfaces;
+            if (type.BaseType != null)
+                baseTypes = baseTypes.Append(type.BaseType);
+            return baseTypes;
         }
     }
 }
