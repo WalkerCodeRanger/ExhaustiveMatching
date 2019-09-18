@@ -2,7 +2,7 @@
 
 ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements.
 
-*Get compiler errors when you leave out a case in a switch statement.* Mark which switch statements should have exhaustive matching by throwing an exception in the default case. Exhaustive matching works not just for enums, but for classes and interfaces. Turn them into [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagged_union) by marking them with the `Closed` attribute and listing the cases. ExhaustiveMatching.Analyzer goes beyond what other languages support by handling full inheritance hierarchies.
+*Get compiler errors for missing cases in a switch statement.* Mark which switch statements should have exhaustive matching by throwing an exception in the default case. Exhaustive matching works not just for enums, but for classes and interfaces. Turn them into [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagged_union) by marking them with the `Closed` attribute and listing the cases. ExhaustiveMatching.Analyzer goes beyond what other languages support by handling full inheritance hierarchies.
 
 ## Exhaustive Matching for C\#
 
@@ -49,13 +49,13 @@ switch (ipAddress)
 
 The latest stable release of ExhaustiveMatching.Analyzer is [available on NuGet](https://www.nuget.org/packages/ExhaustiveMatching.Analyzer/).
 
-## Features
+## Usage
 
-A full explanation of features
+Install the ExhaustiveMatching.Analyzer package into each project that will contain exhaustive switch statements or the classes and interfaces that will be switched on. Additionally, *install the package in any project that will reference a project containing types marked with the `Closed` attribute*. This is important because the analyzer enforces rules about inheriting from and implementing closed types. If the analyzer isn't in a project then those rules may be violated without an error being reported. Most of the time, the ExhaustiveMatching.Analyzer can be added to every project in a solution.
 
-### Exhaustive Matching on Enum Values
+### Exhaustive Switch on Enum Values
 
-Add the `ExhaustiveMatching` NuGet package to a project. To enable exhaustiveness checking for a switch on an enum, throw an `InvalidEnumArgumentException` from the default case. This exception is used to indicate that the value in an enum variable doesn't match any of the defined enum values. Thus, if the code throws it from the default case, the developer is expecting that all defined enum cases will be handled by the switch statement.
+To enable exhaustiveness checking for a switch on an enum, throw an `ExhaustiveMatchFailedException` from the default case. That exception is constructed using the `ExhaustiveMatch.Failed(…)` factory method which should be passed the value being switched on. For switch statements with exhaustiveness checking, analyzer will report an error for any missing enum cases.
 
 ```csharp
 switch(dayOfWeek)
@@ -72,67 +72,98 @@ switch(dayOfWeek)
         Console.WriteLine(""Weekend"");
         break;
     default:
-        throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
+        throw ExhaustiveMatch.Failed(dayOfWeek);
 }
 ```
 
-Easier yet, use the convenient `ExhaustiveMatch` class in the `ExhaustiveMatching` package. The throw statement above can be replaced by `throw ExhaustiveMatch.Failed(dayOfWeek)`. This will throw an `ExhaustiveMatchFailedException` that provides both the enum type and value that wasn't matched.
+Exhaustiveness checking is also applied to switch statements that throw `InvalidEnumArgumentException`. This indicates that the value doesn't match any of the defined enum values. Thus, if the code throws it from the default case, the developer is expecting that all defined enum cases will be handled by the switch statement. Using this exceptuin, the throw statement in the above example would be `throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));`. Since this is longer and less readable, its use is discouraged.
 
-### Exhaustive Matching on Type
+### Exhaustive Switch on Type
 
-C# 7.0 added pattern matching including the ability to switch on the type of a value. When switching on the type of a value, any value must have a subclass type that is a subclass. To be sure any value will be matched by some case clause, all these types must be matched by some case. This provides powerful case matching possibilities. The Scala language uses a similar idea in the form of "case classes" for pattern matching.
+C# 7.0 added pattern matching including the ability to switch on the type of a value. To ensure any possible value will be handled, all subtypes must be matched by some case. That is what exhaustiveness checking ensures.
 
-To enable exhaustiveness checking on a type match, two things must be done. The default case must throw an `ExhaustiveMatchFailedException` (using `ExhaustiveMatch.Failed(...)`) and the type being matched up must be marked with the `Matchable` attribute. Classes marked with the matchable attributes have a number of limitations imposed on them which combine to ensure the analyzer can determine the complete set of possible subclasses.
+To enable exhaustiveness checking for a switch on type, two things must be done. The default case must throw an `ExhaustiveMatchFailedException` (using the `ExhaustiveMatch.Failed(…)` factory method) and the type being switched on must be marked with the `Closed` attribute. The closed attribute makes a type similar to an enum with a defined set of possible cases. However, instead of a fixed set of values like an enum, a closed type has a fixed set of direct subtypes.
 
-This example shows how to declare a class `Answer` that is matchable.
+This example shows how to declare a closed class `Shape` that can either a circle or a square.
 
 ```csharp
-[Matchable]
-public abstract class Answer
-{
-    private protected Answer () {}
-}
+[Closed(typeof(Yes), typeof(No))]
+public abstract class Shape { }
 
-public sealed class Yes : Answer {}
-public sealed class No : Answer {}
+public class Circle : Shape {}
+public class Square : Shape {}
 ```
 
-Values of type `Answer` can then be exhaustively matched against.
+A switch on the type of a shape can then be checked for exhaustiveness.
 
 ```csharp
-switch(answer)
+switch(shape)
 {
-    case Yes yes:
-        Console.WriteLine("The answer is Yes!");
+    case Circle _:
+        Console.WriteLine("Circle");
         break;
-    case No no:
-        Console.WriteLine("The answer is no.");
+    case Square _:
+        Console.WriteLine("Square");
         break;
     default:
-        throw ExhaustiveMatch.Failed(answer);
+        throw ExhaustiveMatch.Failed(shape);
 }
 ```
 
-### Rules for Matchable Types
+### Handling Null
 
-1. Each class must be either:
-   * `sealed`
-   * Have all constructors `private`, `internal`, or `private protected` (added in C# 7.2)
+Since C# reference types are always nullable, but may be intended to never be null, exhaustiveness checking does not require a case for null. If a null value is expected it can be handled by a `case null:`. The analyzer will ignore this case for its analysis.
 
-**TODO:** Write out the rest of the rules
+For nullable enum types, the analyzer requires that there be a `case null:` to handle the null value.
 
-### Null Values and Exhaustiveness
+### Type Hierarchies
 
-**TODO**
+While a given closed type can only have its direct subtypes as cases, some of those subtypes may themselves be closed types. This allows for flexible switching on multiple levels of a type hierarchy. The exhaustiveness check ensures that every possible value is handled by some case. However, a single case high up in the hierarchy can handle many types.
 
-### Rules for Matching on Type
+In the example below, an expression tree is being evaluated. The switch statement is able to match against multiple levels of the hierarchy while exhaustiveness checking ensures no cases are missing. Notice how the `Addition` and `Subtraction` cases are indirect subtypes of `Expression`, and the `Value` case handles both `Constant` and `Variable`. This kind of sophisticated multi-level switching is not supported in most languages that include exhaustive matching.
 
-**TODO**
+```csharp
+[Closed(typeof(BinaryOperator), typeof())]
+public abstract class Expression { … }
 
-## Analyzer Errors and Warnings
+[Closed(typeof(Addition), typeof(Subtraction))]
+public abstract class BinaryOperator { … }
 
-**TODO**
+public class Addition { … }
+public class Subtraction { … }
 
-Number | Meaning
----|---
-EM001 | A switch statement marked for exhaustiveness checking is not an exhaustive match.
+public abstract class Value { … }
+
+public class Constant { … }
+public class Variable { … }
+
+public int Evaluate(Expression expression)
+{
+    switch(expression)
+    {
+        case Addition a:
+            return Evaluate(a.Left) + Evaluate(a.Right);
+        case Subtraction s:
+            return Evaluate(s.Left) - Evaluate(s.Right);
+        case Value v: // handles both Constant and Variable
+            return v.GetValue();
+        default:
+            throw ExhaustiveMatch.Failed(expression);
+    }
+}
+```
+
+## Analyzer Errors
+
+The analyzer reports various errors for incorrect code. The table below gives a complete list of them along with a description.
+
+<table>
+    <tr>
+        <th>Number</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <th>EM0001</th>
+        <td>A switch on an enum is missing a case</td>
+    </tr>
+</table>
