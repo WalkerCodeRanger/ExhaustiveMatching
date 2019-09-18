@@ -2,9 +2,9 @@
 
 ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements.
 
-*Get compiler errors for missing cases in a switch statement.* Mark which switch statements should have exhaustive matching by throwing an exception in the default case. Exhaustive matching works not just for enums, but for classes and interfaces. Turn them into [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagged_union) by marking them with the `Closed` attribute and listing the cases. ExhaustiveMatching.Analyzer goes beyond what other languages support by handling full inheritance hierarchies.
+*Get compiler errors for missing cases in a switch statement.* Mark which switch statements should have exhaustiveness checking by throwing an exception in the default case. Exhaustiveness checking works not just for enums, but for classes and interfaces. Turn them into [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagged_union) by marking them with the `Closed` attribute and listing the cases. ExhaustiveMatching.Analyzer goes beyond what other languages support by handling full inheritance hierarchies.
 
-## Exhaustive Matching for C\#
+## Exhaustive Switch for C\#
 
 Mark a switch statement as exhaustive and get errors for missing cases.
 
@@ -24,7 +24,7 @@ switch (coinFlip)
 }
 ```
 
-Create [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagged_union) and get errors for missing cases.
+Create [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagged_union) and get errors for missing switch cases.
 
 ```csharp
 [Closed(typeof(IPv4Address), typeof(IPv6Address))]
@@ -43,8 +43,6 @@ switch (ipAddress)
 }
 ```
 
-## Why\?
-
 ## Download
 
 The latest stable release of ExhaustiveMatching.Analyzer is [available on NuGet](https://www.nuget.org/packages/ExhaustiveMatching.Analyzer/).
@@ -55,7 +53,7 @@ Install the ExhaustiveMatching.Analyzer package into each project that will cont
 
 ### Exhaustive Switch on Enum Values
 
-To enable exhaustiveness checking for a switch on an enum, throw an `ExhaustiveMatchFailedException` from the default case. That exception is constructed using the `ExhaustiveMatch.Failed(…)` factory method which should be passed the value being switched on. For switch statements with exhaustiveness checking, analyzer will report an error for any missing enum cases.
+To enable exhaustiveness checking for a switch on an enum, throw an `ExhaustiveMatchFailedException` from the default case. That exception is constructed using the `ExhaustiveMatch.Failed(…)` factory method which should be passed the value being switched on. For switch statements with exhaustiveness checking, the analyzer will report an error for any missing enum cases.
 
 ```csharp
 switch(dayOfWeek)
@@ -76,18 +74,18 @@ switch(dayOfWeek)
 }
 ```
 
-Exhaustiveness checking is also applied to switch statements that throw `InvalidEnumArgumentException`. This indicates that the value doesn't match any of the defined enum values. Thus, if the code throws it from the default case, the developer is expecting that all defined enum cases will be handled by the switch statement. Using this exceptuin, the throw statement in the above example would be `throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));`. Since this is longer and less readable, its use is discouraged.
+Exhaustiveness checking is also applied to switch statements that throw `InvalidEnumArgumentException`. This exception indicates that the value doesn't match any of the defined enum values. Thus, if the code throws it from the default case, the developer is expecting that all defined enum cases will be handled by the switch statement. Using this exception, the throw statement in the above example would be `throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));`. Since this is longer and less readable, its use is discouraged.
 
 ### Exhaustive Switch on Type
 
 C# 7.0 added pattern matching including the ability to switch on the type of a value. To ensure any possible value will be handled, all subtypes must be matched by some case. That is what exhaustiveness checking ensures.
 
-To enable exhaustiveness checking for a switch on type, two things must be done. The default case must throw an `ExhaustiveMatchFailedException` (using the `ExhaustiveMatch.Failed(…)` factory method) and the type being switched on must be marked with the `Closed` attribute. The closed attribute makes a type similar to an enum with a defined set of possible cases. However, instead of a fixed set of values like an enum, a closed type has a fixed set of direct subtypes.
+To enable exhaustiveness checking for a switch on type, two things must be done. The default case must throw an `ExhaustiveMatchFailedException` (using the `ExhaustiveMatch.Failed(…)` factory method) and the type being switched on must be marked with the `Closed` attribute. The closed attribute makes a type similar to an enum by giving it a defined set of possible cases. However, instead of a fixed set of values like an enum, a closed type has a fixed set of direct subtypes.
 
-This example shows how to declare a closed class `Shape` that can either a circle or a square.
+This example shows how to declare a closed class `Shape` that can be either a circle or a square.
 
 ```csharp
-[Closed(typeof(Yes), typeof(No))]
+[Closed(typeof(Circle), typeof(Square))]
 public abstract class Shape { }
 
 public class Circle : Shape {}
@@ -165,5 +163,37 @@ The analyzer reports various errors for incorrect code. The table below gives a 
     <tr>
         <th>EM0001</th>
         <td>A switch on an enum is missing a case</td>
+    </tr>
+    <tr>
+        <th>EM0002</th>
+        <td>A switch on type is missing a case</td>
+    </tr>
+    <tr>
+        <th>EM0011</th>
+        <td>A type is not listed as a case in a closed type it is a direct subtype of</td>
+    </tr>
+    <tr>
+        <th>EM0012</th>
+        <td>A case type listed in the closed attribute is not a direct subtype of the closed type (though it is a subtype)</td>
+    </tr>
+    <tr>
+        <th>EM0013</th>
+        <td>A case type listed in the closed attribute is not a subtype of the closed type</td>
+    </tr>
+    <tr>
+        <th>EM0100</th>
+        <td>An exhaustive switch can't contain when guards</td>
+    </tr>
+    <tr>
+        <th>EM0101</th>
+        <td>Class clause kind is not supported</td>
+    </tr>
+    <tr>
+        <th>EM0102</th>
+        <td>Can't do exhaustiveness checking for switch on a type that is not and enum and not closed</td>
+    </tr>
+    <tr>
+        <th>EM0103</th>
+        <td>Case clause is for a type that is not in the closed type hierarchy</td>
     </tr>
 </table>
