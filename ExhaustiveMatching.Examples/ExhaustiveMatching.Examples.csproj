@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExhaustiveMatching.Analyzer" Version="0.2.2" />
+    <PackageReference Include="ExhaustiveMatching.Analyzer" Version="0.3.0" />
   </ItemGroup>
 
 </Project>
