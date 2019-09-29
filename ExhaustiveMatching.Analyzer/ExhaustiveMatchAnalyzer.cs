@@ -117,11 +117,19 @@ namespace ExhaustiveMatching.Analyzer
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
+
             if (!(context.Node is SwitchStatementSyntax switchStatement))
                 throw new InvalidOperationException(
                     $"{nameof(AnalyzeSwitchStatement)} called with a non-switch statement context");
-
-            SwitchStatementAnalyzer.Analyze(context, switchStatement);
+            try
+            {
+                SwitchStatementAnalyzer.Analyze(context, switchStatement);
+            }
+            catch (Exception ex)
+            {
+                // Include stack trace info by ToString() the exception as part of the message
+                throw new Exception("Uncaught exception in analyzer: " + ex, ex);
+            }
         }
 
         private void AnalyzeTypeDeclaration(SyntaxNodeAnalysisContext context)
@@ -130,7 +138,15 @@ namespace ExhaustiveMatching.Analyzer
                 throw new InvalidOperationException(
                     $"{nameof(AnalyzeTypeDeclaration)} with a non-type declaration context");
 
-            TypeDeclarationAnalyzer.Analyze(context, typeDeclaration);
+            try
+            {
+                TypeDeclarationAnalyzer.Analyze(context, typeDeclaration);
+            }
+            catch (Exception ex)
+            {
+                // Include stack trace info by ToString() the exception as part of the message
+                throw new Exception("Uncaught exception in analyzer: " + ex, ex);
+            }
         }
 
         private static LocalizableResourceString LoadString(string name)
