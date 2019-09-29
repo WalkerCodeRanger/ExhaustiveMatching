@@ -14,7 +14,7 @@ namespace ExhaustiveMatching.Analyzer
         {
             var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
             var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
-            if (typeSymbol.IaDirectSubtypeOfTypeWithAttribute(closedAttribute))
+            if (typeSymbol.IsDirectSubtypeOfTypeWithAttribute(closedAttribute))
                 MustBeCase(context, typeDeclaration, typeSymbol, closedAttribute);
 
             if (IsClosedType(typeSymbol, closedAttribute))
@@ -27,20 +27,45 @@ namespace ExhaustiveMatching.Analyzer
             ITypeSymbol typeSymbol,
             INamedTypeSymbol closedAttribute)
         {
-            // Any type inheriting from a closed type must be listed in the cases
-            var baseTypes = typeSymbol.DirectSuperTypes();
-            var closedBaseTypes = baseTypes
-                .Where(t => t.HasAttribute(closedAttribute));
+            if (typeSymbol.IsAbstract)
+                return;
 
-            foreach (var baseType in closedBaseTypes)
+            // Any concrete type directly inheriting from a closed type must be listed in the cases
+            var directSuperTypes = typeSymbol.DirectSuperTypes();
+            var closedSuperTypes = directSuperTypes
+                .Where(t => t.HasAttribute(closedAttribute))
+                .ToList();
+
+            foreach (var superType in closedSuperTypes)
             {
-                var isMember = baseType.GetCaseTypes(closedAttribute)
+                var isMember = superType.GetCaseTypes(closedAttribute)
                                 .Any(t => t.Equals(typeSymbol));
                 if (isMember)
                     continue;
 
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeCaseOfClosedType,
-                    typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), baseType.GetFullName());
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.ConcreteSubtypeMustBeCaseOfClosedType,
+                    typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), superType.GetFullName());
+                context.ReportDiagnostic(diagnostic);
+            }
+
+            // Any concrete type indirectly inheriting from a closed type must be covered by a case type
+            // that isn't itself closed. If it were closed, then it could be matched by all the cases, and
+            // this type would not be matched.
+            var otherClosedSuperTypes = typeSymbol.AllSuperTypes()
+                .Where(t => t.HasAttribute(closedAttribute))
+                .Except(closedSuperTypes);
+
+            foreach (var superType in otherClosedSuperTypes)
+            {
+                var isCovered = superType
+                    .GetLeafCaseTypes(closedAttribute)
+                    .Any(typeSymbol.IsSubtypeOf);
+
+                if (isCovered)
+                    continue;
+
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.SubtypeMustBeCovered,
+                    typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), superType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
         }

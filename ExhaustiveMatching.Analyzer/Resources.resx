@@ -136,13 +136,13 @@
     <value>Switch on Closed Type Not Exhaustive</value>
   </data>
   <data name="EM0011Description" xml:space="preserve">
-    <value>A subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
+    <value>A concrete subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
   </data>
   <data name="EM0011Message" xml:space="preserve">
     <value>{0} is not a case of its closed supertype: {1}</value>
   </data>
   <data name="EM0011Title" xml:space="preserve">
-    <value>Subtype of a Closed Type Must Be a Case</value>
+    <value>Concrete Subtype of a Closed Type Must Be a Case</value>
   </data>
   <data name="EM0012Description" xml:space="preserve">
     <value>A closed type's case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface.</value>
@@ -161,6 +161,15 @@
   </data>
   <data name="EM0013Title" xml:space="preserve">
     <value>Closed Type Case Must Be a Subtype</value>
+  </data>
+  <data name="EM0014Description" xml:space="preserve">
+    <value>A concrete subtype of a type marked with the "Closed" attribute must be be covered by some leaf case type.</value>
+  </data>
+  <data name="EM0014Message" xml:space="preserve">
+    <value>An exhaustive match on {1} might not cover the type {0}. It must be a subtype of a leaf type of the case type tree.</value>
+  </data>
+  <data name="EM0014Title" xml:space="preserve">
+    <value>Concrete Subtype of a Closed Type Must Be a Covered</value>
   </data>
   <data name="EM0100Description" xml:space="preserve">
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>

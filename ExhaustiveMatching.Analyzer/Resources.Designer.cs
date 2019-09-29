@@ -115,7 +115,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A subtype of a type marked with the &quot;Closed&quot; attribute must be a case of the closed type..
+        ///   Looks up a localized string similar to A concrete subtype of a type marked with the &quot;Closed&quot; attribute must be a case of the closed type..
         /// </summary>
         internal static string EM0011Description {
             get {
@@ -133,7 +133,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtype of a Closed Type Must Be a Case.
+        ///   Looks up a localized string similar to Concrete Subtype of a Closed Type Must Be a Case.
         /// </summary>
         internal static string EM0011Title {
             get {
@@ -192,6 +192,33 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM0013Title {
             get {
                 return ResourceManager.GetString("EM0013Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A concrete subtype of a type marked with the &quot;Closed&quot; attribute must be be covered by some leaf case type..
+        /// </summary>
+        internal static string EM0014Description {
+            get {
+                return ResourceManager.GetString("EM0014Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An exhaustive match on {1} might not cover the type {0}. It must be a subtype of a leaf type of the case type tree..
+        /// </summary>
+        internal static string EM0014Message {
+            get {
+                return ResourceManager.GetString("EM0014Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete Subtype of a Closed Type Must Be a Covered.
+        /// </summary>
+        internal static string EM0014Title {
+            get {
+                return ResourceManager.GetString("EM0014Title", resourceCulture);
             }
         }
         

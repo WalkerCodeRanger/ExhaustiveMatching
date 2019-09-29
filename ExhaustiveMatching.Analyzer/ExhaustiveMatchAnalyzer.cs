@@ -29,7 +29,11 @@ namespace ExhaustiveMatching.Analyzer
 
         private static readonly LocalizableString EM0013Title = LoadString(nameof(Resources.EM0013Title));
         private static readonly LocalizableString EM0013Message = LoadString(nameof(Resources.EM0013Message));
-        private static readonly LocalizableString EM013Description = LoadString(Resources.EM0013Description);
+        private static readonly LocalizableString EM0013Description = LoadString(Resources.EM0013Description);
+
+        private static readonly LocalizableString EM0014Title = LoadString(nameof(Resources.EM0014Title));
+        private static readonly LocalizableString EM0014Message = LoadString(nameof(Resources.EM0014Message));
+        private static readonly LocalizableString EM0014Description = LoadString(Resources.EM0014Description);
 
         private static readonly LocalizableString EM0100Title = LoadString(nameof(Resources.EM0100Title));
         private static readonly LocalizableString EM0100Message = LoadString(nameof(Resources.EM0100Message));
@@ -58,7 +62,7 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0002", EM0002Title, EM0002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0002Description);
 
-        public static readonly DiagnosticDescriptor MustBeCaseOfClosedType =
+        public static readonly DiagnosticDescriptor ConcreteSubtypeMustBeCaseOfClosedType =
             new DiagnosticDescriptor("EM0011", EM0011Title, EM0011Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0011Description);
 
@@ -68,7 +72,11 @@ namespace ExhaustiveMatching.Analyzer
 
         public static readonly DiagnosticDescriptor MustBeSubtype =
             new DiagnosticDescriptor("EM0013", EM0013Title, EM0013Message, Category,
-                DiagnosticSeverity.Error, isEnabledByDefault: true, EM013Description);
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0013Description);
+
+        public static readonly DiagnosticDescriptor SubtypeMustBeCovered =
+            new DiagnosticDescriptor("EM0014", EM0014Title, EM0014Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0014Description);
 
         public static readonly DiagnosticDescriptor WhenGuardNotSupported =
             new DiagnosticDescriptor("EM0100", EM0100Title, EM0100Message, Category,
@@ -88,8 +96,8 @@ namespace ExhaustiveMatching.Analyzer
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitchRule,
-                NotExhaustiveObjectSwitchRule, MustBeCaseOfClosedType,
-                MustBeDirectSubtype, MustBeSubtype, WhenGuardNotSupported,
+                NotExhaustiveObjectSwitchRule, ConcreteSubtypeMustBeCaseOfClosedType,
+                MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered, WhenGuardNotSupported,
                 CaseClauseTypeNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType);
 
         public override void Initialize(AnalysisContext context)

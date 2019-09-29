@@ -140,6 +140,62 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
+        [TestMethod]
+        public void MirrorHierarchy()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(ISquare),
+        typeof(ICircle))]
+    public interface IShape { }
+    public interface ISquare : IShape { }
+    public interface ICircle : IShape { }
+
+    [Closed(
+        typeof(Square),
+        typeof(Circle))]
+    public abstract class Shape : IShape { }
+    public class Square : Shape, ISquare { }
+    public class Circle : Shape, ICircle { }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void MirrorHierarchyMustBeCovered()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(ISquare),
+        typeof(ICircle))]
+    public interface IShape { }
+    public interface ISquare : IShape { }
+    public interface ICircle : IShape { }
+
+    [Closed(
+        typeof(Square),
+        typeof(Circle))]
+    public abstract class Shape : IShape { }
+    public class Square : Shape, ISquare { }
+    public class Circle : Shape { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM0014",
+                Message = "An exhaustive match on TestNamespace.IShape might not cover the type TestNamespace.Circle. It must be a subtype of a leaf type of the case type tree.",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 18, 6) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();

@@ -42,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer
             return symbol.BaseClasses().Any(t => t.Equals(type));
         }
 
-        public static bool IaDirectSubtypeOfTypeWithAttribute(
+        public static bool IsDirectSubtypeOfTypeWithAttribute(
             this ITypeSymbol symbol,
             INamedTypeSymbol attributeType)
         {
@@ -88,6 +88,14 @@ namespace ExhaustiveMatching.Analyzer
                 .Where(t => t.TypeKind != TypeKind.Error && t.IsDirectSubtypeOf(type));
         }
 
+        public static IEnumerable<ITypeSymbol> GetLeafCaseTypes(
+            this ITypeSymbol type,
+            INamedTypeSymbol closedAttributeType)
+        {
+            return type.GetCaseTypes(closedAttributeType)
+                .Where(t => !t.HasAttribute(closedAttributeType));
+        }
+
         private static IEnumerable<TypedConstant> GetTypeConstants(TypedConstant constant)
         {
             // Ignore anything that isn't a type or type in a single array. The compiler will report
@@ -117,6 +125,11 @@ namespace ExhaustiveMatching.Analyzer
             if (type.BaseType != null)
                 baseTypes = baseTypes.Append(type.BaseType);
             return baseTypes;
+        }
+
+        public static IEnumerable<ITypeSymbol> AllSuperTypes(this ITypeSymbol type)
+        {
+            return type.AllInterfaces.Concat(type.BaseClasses());
         }
     }
 }
