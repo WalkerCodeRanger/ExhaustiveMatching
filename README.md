@@ -169,8 +169,12 @@ The analyzer reports various errors for incorrect code. The table below gives a 
         <td>A switch on type is missing a case</td>
     </tr>
     <tr>
+        <th>EM0003</th>
+        <td>A switch on a nullable enum is missing a null case</td>
+    </tr>
+    <tr>
         <th>EM0011</th>
-        <td>A type is not listed as a case in a closed type it is a direct subtype of</td>
+        <td>A concrete type is not listed as a case in a closed type it is a direct subtype of</td>
     </tr>
     <tr>
         <th>EM0012</th>
@@ -179,6 +183,10 @@ The analyzer reports various errors for incorrect code. The table below gives a 
     <tr>
         <th>EM0013</th>
         <td>A case type listed in the closed attribute is not a subtype of the closed type</td>
+    </tr>
+    <tr>
+        <th>EM0014</th>
+        <td>A concrete subtype of a closed type is not covered by some case</td>
     </tr>
     <tr>
         <th>EM0100</th>
