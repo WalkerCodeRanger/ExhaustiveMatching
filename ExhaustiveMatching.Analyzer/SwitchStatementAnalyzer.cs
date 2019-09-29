@@ -24,6 +24,16 @@ namespace ExhaustiveMatching.Analyzer
 
             if (expressionType?.TypeKind == TypeKind.Enum)
                 AnalyzeSwitchOnEnum(context, switchStatement, expressionType);
+            else if (expressionType?.TypeKind == TypeKind.Struct)
+            {
+                var nullableType = context.Compilation.GetTypeByMetadataName(TypeNames.Nullable);
+                if (expressionType.OriginalDefinition.Equals(nullableType))
+                {
+                    expressionType = ((INamedTypeSymbol)expressionType).TypeArguments.Single();
+                    if (expressionType.TypeKind == TypeKind.Enum)
+                        AnalyzeSwitchOnEnum(context, switchStatement, expressionType, true);
+                }
+            }
             else if (!switchKind.DefaultThrowsInvalidEnum)
                 AnalyzeSwitchOnClosed(context, switchStatement, expressionType);
         }
@@ -61,14 +71,24 @@ namespace ExhaustiveMatching.Analyzer
         private static void AnalyzeSwitchOnEnum(
             SyntaxNodeAnalysisContext context,
             SwitchStatementSyntax switchStatement,
-            ITypeSymbol type)
+            ITypeSymbol type,
+            bool nullRequired = false)
         {
-            var symbolsUsed = switchStatement
+            var caseSwitchLabels = switchStatement
                 .Sections
                 .SelectMany(s => s.Labels)
                 .OfType<CaseSwitchLabelSyntax>()
+                .ToList();
+            var symbolsUsed = caseSwitchLabels
                 .Select(l => context.SemanticModel.GetSymbolInfo(l.Value, context.CancellationToken).Symbol)
                 .ToImmutableHashSet();
+
+            if (nullRequired && !caseSwitchLabels.Any(IsNullCase))
+            {
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.NotExhaustiveNullableEnumSwitch,
+                    switchStatement.SwitchKeyword.GetLocation());
+                context.ReportDiagnostic(diagnostic);
+            }
 
             var allSymbols = type.GetMembers()
                 .Where(m => m.Kind == SymbolKind.Field)
@@ -82,7 +102,7 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var unusedSymbol in unusedSymbols.OrderBy(s => s))
             {
                 var diagnostic = Diagnostic.Create(
-                    ExhaustiveMatchAnalyzer.NotExhaustiveEnumSwitchRule,
+                    ExhaustiveMatchAnalyzer.NotExhaustiveEnumSwitch,
                     switchStatement.SwitchKeyword.GetLocation(), unusedSymbol);
                 context.ReportDiagnostic(diagnostic);
             }
@@ -127,7 +147,7 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var uncoveredType in uncoveredTypes.OrderBy(t => t.Name))
             {
                 var diagnostic = Diagnostic.Create(
-                    ExhaustiveMatchAnalyzer.NotExhaustiveObjectSwitchRule,
+                    ExhaustiveMatchAnalyzer.NotExhaustiveObjectSwitch,
                     switchStatement.SwitchKeyword.GetLocation(), uncoveredType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
@@ -139,8 +159,7 @@ namespace ExhaustiveMatching.Analyzer
         {
             foreach (var switchLabel in switchLabels.OfType<CaseSwitchLabelSyntax>())
             {
-                if (switchLabel.Value is LiteralExpressionSyntax literalExpression
-                    && literalExpression.Kind() == SyntaxKind.NullLiteralExpression)
+                if (IsNullCase(switchLabel))
                 {
                     // `case null:` is allowed
                 }
@@ -151,6 +170,12 @@ namespace ExhaustiveMatching.Analyzer
                     context.ReportDiagnostic(diagnostic);
                 }
             }
+        }
+
+        private static bool IsNullCase(CaseSwitchLabelSyntax switchLabel)
+        {
+            return switchLabel.Value is LiteralExpressionSyntax literalExpression
+                   && literalExpression.Kind() == SyntaxKind.NullLiteralExpression;
         }
 
         private static ITypeSymbol GetTypeSymbolMatched(

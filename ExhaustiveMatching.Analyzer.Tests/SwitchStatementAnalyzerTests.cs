@@ -114,6 +114,14 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 throw ExhaustiveMatch.Failed(dayOfWeek);
         }";
 
+            var expectedNull = new DiagnosticResult
+            {
+                Id = "EM0003",
+                Message = "null value not handled by switch",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
+            };
+
             var expectedFriday = new DiagnosticResult
             {
                 Id = "EM0001",
@@ -130,15 +138,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
             };
 
-            var expectedNull = new DiagnosticResult
-            {
-                Id = "EM0001",
-                Message = "Enum value not handled by switch: null",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 9, 6) }
-            };
-
-            VerifyCSharpDiagnostic(CodeContext(args, test), expectedFriday, expectedSunday, expectedNull);
+            VerifyCSharpDiagnostic(CodeContext(args, test), expectedNull, expectedFriday, expectedSunday);
         }
 
 

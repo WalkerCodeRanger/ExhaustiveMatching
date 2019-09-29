@@ -61,7 +61,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An switch statement on an enum type marked as exhustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
+        ///   Looks up a localized string similar to An switch statement on an enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
         /// </summary>
         internal static string EM0001Description {
             get {
@@ -111,6 +111,33 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM0002Title {
             get {
                 return ResourceManager.GetString("EM0002Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An switch statement on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits null from the cases..
+        /// </summary>
+        internal static string EM0003Description {
+            get {
+                return ResourceManager.GetString("EM0003Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to null value not handled by switch.
+        /// </summary>
+        internal static string EM0003Message {
+            get {
+                return ResourceManager.GetString("EM0003Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch on Nullable Enum Not Exhaustive.
+        /// </summary>
+        internal static string EM0003Title {
+            get {
+                return ResourceManager.GetString("EM0003Title", resourceCulture);
             }
         }
         
