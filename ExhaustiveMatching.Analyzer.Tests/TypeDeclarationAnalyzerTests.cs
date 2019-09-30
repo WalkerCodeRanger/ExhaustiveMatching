@@ -166,6 +166,31 @@ namespace TestNamespace
         }
 
         [TestMethod]
+        public void MultiLevelHierarchyWithConcreteInteriorTypes()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(Circle),
+        typeof(Triangle))]
+    public abstract class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+
+    [Closed(
+        typeof(EquilateralTriangle),
+        typeof(IsoscelesTriangle))]
+    public class Triangle : Shape { } // important part is that triangle is concrete
+    public class EquilateralTriangle : Triangle { }
+    public class IsoscelesTriangle : Triangle { }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
         public void MirrorHierarchy()
         {
             const string test = @"using ExhaustiveMatching;

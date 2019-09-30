@@ -68,6 +68,9 @@ namespace ExhaustiveMatching.Analyzer
                 .Select(s => s.Type);
         }
 
+        /// <summary>
+        /// Get the case types of a type. (one level, not recursive)
+        /// </summary>
         public static IEnumerable<ITypeSymbol> GetCaseTypes(
             this ITypeSymbol type,
             INamedTypeSymbol closedAttributeType)
@@ -88,11 +91,13 @@ namespace ExhaustiveMatching.Analyzer
                 .Where(t => t.TypeKind != TypeKind.Error && t.IsDirectSubtypeOf(type));
         }
 
+
         public static IEnumerable<ITypeSymbol> GetLeafCaseTypes(
             this ITypeSymbol type,
             INamedTypeSymbol closedAttributeType)
         {
-            return type.GetCaseTypes(closedAttributeType)
+            return new[] { type }
+                .SelectRecursive(t => t.GetCaseTypes(closedAttributeType))
                 .Where(t => !t.HasAttribute(closedAttributeType));
         }
 
