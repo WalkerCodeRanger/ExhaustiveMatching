@@ -141,6 +141,31 @@ namespace TestNamespace
         }
 
         [TestMethod]
+        public void MultiLevelHierarchy()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(Square),
+        typeof(Circle),
+        typeof(Triangle))]
+    public abstract class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+
+    [Closed(
+        typeof(EquilateralTriangle),
+        typeof(IsoscelesTriangle))]
+    public abstract class Triangle : Shape { }
+    public class EquilateralTriangle : Triangle { }
+    public class IsoscelesTriangle : Triangle { }
+}";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
         public void MirrorHierarchy()
         {
             const string test = @"using ExhaustiveMatching;
