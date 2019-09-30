@@ -18,7 +18,7 @@ namespace ExhaustiveMatching.Analyzer
                 MustBeCase(context, typeDeclaration, typeSymbol, closedAttribute);
 
             if (IsClosedType(typeSymbol, closedAttribute))
-                AllMemberTypesMustBeDirectSubtypes(context, typeDeclaration, typeSymbol, closedAttribute);
+                AllMemberTypesMustBeDirectSubtypes(context, typeSymbol, closedAttribute);
         }
 
         private static void MustBeCase(
@@ -79,7 +79,6 @@ namespace ExhaustiveMatching.Analyzer
 
         private static void AllMemberTypesMustBeDirectSubtypes(
             SyntaxNodeAnalysisContext context,
-            TypeDeclarationSyntax typeDeclaration,
             ITypeSymbol typeSymbol,
             INamedTypeSymbol closedAttribute)
         {
