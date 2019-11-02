@@ -106,6 +106,30 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
+        [TestMethod, Ignore("Check not yet implemented")]
+        public void CaseTypeMustBeUnique()
+        {
+            const string test = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof(Square), typeof(Square))]
+    public abstract class Shape { }
+    public class Square : Shape { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM0012",
+                Message = "Closed type case is not a direct subtype: TestNamespace.Square",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 16, 6) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
         /// <summary>
         /// Previous versions of the analyzer would throw an exception when encountering
         /// invalid arguments to <see cref="ClosedAttribute"/>.
