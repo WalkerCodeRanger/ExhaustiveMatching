@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -85,26 +86,49 @@ namespace ExhaustiveMatching.Analyzer
             var caseTypeSyntaxes = typeSymbol.GetCaseTypeSyntaxes(closedAttribute);
             foreach (var caseTypeSyntax in caseTypeSyntaxes)
             {
-                var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
-                if (caseType == null
-                    || typeSymbol.Equals(caseType.BaseType) // BaseType is null for interfaces, avoid calling method on it
-                    || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
-                    continue;
+                try
+                {
+                    // This condition is to address issue #24. Without it, there are
+                    // intermittent argument exceptions that the syntax doesn't come
+                    // from the same syntax tree. It so far hasn't been possible to
+                    // create a unit test that reproduces this. (Hence the long comment)
+                    // The most likely cause seems to be that the `caseTypeSyntax` is
+                    // coming from a closed attribute on another copy of the partial
+                    // class that is in different file. Assuming that is true, it
+                    // is ok to simply skip them, because when that file is analyzed,
+                    // they will be checked.
+                    if (!context.SemanticModel.SyntaxTree.Equals(caseTypeSyntax.SyntaxTree))
+                        continue;
 
-                if (caseType.InheritsFrom(typeSymbol)
-                    || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol)))
-                {
-                    // It's a subtype, just not a direct one
-                    var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
-                        caseTypeSyntax.GetLocation(), caseType.GetFullName());
-                    context.ReportDiagnostic(diagnostic);
+                    var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
+
+                    if (caseType == null
+                        || typeSymbol.Equals(caseType.BaseType) // BaseType is null for interfaces, avoid calling method on it
+                        || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
+                        continue;
+
+                    if (caseType.InheritsFrom(typeSymbol)
+                        || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol)))
+                    {
+                        // It's a subtype, just not a direct one
+                        var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
+                            caseTypeSyntax.GetLocation(), caseType.GetFullName());
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                    else
+                    {
+                        // Not even a subtype
+                        var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeSubtype,
+                            caseTypeSyntax.GetLocation(), caseType.GetFullName());
+                        context.ReportDiagnostic(diagnostic);
+                    }
                 }
-                else
+                catch (ArgumentException ex)
                 {
-                    // Not even a subtype
-                    var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeSubtype,
-                        caseTypeSyntax.GetLocation(), caseType.GetFullName());
-                    context.ReportDiagnostic(diagnostic);
+                    // Provide some more context which was helpful in tracking down bugs
+                    throw new Exception(
+                        $"For type symbol '{typeSymbol.Name}' when getting type info for syntax '{caseTypeSyntax.ToString()}'",
+                        ex);
                 }
             }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace ExhaustiveMatching
 {
+    // Allow multiple because we allow one in each part of a partial class
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
     public class ClosedAttribute : Attribute
     {
