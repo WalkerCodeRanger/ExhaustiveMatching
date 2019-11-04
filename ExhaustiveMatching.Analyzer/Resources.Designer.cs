@@ -250,6 +250,33 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An open interface subtype of a type marked with the &quot;Closed&quot; attribute must be a case of the closed type..
+        /// </summary>
+        internal static string EM0015Description {
+            get {
+                return ResourceManager.GetString("EM0015Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open interface {0} is not a case of its closed supertype: {1}.
+        /// </summary>
+        internal static string EM0015Message {
+            get {
+                return ResourceManager.GetString("EM0015Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Interface Subtype of a Closed Type Must Be a Case.
+        /// </summary>
+        internal static string EM0015Title {
+            get {
+                return ResourceManager.GetString("EM0015Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An exhustive switch statement does not support case clauses with &quot;when&quot; guards.
         /// </summary>
         internal static string EM0100Description {

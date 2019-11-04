@@ -28,10 +28,13 @@ namespace ExhaustiveMatching.Analyzer
             ITypeSymbol typeSymbol,
             INamedTypeSymbol closedAttribute)
         {
-            if (typeSymbol.IsAbstract)
+            var isConcrete = !typeSymbol.IsAbstract;
+            var isOpenInterface = typeSymbol.TypeKind == TypeKind.Interface
+                                  &&  !typeSymbol.HasAttribute(closedAttribute);
+            if (!isConcrete && !isOpenInterface)
                 return;
 
-            // Any concrete type directly inheriting from a closed type must be listed in the cases
+            // Any concrete type or open interface directly inheriting from a closed type must be listed in the cases
             var directSuperTypes = typeSymbol.DirectSuperTypes();
             var closedSuperTypes = directSuperTypes
                 .Where(t => t.HasAttribute(closedAttribute))
@@ -44,10 +47,17 @@ namespace ExhaustiveMatching.Analyzer
                 if (isMember)
                     continue;
 
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.ConcreteSubtypeMustBeCaseOfClosedType,
-                    typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), superType.GetFullName());
+                var descriptor = isConcrete
+                    ? ExhaustiveMatchAnalyzer.ConcreteSubtypeMustBeCaseOfClosedType
+                    // else isOpenInterface is always true
+                    : ExhaustiveMatchAnalyzer.OpenInterfaceSubtypeMustBeCaseOfClosedType;
+
+                var diagnostic = Diagnostic.Create(descriptor, typeDeclaration.Identifier.GetLocation(),
+                    typeSymbol.GetFullName(), superType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
+
+            if (!isConcrete) return;
 
             // Any concrete type indirectly inheriting from a closed type must be covered by a case type
             // that isn't itself closed. If it were closed, then it could be matched by all the cases, and

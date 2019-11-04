@@ -10,7 +10,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
     public class TypeDeclarationAnalyzerTests : CodeFixVerifier
     {
         [TestMethod]
-        public void SubtypeOfClosedTypeMustBeCase()
+        public void ConcreteSubtypeOfClosedTypeMustBeCase()
         {
             const string test = @"using ExhaustiveMatching;
 namespace TestNamespace
@@ -30,6 +30,32 @@ namespace TestNamespace
                 Message = "TestNamespace.Triangle is not a case of its closed supertype: TestNamespace.Shape",
                 Severity = DiagnosticSeverity.Error,
                 Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 18, 8) }
+            };
+
+            VerifyCSharpDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void OpenInterfaceSubtypeOfClosedTypeMustBeCase()
+        {
+            const string test = @"using ExhaustiveMatching;
+namespace TestNamespace
+{
+    [Closed(
+        typeof(ISquare),
+        typeof(ICircle))]
+    public interface IShape { }
+    public interface ISquare : IShape { }
+    public interface ICircle : IShape { }
+    public interface ITriangle : IShape { }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "EM0015",
+                Message = "Open interface TestNamespace.ITriangle is not a case of its closed supertype: TestNamespace.IShape",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 22, 9) }
             };
 
             VerifyCSharpDiagnostic(test, expected);

@@ -189,6 +189,10 @@ The analyzer reports various errors for incorrect code. The table below gives a 
         <td>A concrete subtype of a closed type is not covered by some case</td>
     </tr>
     <tr>
+        <th>EM0015</th>
+        <td>An open interface is not listed as a case in a closed type it is a direct subtype of</td>
+    </tr>
+    <tr>
         <th>EM0100</th>
         <td>An exhaustive switch can't contain when guards</td>
     </tr>

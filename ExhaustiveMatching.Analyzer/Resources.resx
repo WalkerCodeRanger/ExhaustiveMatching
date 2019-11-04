@@ -180,6 +180,15 @@
   <data name="EM0014Title" xml:space="preserve">
     <value>Concrete Subtype of a Closed Type Must Be a Covered</value>
   </data>
+  <data name="EM0015Description" xml:space="preserve">
+    <value>An open interface subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
+  </data>
+  <data name="EM0015Message" xml:space="preserve">
+    <value>Open interface {0} is not a case of its closed supertype: {1}</value>
+  </data>
+  <data name="EM0015Title" xml:space="preserve">
+    <value>Open Interface Subtype of a Closed Type Must Be a Case</value>
+  </data>
   <data name="EM0100Description" xml:space="preserve">
     <value>An exhustive switch statement does not support case clauses with "when" guards</value>
   </data>

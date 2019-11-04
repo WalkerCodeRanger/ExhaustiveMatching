@@ -40,6 +40,10 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM0014Message = LoadString(nameof(Resources.EM0014Message));
         private static readonly LocalizableString EM0014Description = LoadString(Resources.EM0014Description);
 
+        private static readonly LocalizableString EM0015Title = LoadString(nameof(Resources.EM0015Title));
+        private static readonly LocalizableString EM0015Message = LoadString(nameof(Resources.EM0015Message));
+        private static readonly LocalizableString EM0015Description = LoadString(Resources.EM0015Description);
+
         private static readonly LocalizableString EM0100Title = LoadString(nameof(Resources.EM0100Title));
         private static readonly LocalizableString EM0100Message = LoadString(nameof(Resources.EM0100Message));
         private static readonly LocalizableString EM0100Description = LoadString(Resources.EM0100Description);
@@ -86,6 +90,10 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0014", EM0014Title, EM0014Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0014Description);
 
+        public static readonly DiagnosticDescriptor OpenInterfaceSubtypeMustBeCaseOfClosedType =
+            new DiagnosticDescriptor("EM0015", EM0015Title, EM0015Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0015Description);
+
         public static readonly DiagnosticDescriptor WhenGuardNotSupported =
             new DiagnosticDescriptor("EM0100", EM0100Title, EM0100Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0100Description);
@@ -105,7 +113,8 @@ namespace ExhaustiveMatching.Analyzer
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveObjectSwitch,
                 NotExhaustiveNullableEnumSwitch, ConcreteSubtypeMustBeCaseOfClosedType,
-                MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered, WhenGuardNotSupported,
+                MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered,
+                OpenInterfaceSubtypeMustBeCaseOfClosedType, WhenGuardNotSupported,
                 CaseClauseTypeNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType);
 
         public override void Initialize(AnalysisContext context)
