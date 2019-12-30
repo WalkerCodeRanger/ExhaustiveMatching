@@ -82,6 +82,8 @@ C# 7.0 added pattern matching including the ability to switch on the type of a v
 
 To enable exhaustiveness checking for a switch on type, two things must be done. The default case must throw an `ExhaustiveMatchFailedException` (using the `ExhaustiveMatch.Failed(…)` factory method) and the type being switched on must be marked with the `Closed` attribute. The closed attribute makes a type similar to an enum by giving it a defined set of possible cases. However, instead of a fixed set of values like an enum, a closed type has a fixed set of direct subtypes.
 
+**CAUTION:** subtyping rules for types with the `[Closed(...)]` attribute are enforced by the analyzer, not the language. They can be circumvented. To prevent this include the exhaustive matching analyzer in all projects in your solution, do not expose a closed type to external code that may not be using exhaustive matching, and do not use dynamic code generation to create subtypes. If unexpected subtypes are created, an `ExhaustiveMatchFailedException` exception could be generated at runtime.
+
 This example shows how to declare a closed class `Shape` that can be either a circle or a square.
 
 ```csharp
