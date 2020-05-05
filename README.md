@@ -63,11 +63,11 @@ switch(dayOfWeek)
     case DayOfWeek.Wednesday:
     case DayOfWeek.Thursday:
     case DayOfWeek.Friday:
-        Console.WriteLine(""Weekday"");
+        Console.WriteLine("Weekday");
         break;
     case DayOfWeek.Saturday:
         // Omitted Sunday
-        Console.WriteLine(""Weekend"");
+        Console.WriteLine("Weekend");
         break;
     default:
         throw ExhaustiveMatch.Failed(dayOfWeek);
