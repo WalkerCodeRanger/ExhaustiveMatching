@@ -16,6 +16,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
             const string test = @"
         switch(dayOfWeek)
         {
+            default:
+                throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
             case DayOfWeek.Monday:
             case DayOfWeek.Tuesday:
             case DayOfWeek.Wednesday:
@@ -27,8 +29,6 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 // Omitted Sunday
                 Console.WriteLine(""Weekend"");
                 break;
-            default:
-                throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
         }";
 
             var expectedFriday = new DiagnosticResult
@@ -57,6 +57,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
             const string test = @"
         switch(dayOfWeek)
         {
+            default:
+                throw ExhaustiveMatch.Failed(dayOfWeek);
             case DayOfWeek.Monday:
             case DayOfWeek.Tuesday:
             case DayOfWeek.Wednesday:
@@ -68,8 +70,6 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 // Omitted Sunday
                 Console.WriteLine(""Weekend"");
                 break;
-            default:
-                throw ExhaustiveMatch.Failed(dayOfWeek);
         }";
 
             var expectedFriday = new DiagnosticResult
@@ -99,6 +99,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
             const string test = @"
         switch(dayOfWeek)
         {
+            default:
+                throw ExhaustiveMatch.Failed(dayOfWeek);
             case DayOfWeek.Monday:
             case DayOfWeek.Tuesday:
             case DayOfWeek.Wednesday:
@@ -110,8 +112,6 @@ namespace ExhaustiveMatching.Analyzer.Tests
                 // Omitted Sunday
                 Console.WriteLine(""Weekend"");
                 break;
-            default:
-                throw ExhaustiveMatch.Failed(dayOfWeek);
         }";
 
             var expectedNull = new DiagnosticResult
@@ -355,6 +355,8 @@ namespace TestNamespace
         {
             switch (shape)
             {
+                default:
+                    throw ExhaustiveMatch.Failed(shape);
                 case Square square:
                     Console.WriteLine(""Square: "" + square);
                     break;
@@ -364,8 +366,6 @@ namespace TestNamespace
                 case Triangle triangle:
                     Console.WriteLine(""Triangle: "" + triangle);
                     break;
-                default:
-                    throw ExhaustiveMatch.Failed(shape);
             }
         }
     }
@@ -439,11 +439,11 @@ namespace TestNamespace
         {
             switch (token)
             {
+                default:
+                    throw ExhaustiveMatch.Failed(token);
                 case IKeywordToken _:
                     Console.WriteLine(""foreach"");
                     break;
-                default:
-                    throw ExhaustiveMatch.Failed(token);
             }
         }
     }

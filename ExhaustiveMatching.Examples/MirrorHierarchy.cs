@@ -8,14 +8,14 @@ class MirrorExample
     {
         switch (animal)
         {
+            default:
+                throw ExhaustiveMatch.Failed(animal);
             case ICat cat:
                 Console.WriteLine("Cat: " + cat);
                 break;
             case IDog dog:
                 Console.WriteLine("Dog: " + dog);
                 break;
-            default:
-                throw ExhaustiveMatch.Failed(animal);
         }
     }
 }

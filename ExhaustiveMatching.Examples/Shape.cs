@@ -8,6 +8,8 @@ class ShapeExample
     {
         switch (shape)
         {
+            default:
+                throw ExhaustiveMatch.Failed(shape);
             case Square square:
                 Console.WriteLine("Square: " + square);
                 break;
@@ -20,11 +22,9 @@ class ShapeExample
             case Triangle triangle:
                 Console.WriteLine("Triangle: " + triangle);
                 break;
-            //case string s:
-            //    Console.WriteLine("string: " + s);
-            //    break;
-            default:
-                throw ExhaustiveMatch.Failed(shape);
+                //case string s:
+                //    Console.WriteLine("string: " + s);
+                //    break;
         }
     }
 }

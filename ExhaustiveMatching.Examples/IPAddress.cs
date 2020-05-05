@@ -25,14 +25,14 @@ class IPAddressExample
     {
         switch (ipAddress)
         {
+            default:
+                throw ExhaustiveMatch.Failed(ipAddress);
             case IPv4Address ipv4Address:
                 return ipv4Address.MapToIPv6();
             #region Snip
             case IPv6Address ipv6Address:
                 return ipv6Address;
             #endregion
-            default:
-                throw ExhaustiveMatch.Failed(ipAddress);
         }
     }
 }

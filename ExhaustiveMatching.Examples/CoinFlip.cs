@@ -9,6 +9,8 @@ class CoinFlipExample
     {
         switch (coinFlip)
         {
+            default:
+                throw ExhaustiveMatch.Failed(coinFlip);
             case CoinFlip.Heads:
                 Console.WriteLine("Heads!");
                 break;
@@ -17,8 +19,6 @@ class CoinFlipExample
                 Console.WriteLine("Tails!");
                 break;
             #endregion
-            default:
-                throw ExhaustiveMatch.Failed(coinFlip);
         }
     }
 }

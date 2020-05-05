@@ -16,11 +16,12 @@ public enum CoinFlip { Heads, Tails }
 // ERROR Enum value not processed by switch: Tails
 switch (coinFlip)
 {
+    default:
+        throw ExhaustiveMatch.Failed(coinFlip);
     case CoinFlip.Heads:
         Console.WriteLine("Heads!");
         break;
-    default:
-        throw ExhaustiveMatch.Failed(coinFlip);
+
 }
 ```
 
@@ -36,10 +37,10 @@ class IPv6Address : IPAddress { … }
 // ERROR Subtype not processed by switch: IPv6Address
 switch (ipAddress)
 {
-    case IPv4Address ipv4Address:
-        return ipv4Address.MapToIPv6();
     default:
         throw ExhaustiveMatch.Failed(ipAddress);
+    case IPv4Address ipv4Address:
+        return ipv4Address.MapToIPv6();
 }
 ```
 
@@ -58,6 +59,8 @@ To enable exhaustiveness checking for a switch on an enum, throw an `ExhaustiveM
 ```csharp
 switch(dayOfWeek)
 {
+    default:
+        throw ExhaustiveMatch.Failed(dayOfWeek);
     case DayOfWeek.Monday:
     case DayOfWeek.Tuesday:
     case DayOfWeek.Wednesday:
@@ -69,8 +72,6 @@ switch(dayOfWeek)
         // Omitted Sunday
         Console.WriteLine("Weekend");
         break;
-    default:
-        throw ExhaustiveMatch.Failed(dayOfWeek);
 }
 ```
 

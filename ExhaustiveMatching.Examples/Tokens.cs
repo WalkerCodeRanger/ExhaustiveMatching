@@ -58,6 +58,8 @@ class TokensExample
     {
         switch (token)
         {
+            default:
+                throw ExhaustiveMatch.Failed(token);
             case IKeywordToken _:
                 Console.WriteLine("boolean literal");
                 break;
@@ -67,8 +69,6 @@ class TokensExample
             case IMinusToken _:
                 Console.WriteLine("+");
                 break;
-            default:
-                throw ExhaustiveMatch.Failed(token);
         }
     }
 }
