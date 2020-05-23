@@ -11,9 +11,9 @@ Mark a switch statement as exhaustive and get errors for missing cases.
 ```csharp
 using ExhaustiveMatching;
 
-public enum CoinFlip { Heads, Tails }
+enum CoinFlip { Heads, Tails }
 
-// ERROR Enum value not processed by switch: Tails
+// ERROR Enum value not handled by switch: Tails
 switch (coinFlip)
 {
     default:
@@ -21,7 +21,6 @@ switch (coinFlip)
     case CoinFlip.Heads:
         Console.WriteLine("Heads!");
         break;
-
 }
 ```
 
@@ -34,7 +33,7 @@ abstract class IPAddress { … }
 class IPv4Address : IPAddress { … }
 class IPv6Address : IPAddress { … }
 
-// ERROR Subtype not processed by switch: IPv6Address
+// ERROR Subtype not handled by switch: IPv6Address
 switch (ipAddress)
 {
     default:

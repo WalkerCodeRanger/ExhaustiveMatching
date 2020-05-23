@@ -1,0 +1,9 @@
+# Override Message Severity for Examples Only
+
+[*.cs]
+
+# EM0001: Switch on Enum Not Exhaustive
+dotnet_diagnostic.EM0001.severity = suggestion
+
+# EM0002: Switch on Closed Type Not Exhaustive
+dotnet_diagnostic.EM0002.severity = suggestion

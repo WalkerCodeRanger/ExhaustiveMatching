@@ -1,36 +1,35 @@
 ﻿using System;
 using ExhaustiveMatching;
-using TestNamespace;
 
-class ShapeExample
+namespace Examples
 {
-    void Example(Shape shape)
+    class ShapeExample
     {
-        switch (shape)
+        void Example(Shape shape)
         {
-            default:
-                throw ExhaustiveMatch.Failed(shape);
-            case Square square:
-                Console.WriteLine("Square: " + square);
-                break;
-            case Circle circle:
-                Console.WriteLine("Circle: " + circle);
-                break;
-            //case EquilateralTriangle equilateralTriangle:
-            //    Console.WriteLine("EquilateralTriangle: " + equilateralTriangle);
-            //    break;
-            case Triangle triangle:
-                Console.WriteLine("Triangle: " + triangle);
-                break;
+            switch (shape)
+            {
+                default:
+                    throw ExhaustiveMatch.Failed(shape);
+                case Square square:
+                    Console.WriteLine("Square: " + square);
+                    break;
+                case Circle circle:
+                    Console.WriteLine("Circle: " + circle);
+                    break;
+                //case EquilateralTriangle equilateralTriangle:
+                //    Console.WriteLine("EquilateralTriangle: " + equilateralTriangle);
+                //    break;
+                case Triangle triangle:
+                    Console.WriteLine("Triangle: " + triangle);
+                    break;
                 //case string s:
                 //    Console.WriteLine("string: " + s);
                 //    break;
+            }
         }
     }
-}
 
-namespace TestNamespace
-{
     [Closed(typeof(Square), typeof(Circle), typeof(Triangle))]
     public abstract class Shape { }
 
@@ -38,7 +37,7 @@ namespace TestNamespace
 
     public class Circle : Shape { }
 
-    // abstract to show abstract leaf types are checked
+// abstract to show abstract leaf types are checked
     public abstract class Triangle : Shape { }
 
     public class EquilateralTriangle : Triangle { }

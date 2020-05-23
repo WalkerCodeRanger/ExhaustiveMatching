@@ -1,6 +1,8 @@
 ﻿using ExhaustiveMatching;
 
-[Closed(typeof(IPartialChild2))]
-public partial interface IPartialBase { }
+namespace Examples {
+    [Closed(typeof(IPartialChild2))]
+    public partial interface IPartialBase { }
 
-public interface IPartialChild2 : IPartialBase { }
+    public interface IPartialChild2 : IPartialBase { }
+}

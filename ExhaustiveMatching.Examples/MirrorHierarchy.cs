@@ -1,27 +1,26 @@
-﻿using System;
+using System;
 using ExhaustiveMatching;
-using TestNamespace;
 
-class MirrorExample
+namespace Examples
 {
-    void Example(IAnimal animal)
+    class MirrorExample
     {
-        switch (animal)
+        void Example(IAnimal animal)
         {
-            default:
-                throw ExhaustiveMatch.Failed(animal);
-            case ICat cat:
-                Console.WriteLine("Cat: " + cat);
-                break;
-            case IDog dog:
-                Console.WriteLine("Dog: " + dog);
-                break;
+            switch (animal)
+            {
+                default:
+                    throw ExhaustiveMatch.Failed(animal);
+                case ICat cat:
+                    Console.WriteLine("Cat: " + cat);
+                    break;
+                case IDog dog:
+                    Console.WriteLine("Dog: " + dog);
+                    break;
+            }
         }
     }
-}
 
-namespace TestNamespace
-{
     [Closed(typeof(ICat), typeof(IDog))]
     public interface IAnimal { }
     public interface ICat : IAnimal { }

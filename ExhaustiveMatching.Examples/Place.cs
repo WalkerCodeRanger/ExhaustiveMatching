@@ -1,6 +1,6 @@
 ﻿using ExhaustiveMatching;
 
-namespace TestPlaceNamespace
+namespace Examples
 {
     [Closed(typeof(ValuePlace), typeof(DiscardPlace))]
     public abstract class Place
