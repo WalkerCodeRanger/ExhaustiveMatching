@@ -9,12 +9,12 @@ using ExhaustiveMatching;
 namespace Examples.ReadMe
 {
     #region snippet
-    enum CoinFlip { Heads, Tails }
+    public enum CoinFlip { Heads, Tails }
     #endregion
 
     public static class CoinFlipExample
     {
-        static void Example(CoinFlip coinFlip)
+        public static void Example(CoinFlip coinFlip)
         {
             #region snippet
             // ERROR Enum value not handled by switch: Tails

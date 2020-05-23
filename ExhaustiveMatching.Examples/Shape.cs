@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using ExhaustiveMatching;
+
+// ReSharper disable All
 
 namespace Examples
 {
-    class ShapeExample
+    public class ShapeExample
     {
-        void Example(Shape shape)
+        public void Example(Shape shape)
         {
             switch (shape)
             {
@@ -23,9 +25,9 @@ namespace Examples
                 case Triangle triangle:
                     Console.WriteLine("Triangle: " + triangle);
                     break;
-                //case string s:
-                //    Console.WriteLine("string: " + s);
-                //    break;
+                    //case string s:
+                    //    Console.WriteLine("string: " + s);
+                    //    break;
             }
         }
     }
@@ -37,7 +39,7 @@ namespace Examples
 
     public class Circle : Shape { }
 
-// abstract to show abstract leaf types are checked
+    // abstract to show abstract leaf types are checked
     public abstract class Triangle : Shape { }
 
     public class EquilateralTriangle : Triangle { }

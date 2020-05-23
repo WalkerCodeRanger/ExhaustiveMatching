@@ -4,6 +4,8 @@
 using System;
 using ExhaustiveMatching;
 
+// ReSharper disable All
+
 namespace Examples
 {
     // This section represents code that would be auto generated
@@ -54,9 +56,9 @@ namespace Examples
     public partial interface IMinusToken : IOperatorToken { }
     #endregion
 
-    class TokensExample
+    public class TokensExample
     {
-        void Example(IToken token)
+        public void Example(IToken token)
         {
             switch (token)
             {

@@ -11,7 +11,7 @@ Mark a switch statement as exhaustive and get errors for missing cases.
 ```csharp
 using ExhaustiveMatching;
 
-enum CoinFlip { Heads, Tails }
+public enum CoinFlip { Heads, Tails }
 
 // ERROR Enum value not handled by switch: Tails
 switch (coinFlip)
@@ -28,10 +28,10 @@ Create [discriminated unions (aka sum types)](https://en.wikipedia.org/wiki/Tagg
 
 ```csharp
 [Closed(typeof(IPv4Address), typeof(IPv6Address))]
-abstract class IPAddress { … }
+public abstract class IPAddress { … }
 
-class IPv4Address : IPAddress { … }
-class IPv6Address : IPAddress { … }
+public class IPv4Address : IPAddress { … }
+public class IPv6Address : IPAddress { … }
 
 // ERROR Subtype not handled by switch: IPv6Address
 switch (ipAddress)
@@ -56,6 +56,7 @@ Install the ExhaustiveMatching.Analyzer package into each project that will cont
 To enable exhaustiveness checking for a switch on an enum, throw an `ExhaustiveMatchFailedException` from the default case. That exception is constructed using the `ExhaustiveMatch.Failed(…)` factory method which should be passed the value being switched on. For switch statements with exhaustiveness checking, the analyzer will report an error for any missing enum cases.
 
 ```csharp
+// ERROR Enum value not handled by switch: Sunday
 switch(dayOfWeek)
 {
     default:

@@ -1,11 +1,13 @@
 using System;
 using ExhaustiveMatching;
 
+// ReSharper disable All
+
 namespace Examples
 {
-    class MirrorExample
+    public class MirrorExample
     {
-        void Example(IAnimal animal)
+        public void Example(IAnimal animal)
         {
             switch (animal)
             {

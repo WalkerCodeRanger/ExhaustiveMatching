@@ -9,14 +9,14 @@ namespace Examples.ReadMe
     {
         #region snippet
         [Closed(typeof(IPv4Address), typeof(IPv6Address))]
-        abstract class IPAddress { /* … */ }
+        public abstract class IPAddress { /* … */ }
 
-        class IPv4Address : IPAddress { /* … */ }
+        public class IPv4Address : IPAddress { /* … */ }
 
-        class IPv6Address : IPAddress { /* … */ }
+        public class IPv6Address : IPAddress { /* … */ }
         #endregion
 
-        static IPv6Address Example(IPAddress ipAddress)
+        public static IPv6Address Example(IPAddress ipAddress)
         {
             #region snippet
             // ERROR Subtype not handled by switch: IPv6Address
@@ -31,7 +31,7 @@ namespace Examples.ReadMe
         }
 
         // Use extension method to avoid putting a method in the body
-        static IPv6Address MapToIPv6(this IPv4Address address)
+        private static IPv6Address MapToIPv6(this IPv4Address address)
         {
             throw new NotImplementedException();
         }
