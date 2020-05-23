@@ -2,14 +2,13 @@ using ExhaustiveMatching.Analyzer.Tests.Helpers;
 using ExhaustiveMatching.Analyzer.Tests.Verifiers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    [TestClass]
     public class TypeDeclarationAnalyzerTests : CodeFixVerifier
     {
-        [TestMethod]
+        [Fact]
         public void ConcreteSubtypeOfClosedTypeMustBeCase()
         {
             const string test = @"using ExhaustiveMatching;
@@ -35,7 +34,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test, expected);
         }
 
-        [TestMethod]
+        [Fact]
         public void OpenInterfaceSubtypeOfClosedTypeMustBeCase()
         {
             const string test = @"using ExhaustiveMatching;
@@ -61,7 +60,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test, expected);
         }
 
-        [TestMethod]
+        [Fact]
         public void CaseTypeMustBeSubtype()
         {
             const string test = @"using ExhaustiveMatching;
@@ -89,7 +88,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test, expected);
         }
 
-        [TestMethod]
+        [Fact]
         public void CaseTypeMustBeDirectSubtype()
         {
             const string test = @"using ExhaustiveMatching;
@@ -116,7 +115,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test, expected);
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleCaseTypeSupported()
         {
             const string test = @"using ExhaustiveMatching;
@@ -132,7 +131,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
-        [TestMethod, Ignore("Check not yet implemented")]
+        [Fact(Skip = "Check not yet implemented")]
         public void CaseTypeMustBeUnique()
         {
             const string test = @"using ExhaustiveMatching;
@@ -160,7 +159,7 @@ namespace TestNamespace
         /// Previous versions of the analyzer would throw an exception when encountering
         /// invalid arguments to <see cref="ClosedAttribute"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EmptyTypeofArgumentToClosedAttributeHandled()
         {
             const string test = @"using ExhaustiveMatching;
@@ -175,7 +174,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
-        [TestMethod]
+        [Fact]
         public void PrimitiveArgumentToClosedAttributeHandled()
         {
             const string test = @"using ExhaustiveMatching;
@@ -190,7 +189,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
-        [TestMethod]
+        [Fact]
         public void MultiLevelHierarchy()
         {
             const string test = @"using ExhaustiveMatching;
@@ -215,7 +214,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
-        [TestMethod]
+        [Fact]
         public void MultiLevelHierarchyWithConcreteInteriorTypes()
         {
             const string test = @"using ExhaustiveMatching;
@@ -240,7 +239,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
-        [TestMethod]
+        [Fact]
         public void MirrorHierarchy()
         {
             const string test = @"using ExhaustiveMatching;
@@ -264,7 +263,7 @@ namespace TestNamespace
             VerifyCSharpDiagnostic(test);
         }
 
-        [TestMethod]
+        [Fact]
         public void MirrorHierarchyMustBeCovered()
         {
             const string test = @"using ExhaustiveMatching;

@@ -2,14 +2,13 @@ using ExhaustiveMatching.Analyzer.Tests.Helpers;
 using ExhaustiveMatching.Analyzer.Tests.Verifiers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    [TestClass]
     public class SwitchStatementAnalyzerTests : CodeFixVerifier
     {
-        [TestMethod]
+        [Fact]
         public void SwitchOnEnumThrowingInvalidEnumIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "DayOfWeek dayOfWeek";
@@ -50,7 +49,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expectedFriday, expectedSunday);
         }
 
-        [TestMethod]
+        [Fact]
         public void SwitchOnEnumThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "DayOfWeek dayOfWeek";
@@ -92,7 +91,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void SwitchOnNullableEnum()
         {
             const string args = "DayOfWeek? dayOfWeek";
@@ -142,7 +141,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void SwitchOnClosedThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "Shape shape";
@@ -174,7 +173,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expectedCircle, expectedTriangle);
         }
 
-        [TestMethod]
+        [Fact]
         public void ExhaustiveObjectSwitchAllowsNull()
         {
             const string args = "Shape shape";
@@ -200,7 +199,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test));
         }
 
-        [TestMethod]
+        [Fact]
         public void UnsupportedCaseClauses()
         {
             const string args = "Shape shape";
@@ -241,7 +240,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2);
         }
 
-        [TestMethod]
+        [Fact]
         public void SwitchOnNonClosedType()
         {
             const string args = "object o";
@@ -288,7 +287,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             VerifyCSharpDiagnostic(CodeContext(args, test), expected1, expected2, expected3);
         }
 
-        [TestMethod]
+        [Fact]
         public void ErrorForMatchOnTypesOutsideOfHierarchy()
         {
             const string args = "Shape shape";
@@ -334,7 +333,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void HandlesMultipleClosedAttributes()
         {
             const string test = @"using ExhaustiveMatching;
@@ -379,7 +378,7 @@ namespace TestNamespace
         /// cause all switches on that type to report a missing case with no
         /// type listed. (It was the error type.)
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EmptyTypeofDoesNotCauseMissingCase()
         {
             const string test = @"using ExhaustiveMatching;
@@ -420,7 +419,7 @@ namespace TestNamespace
         /// the middle of a case hierarchy gave EM013 that the type was not a
         /// case type.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MultipleInterfaceLevels()
         {
             const string test = @"using System;
@@ -456,7 +455,7 @@ namespace TestNamespace
         /// Regression test for infinite loop when a type listed itself as one
         /// of its case types.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelfTypeAsCaseType()
         {
             const string test = @"using System;

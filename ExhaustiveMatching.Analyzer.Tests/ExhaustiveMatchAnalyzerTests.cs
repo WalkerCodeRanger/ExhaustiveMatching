@@ -1,13 +1,12 @@
 using ExhaustiveMatching.Analyzer.Tests.Verifiers;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    [TestClass]
     public class ExhaustiveMatchAnalyzerTests : CodeFixVerifier
     {
-        [TestMethod]
+        [Fact]
         public void EmptyFileReportsNoDiagnostics()
         {
             const string test = @"";
