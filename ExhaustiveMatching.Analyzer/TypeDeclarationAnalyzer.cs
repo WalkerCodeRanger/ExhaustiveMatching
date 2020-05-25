@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,9 +15,15 @@ namespace ExhaustiveMatching.Analyzer
             TypeDeclarationSyntax typeDeclaration)
         {
             var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
+
             var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
+
             if (typeSymbol.IsDirectSubtypeOfTypeWithAttribute(closedAttribute))
                 MustBeCase(context, typeDeclaration, typeSymbol, closedAttribute);
+
+            var closedAttributesOnType = ClosedAttributes(context, typeDeclaration, closedAttribute);
+            if (closedAttributesOnType.Any())
+                CheckClosedAttributes(context, closedAttributesOnType);
 
             if (IsClosedType(typeSymbol, closedAttribute))
                 AllMemberTypesMustBeDirectSubtypes(context, typeSymbol, closedAttribute);
@@ -77,6 +84,35 @@ namespace ExhaustiveMatching.Analyzer
 
                 var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.SubtypeMustBeCovered,
                     typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), superType.GetFullName());
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private static IList<AttributeSyntax> ClosedAttributes(
+            SyntaxNodeAnalysisContext context,
+            TypeDeclarationSyntax typeDeclaration,
+            INamedTypeSymbol closedAttribute)
+        {
+            var closedAttributes = typeDeclaration.AttributeLists
+              .SelectMany(l => l.Attributes)
+              .Where(a =>
+              {
+                  var constructorSymbol = context.GetSymbol(a);
+                  var attributeSymbol = constructorSymbol?.ContainingSymbol;
+                  return closedAttribute.Equals(attributeSymbol);
+              }).ToList();
+
+            return closedAttributes;
+        }
+
+        private static void CheckClosedAttributes(
+            SyntaxNodeAnalysisContext context,
+            IList<AttributeSyntax> closedAttributesOnType)
+        {
+            foreach (var attribute in closedAttributesOnType.Skip(1))
+            {
+                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.DuplicateClosedAttribute,
+                    attribute.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
         }

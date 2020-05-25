@@ -169,11 +169,11 @@ The analyzer reports various errors for incorrect code. The table below gives a 
     </tr>
     <tr>
         <th>EM0002</th>
-        <td>A switch on type is missing a case</td>
+        <td>A switch on a nullable enum is missing a null case</td>
     </tr>
     <tr>
         <th>EM0003</th>
-        <td>A switch on a nullable enum is missing a null case</td>
+        <td>A switch on type is missing a case</td>
     </tr>
     <tr>
         <th>EM0011</th>
@@ -201,14 +201,18 @@ The analyzer reports various errors for incorrect code. The table below gives a 
     </tr>
     <tr>
         <th>EM0101</th>
-        <td>Class clause kind is not supported</td>
+        <td>Case pattern is not supported</td>
     </tr>
     <tr>
         <th>EM0102</th>
-        <td>Can't do exhaustiveness checking for switch on a type that is not and enum and not closed</td>
+        <td>Can't do exhaustiveness checking for switch on a type that is not an enum and not closed</td>
     </tr>
     <tr>
         <th>EM0103</th>
-        <td>Case clause is for a type that is not in the closed type hierarchy</td>
+        <td>Case is for a type that is not in the closed type hierarchy</td>
+    </tr>
+    <tr>
+        <th>EM0104</th>
+        <td>Duplicate 'Closed' attribute on type</td>
     </tr>
 </table>

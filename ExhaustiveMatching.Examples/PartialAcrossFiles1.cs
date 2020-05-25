@@ -1,4 +1,4 @@
-﻿// This test demonstrates closed types split between partial files
+// This test demonstrates closed types split between partial files
 
 using ExhaustiveMatching;
 
@@ -11,7 +11,7 @@ namespace Examples
 
     public interface IPartialChild1 : IPartialBase { }
 
-    public partial interface ISameFileInterface : IPartialBase { }
+    public interface ISameFileInterface : IPartialBase { }
 
     public class SameFileInterface : ISameFileInterface { }
 }

@@ -60,6 +60,10 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM0103Message = LoadString(nameof(Resources.EM0103Message));
         private static readonly LocalizableString EM0103Description = LoadString(Resources.EM0103Description);
 
+        private static readonly LocalizableString EM0104Title = LoadString(nameof(Resources.EM0104Title));
+        private static readonly LocalizableString EM0104Message = LoadString(nameof(Resources.EM0104Message));
+        private static readonly LocalizableString EM0104Description = LoadString(Resources.EM0104Description);
+
         private const string Category = "Logic";
 
         public static readonly DiagnosticDescriptor NotExhaustiveEnumSwitch =
@@ -110,12 +114,17 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0103", EM0103Title, EM0103Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0103Description);
 
+        public static readonly DiagnosticDescriptor DuplicateClosedAttribute =
+            new DiagnosticDescriptor("EM0104", EM0104Title, EM0104Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0104Description);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveObjectSwitch,
-                NotExhaustiveNullableEnumSwitch, ConcreteSubtypeMustBeCaseOfClosedType,
+            ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveNullableEnumSwitch,
+                NotExhaustiveObjectSwitch, ConcreteSubtypeMustBeCaseOfClosedType,
                 MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered,
                 OpenInterfaceSubtypeMustBeCaseOfClosedType, WhenGuardNotSupported,
-                CasePatternNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType);
+                CasePatternNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType,
+                DuplicateClosedAttribute);
 
         public override void Initialize(AnalysisContext context)
         {

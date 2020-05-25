@@ -304,7 +304,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This type of case pattern is not supported in exhaustive switchs. Only &quot;Type name&quot; and null&quot; are supported..
+        ///   Looks up a localized string similar to This type of case pattern is not supported in exhaustive switchs. Only &quot;Type name&quot; and &quot;null&quot; are supported..
         /// </summary>
         internal static string EM0101Description {
             get {
@@ -381,6 +381,33 @@ namespace ExhaustiveMatching.Analyzer {
         internal static string EM0103Title {
             get {
                 return ResourceManager.GetString("EM0103Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not possible to specify the same &apos;Closed&apos; attribute more than once on a type declaration..
+        /// </summary>
+        internal static string EM0104Description {
+            get {
+                return ResourceManager.GetString("EM0104Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate &apos;Closed&apos; attribute.
+        /// </summary>
+        internal static string EM0104Message {
+            get {
+                return ResourceManager.GetString("EM0104Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Closed Attribute.
+        /// </summary>
+        internal static string EM0104Title {
+            get {
+                return ResourceManager.GetString("EM0104Title", resourceCulture);
             }
         }
     }

@@ -286,7 +286,7 @@ namespace TestNamespace
     [Closed(
         typeof(Square),
         typeof(Circle))]
-    [Closed(typeof(Triangle))]
+    [◊1⟦Closed(typeof(Triangle))⟧]
     public abstract class Shape { }
     public class Square : Shape { }
     public class Circle : Shape { }
@@ -313,8 +313,11 @@ namespace TestNamespace
         }
     }
 }";
+            var expected1 = DiagnosticResult
+                            .Error("EM0104", "Duplicate 'Closed' attribute")
+                            .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(source);
+            await VerifyCSharpDiagnosticsAsync(source, expected1);
         }
 
         /// <summary>

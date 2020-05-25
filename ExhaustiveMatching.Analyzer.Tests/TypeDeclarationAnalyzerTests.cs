@@ -177,6 +177,55 @@ namespace TestNamespace
         }
 
         [Fact]
+        public async Task DuplicateClosedAttribute()
+        {
+            const string source = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof(Square))]
+    [◊1⟦Closed(typeof(Circle))⟧]
+    [◊2⟦Closed(typeof(Triangle))⟧]
+    public abstract class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+    public class Triangle : Shape { }
+}";
+
+            var expected1 = DiagnosticResult
+                            .Error("EM0104", "Duplicate 'Closed' attribute")
+                            .AddLocation(source, 1);
+            var expected2 = DiagnosticResult
+                            .Error("EM0104", "Duplicate 'Closed' attribute")
+                            .AddLocation(source, 2);
+
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
+        }
+
+        [Fact]
+        public async Task ClosedAttributeOnMultiplePartialClassParts()
+        {
+            const string source = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof(Square))]
+    public abstract partial class Shape { }
+    [Closed(typeof(Circle))]
+    public abstract partial class Shape { }
+    [Closed(typeof(Triangle))]
+    public abstract partial class Shape { }
+    public class Square : Shape { }
+    public class Circle : Shape { }
+    public class Triangle : Shape { }
+}";
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
         public async Task MultiLevelHierarchy()
         {
             const string source = @"using ExhaustiveMatching;

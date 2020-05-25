@@ -93,10 +93,10 @@ namespace ExhaustiveMatching.Analyzer
 
         public static ISymbol GetSymbol(
             this SyntaxNodeAnalysisContext context,
-            ExpressionSyntax expression)
+            SyntaxNode node)
         {
             return context.SemanticModel
-                          .GetSymbolInfo(expression, context.CancellationToken)
+                          .GetSymbolInfo(node, context.CancellationToken)
                           .Symbol;
         }
 

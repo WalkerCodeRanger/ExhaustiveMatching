@@ -199,7 +199,7 @@
     <value>When Guards Not Supported</value>
   </data>
   <data name="EM0101Description" xml:space="preserve">
-    <value>This type of case pattern is not supported in exhaustive switchs. Only "Type name" and null" are supported.</value>
+    <value>This type of case pattern is not supported in exhaustive switchs. Only "Type name" and "null" are supported.</value>
   </data>
   <data name="EM0101Message" xml:space="preserve">
     <value>Case pattern not supported in exhaustive switch: {0}</value>
@@ -224,5 +224,14 @@
   </data>
   <data name="EM0103Title" xml:space="preserve">
     <value>Match Must Be On Case Type</value>
+  </data>
+  <data name="EM0104Description" xml:space="preserve">
+    <value>It is not possible to specify the same 'Closed' attribute more than once on a type declaration.</value>
+  </data>
+  <data name="EM0104Message" xml:space="preserve">
+    <value>Duplicate 'Closed' attribute</value>
+  </data>
+  <data name="EM0104Title" xml:space="preserve">
+    <value>Duplicate Closed Attribute</value>
   </data>
 </root>
