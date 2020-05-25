@@ -104,5 +104,19 @@ namespace ExhaustiveMatching.Analyzer
         {
             return context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
         }
+
+        public static ITypeSymbol GetExpressionType(
+            this SyntaxNodeAnalysisContext context,
+            ExpressionSyntax switchStatementExpression)
+        {
+            return context.SemanticModel.GetTypeInfo(switchStatementExpression, context.CancellationToken).Type;
+        }
+
+        public static ITypeSymbol GetDeclarationType(
+            this SyntaxNodeAnalysisContext context,
+            DeclarationPatternSyntax declarationPattern)
+        {
+            return context.SemanticModel.GetTypeInfo(declarationPattern.Type, context.CancellationToken).Type;
+        }
     }
 }

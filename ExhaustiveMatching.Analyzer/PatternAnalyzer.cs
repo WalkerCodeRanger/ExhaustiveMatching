@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -19,9 +18,7 @@ namespace ExhaustiveMatching.Analyzer
             switch (pattern)
             {
                 case DeclarationPatternSyntax declarationPattern:
-                    var typeInfo = context.SemanticModel.GetTypeInfo(declarationPattern.Type,
-                        context.CancellationToken);
-                    symbolUsed = typeInfo.Type;
+                    symbolUsed = context.GetDeclarationType(declarationPattern);
                     break;
                 case DiscardPatternSyntax _:
                 case ConstantPatternSyntax constantPattern

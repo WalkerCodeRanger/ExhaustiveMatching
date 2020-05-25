@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -197,13 +196,6 @@ namespace ExhaustiveMatching.Analyzer
                    && type.TypeKind != TypeKind.Error
                    && (!type.IsAbstract
                        || !type.HasAttribute(closedAttributeType));
-        }
-
-        public static ITypeSymbol GetExpressionType(this SyntaxNodeAnalysisContext context, ExpressionSyntax switchStatementExpression)
-        {
-            return context.SemanticModel
-                          .GetTypeInfo(switchStatementExpression, context.CancellationToken)
-                          .Type;
         }
     }
 }
