@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -137,7 +137,7 @@ namespace ExhaustiveMatching.Analyzer
                 {
                     // Provide some more context which was helpful in tracking down bugs
                     throw new Exception(
-                        $"For type symbol '{typeSymbol.Name}' when getting type info for syntax '{caseTypeSyntax.ToString()}'",
+                        $"For type symbol '{typeSymbol.Name}' when getting type info for syntax '{caseTypeSyntax}'",
                         ex);
                 }
             }

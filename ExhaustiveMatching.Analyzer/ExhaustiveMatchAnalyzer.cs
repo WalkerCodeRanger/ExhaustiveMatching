@@ -66,11 +66,11 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0001", EM0001Title, EM0001Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0001Description);
 
-        public static readonly DiagnosticDescriptor NotExhaustiveObjectSwitch =
+        public static readonly DiagnosticDescriptor NotExhaustiveNullableEnumSwitch =
             new DiagnosticDescriptor("EM0002", EM0002Title, EM0002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0002Description);
 
-        public static readonly DiagnosticDescriptor NotExhaustiveNullableEnumSwitch =
+        public static readonly DiagnosticDescriptor NotExhaustiveObjectSwitch =
             new DiagnosticDescriptor("EM0003", EM0003Title, EM0003Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0003Description);
 
@@ -98,7 +98,7 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0100", EM0100Title, EM0100Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0100Description);
 
-        public static readonly DiagnosticDescriptor CaseClauseTypeNotSupported =
+        public static readonly DiagnosticDescriptor CasePatternNotSupported =
             new DiagnosticDescriptor("EM0101", EM0101Title, EM0101Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0101Description);
 
@@ -115,13 +115,14 @@ namespace ExhaustiveMatching.Analyzer
                 NotExhaustiveNullableEnumSwitch, ConcreteSubtypeMustBeCaseOfClosedType,
                 MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered,
                 OpenInterfaceSubtypeMustBeCaseOfClosedType, WhenGuardNotSupported,
-                CaseClauseTypeNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType);
+                CasePatternNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType);
 
         public override void Initialize(AnalysisContext context)
         {
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze|GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeSwitchExpression, SyntaxKind.SwitchExpression);
             context.RegisterSyntaxNodeAction(AnalyzeTypeDeclaration, SyntaxKind.ClassDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeTypeDeclaration, SyntaxKind.InterfaceDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeTypeDeclaration, SyntaxKind.StructDeclaration);
@@ -129,13 +130,30 @@ namespace ExhaustiveMatching.Analyzer
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
-
             if (!(context.Node is SwitchStatementSyntax switchStatement))
                 throw new InvalidOperationException(
                     $"{nameof(AnalyzeSwitchStatement)} called with a non-switch statement context");
             try
             {
                 SwitchStatementAnalyzer.Analyze(context, switchStatement);
+            }
+            catch (Exception ex)
+            {
+                // Include stack trace info by ToString() the exception as part of the message.
+                // Only the first line is included, so we have to remove newlines
+                var exDetails = Regex.Replace(ex.ToString(), @"\r\n?|\n|\r", " ");
+                throw new Exception($"Uncaught exception in analyzer: {exDetails}");
+            }
+        }
+
+        private void AnalyzeSwitchExpression(SyntaxNodeAnalysisContext context)
+        {
+            if (!(context.Node is SwitchExpressionSyntax switchExpression))
+                throw new InvalidOperationException(
+                    $"{nameof(AnalyzeSwitchExpression)} called with a non-switch expression context");
+            try
+            {
+                SwitchExpressionAnalyzer.Analyze(context, switchExpression);
             }
             catch (Exception ex)
             {

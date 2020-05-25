@@ -1,14 +1,10 @@
-using System;
-
-#region snippet
 using ExhaustiveMatching;
-#endregion
 
 // ReSharper disable All
 
-namespace Examples.ReadMe
+namespace Examples
 {
-    public static class CoinFlipExample
+    public static class CoinFlipSwitchExpressionExample
     {
         #region snippet
         public enum CoinFlip { Heads, Tails }
@@ -18,15 +14,15 @@ namespace Examples.ReadMe
         {
             #region snippet
             // ERROR Enum value not handled by switch: Tails
-            switch (coinFlip)
+            var result = coinFlip switch
             {
-                default:
-                    throw ExhaustiveMatch.Failed(coinFlip);
-                case CoinFlip.Heads:
-                    Console.WriteLine("Heads!");
-                    break;
-            }
+                CoinFlip.Heads => "Heads!",
+                _ => throw ExhaustiveMatch.Failed(coinFlip),
+            };
             #endregion
+
+            // Mark as used
+            _ = result;
         }
     }
 }

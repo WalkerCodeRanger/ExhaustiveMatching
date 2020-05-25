@@ -1,59 +1,46 @@
 using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace ExhaustiveMatching.Analyzer.Tests.Helpers
 {
     /// <summary>
-    /// Location where the diagnostic appears, as determined by path, line number, and column number.
-    /// </summary>
-    public struct DiagnosticResultLocation
-    {
-        public DiagnosticResultLocation(string path, int line, int column, int length = -1)
-        {
-            if (line < -1)
-                throw new ArgumentOutOfRangeException(nameof(line), "line must be >= -1");
-
-            if (column < -1)
-                throw new ArgumentOutOfRangeException(nameof(column), "column must be >= -1");
-
-            if (length < -1)
-                throw new ArgumentOutOfRangeException(nameof(length), "length must be >= -1");
-
-            Path = path;
-            Line = line;
-            Column = column;
-            Length = length;
-        }
-
-        public string Path { get; }
-        public int Line { get; }
-        public int Column { get; }
-        public int Length { get; }
-    }
-
-    /// <summary>
     /// Struct that stores information about a Diagnostic appearing in a source
     /// </summary>
     public struct DiagnosticResult
     {
-        private DiagnosticResultLocation[] locations;
-
-        public DiagnosticResultLocation[] Locations
+        public static DiagnosticResult Error(string id, string message)
         {
-            get => locations ?? (locations = new DiagnosticResultLocation[] { });
-            set => locations = value;
+            return new DiagnosticResult(DiagnosticSeverity.Error, id, message);
         }
+
+        private DiagnosticResult(DiagnosticSeverity severity, string id, string message)
+        {
+            Severity = severity;
+            Id = id;
+            Message = message;
+            Locations = Array.Empty<DiagnosticResultLocation>();
+        }
+
+        public DiagnosticResultLocation[] Locations { get; private set; }
 
         public DiagnosticSeverity Severity { get; set; }
 
-        public string Id { get; set; }
+        public string Id { get; }
 
-        public string Message { get; set; }
+        public string Message { get; }
 
         public string Path => Locations.Length > 0 ? Locations[0].Path : "";
 
         public int Line => Locations.Length > 0 ? Locations[0].Line : -1;
 
         public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
+
+        public DiagnosticResult AddLocation(string source, int marker, int? length = null)
+        {
+            var newLocation = DiagnosticResultLocation.FromMarker(source, marker, length);
+            Locations = Locations.Append(newLocation).ToArray();
+            return this;
+        }
     }
 }

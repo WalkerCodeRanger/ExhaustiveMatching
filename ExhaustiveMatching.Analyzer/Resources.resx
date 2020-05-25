@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EM0001Description" xml:space="preserve">
-    <value>An switch statement on an enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases.</value>
+    <value>A switch on an enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases.</value>
   </data>
   <data name="EM0001Message" xml:space="preserve">
     <value>Enum value not handled by switch: {0}</value>
@@ -127,22 +127,22 @@
     <value>Switch on Enum Not Exhaustive</value>
   </data>
   <data name="EM0002Description" xml:space="preserve">
-    <value>An switch statement on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types.</value>
+    <value>A switch on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits null from the cases.</value>
   </data>
   <data name="EM0002Message" xml:space="preserve">
-    <value>Subtype not handled by switch: {0}</value>
-  </data>
-  <data name="EM0002Title" xml:space="preserve">
-    <value>Switch on Closed Type Not Exhaustive</value>
-  </data>
-  <data name="EM0003Description" xml:space="preserve">
-    <value>An switch statement on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits null from the cases.</value>
-  </data>
-  <data name="EM0003Message" xml:space="preserve">
     <value>null value not handled by switch</value>
   </data>
-  <data name="EM0003Title" xml:space="preserve">
+  <data name="EM0002Title" xml:space="preserve">
     <value>Switch on Nullable Enum Not Exhaustive</value>
+  </data>
+  <data name="EM0003Description" xml:space="preserve">
+    <value>A switch on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types.</value>
+  </data>
+  <data name="EM0003Message" xml:space="preserve">
+    <value>Subtype not handled by switch: {0}</value>
+  </data>
+  <data name="EM0003Title" xml:space="preserve">
+    <value>Switch on Closed Type Not Exhaustive</value>
   </data>
   <data name="EM0011Description" xml:space="preserve">
     <value>A concrete subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
@@ -190,7 +190,7 @@
     <value>Open Interface Subtype of a Closed Type Must Be a Case</value>
   </data>
   <data name="EM0100Description" xml:space="preserve">
-    <value>An exhustive switch statement does not support case clauses with "when" guards</value>
+    <value>An exhustive switch does not support cases with "when" guards</value>
   </data>
   <data name="EM0100Message" xml:space="preserve">
     <value>When guard is not supported in an exhaustive switch</value>
@@ -199,13 +199,13 @@
     <value>When Guards Not Supported</value>
   </data>
   <data name="EM0101Description" xml:space="preserve">
-    <value>This type of case clause is not supported in exhaustive switch statements. Only "case Type name:" and "case null:" are supported.</value>
+    <value>This type of case pattern is not supported in exhaustive switchs. Only "Type name" and null" are supported.</value>
   </data>
   <data name="EM0101Message" xml:space="preserve">
-    <value>Case clause type not supported in exhaustive switch: {0}</value>
+    <value>Case pattern not supported in exhaustive switch: {0}</value>
   </data>
   <data name="EM0101Title" xml:space="preserve">
-    <value>Case Clause Type Not Supported</value>
+    <value>Case Pattern Not Supported</value>
   </data>
   <data name="EM0102Description" xml:space="preserve">
     <value>An exhuastive switch on an open type is not supported. The expression being switched on must be an enum or closed.</value>
@@ -217,7 +217,7 @@
     <value>Open Type Not Supported</value>
   </data>
   <data name="EM0103Description" xml:space="preserve">
-    <value>Case clauses must match on types that are case types inheriting from the type being matched on</value>
+    <value>Cases must match on types that are case types inheriting from the type being matched on</value>
   </data>
   <data name="EM0103Message" xml:space="preserve">
     <value>{0} is not a case type inheriting from type being matched: {1}</value>

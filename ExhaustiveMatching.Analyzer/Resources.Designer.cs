@@ -61,7 +61,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An switch statement on an enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
+        ///   Looks up a localized string similar to A switch on an enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases..
         /// </summary>
         internal static string EM0001Description {
             get {
@@ -88,7 +88,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An switch statement on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types..
+        ///   Looks up a localized string similar to A switch on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits null from the cases..
         /// </summary>
         internal static string EM0002Description {
             get {
@@ -97,7 +97,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtype not handled by switch: {0}.
+        ///   Looks up a localized string similar to null value not handled by switch.
         /// </summary>
         internal static string EM0002Message {
             get {
@@ -106,7 +106,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch on Closed Type Not Exhaustive.
+        ///   Looks up a localized string similar to Switch on Nullable Enum Not Exhaustive.
         /// </summary>
         internal static string EM0002Title {
             get {
@@ -115,7 +115,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An switch statement on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits null from the cases..
+        ///   Looks up a localized string similar to A switch on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types..
         /// </summary>
         internal static string EM0003Description {
             get {
@@ -124,7 +124,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to null value not handled by switch.
+        ///   Looks up a localized string similar to Subtype not handled by switch: {0}.
         /// </summary>
         internal static string EM0003Message {
             get {
@@ -133,7 +133,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch on Nullable Enum Not Exhaustive.
+        ///   Looks up a localized string similar to Switch on Closed Type Not Exhaustive.
         /// </summary>
         internal static string EM0003Title {
             get {
@@ -277,7 +277,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exhustive switch statement does not support case clauses with &quot;when&quot; guards.
+        ///   Looks up a localized string similar to An exhustive switch does not support cases with &quot;when&quot; guards.
         /// </summary>
         internal static string EM0100Description {
             get {
@@ -304,7 +304,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This type of case clause is not supported in exhaustive switch statements. Only &quot;case Type name:&quot; and &quot;case null:&quot; are supported..
+        ///   Looks up a localized string similar to This type of case pattern is not supported in exhaustive switchs. Only &quot;Type name&quot; and null&quot; are supported..
         /// </summary>
         internal static string EM0101Description {
             get {
@@ -313,7 +313,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Case clause type not supported in exhaustive switch: {0}.
+        ///   Looks up a localized string similar to Case pattern not supported in exhaustive switch: {0}.
         /// </summary>
         internal static string EM0101Message {
             get {
@@ -322,7 +322,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Case Clause Type Not Supported.
+        ///   Looks up a localized string similar to Case Pattern Not Supported.
         /// </summary>
         internal static string EM0101Title {
             get {
@@ -358,7 +358,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Case clauses must match on types that are case types inheriting from the type being matched on.
+        ///   Looks up a localized string similar to Cases must match on types that are case types inheriting from the type being matched on.
         /// </summary>
         internal static string EM0103Description {
             get {

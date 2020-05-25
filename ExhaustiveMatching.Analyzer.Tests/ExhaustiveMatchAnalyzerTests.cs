@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using ExhaustiveMatching.Analyzer.Tests.Verifiers;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
@@ -7,11 +8,11 @@ namespace ExhaustiveMatching.Analyzer.Tests
     public class ExhaustiveMatchAnalyzerTests : CodeFixVerifier
     {
         [Fact]
-        public void EmptyFileReportsNoDiagnostics()
+        public async Task EmptyFileReportsNoDiagnostics()
         {
             const string test = @"";
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticsAsync(test);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

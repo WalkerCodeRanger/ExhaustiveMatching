@@ -1,14 +1,14 @@
-﻿namespace ExhaustiveMatching.Analyzer
+namespace ExhaustiveMatching.Analyzer
 {
-    public struct SwitchStatementKind
+    public readonly struct SwitchStatementKind
     {
         public readonly bool IsExhaustive;
-        public readonly bool DefaultThrowsInvalidEnum;
+        public readonly bool ThrowsInvalidEnum;
 
-        public SwitchStatementKind(bool isExhaustive, bool defaultThrowsInvalidEnum)
+        public SwitchStatementKind(bool isExhaustive, bool throwsInvalidEnum)
         {
             IsExhaustive = isExhaustive;
-            DefaultThrowsInvalidEnum = defaultThrowsInvalidEnum;
+            ThrowsInvalidEnum = throwsInvalidEnum;
         }
     }
 }

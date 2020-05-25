@@ -6,109 +6,63 @@ using Xunit;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    public class SwitchStatementAnalyzerTests : CodeFixVerifier
+    public class SwitchExpressionAnalyzerTests : CodeFixVerifier
     {
         [Fact]
         public async Task SwitchOnEnumThrowingInvalidEnumIsNotExhaustiveReportsDiagnostic()
         {
-            const string args = "DayOfWeek dayOfWeek";
+            const string args = "CoinFlip coinFlip";
             const string test = @"
-        ◊1⟦switch⟧ (dayOfWeek)
+        var result = coinFlip ◊1⟦switch⟧
         {
-            default:
-                throw new InvalidEnumArgumentException(nameof(dayOfWeek), (int)dayOfWeek, typeof(DayOfWeek));
-            case DayOfWeek.Monday:
-            case DayOfWeek.Tuesday:
-            case DayOfWeek.Wednesday:
-            case DayOfWeek.Thursday:
-                // Omitted Friday
-                Console.WriteLine(""Weekday"");
-            break;
-            case DayOfWeek.Saturday:
-                // Omitted Sunday
-                Console.WriteLine(""Weekend"");
-                break;
-        }";
+            CoinFlip.Heads => ""Heads!"",
+            _ => throw new InvalidEnumArgumentException(nameof(coinFlip), (int)coinFlip, typeof(CoinFlip)),
+        };";
 
-            var source = CodeContext.Basic(args, test);
-            var expectedFriday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Friday")
-                                 .AddLocation(source, 1);
-            var expectedSunday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Sunday")
-                                 .AddLocation(source, 1);
+            var source = CodeContext.CoinFlip(args, test);
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+                                                .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(source, expectedFriday, expectedSunday);
+            await VerifyCSharpDiagnosticsAsync(source, expectedTails);
         }
 
         [Fact]
         public async Task SwitchOnEnumThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
         {
-            const string args = "DayOfWeek dayOfWeek";
+            const string args = "CoinFlip coinFlip";
             const string test = @"
-        ◊1⟦switch⟧ (dayOfWeek)
+        var result = coinFlip ◊1⟦switch⟧
         {
-            default:
-                throw ExhaustiveMatch.Failed(dayOfWeek);
-            case DayOfWeek.Monday:
-            case DayOfWeek.Tuesday:
-            case DayOfWeek.Wednesday:
-            case DayOfWeek.Thursday:
-                // Omitted Friday
-                Console.WriteLine(""Weekday"");
-            break;
-            case DayOfWeek.Saturday:
-                // Omitted Sunday
-                Console.WriteLine(""Weekend"");
-                break;
-        }";
+            CoinFlip.Heads => ""Heads!"",
+            _ => throw ExhaustiveMatch.Failed(coinFlip),
+        };";
 
-            var source = CodeContext.Basic(args, test);
-            var expectedFriday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Friday")
-                                 .AddLocation(source, 1);
-            var expectedSunday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Sunday")
-                                 .AddLocation(source, 1);
+            var source = CodeContext.CoinFlip(args, test);
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+                                                .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(source, expectedFriday, expectedSunday);
+            await VerifyCSharpDiagnosticsAsync(source, expectedTails);
         }
 
 
         [Fact]
         public async Task SwitchOnNullableEnum()
         {
-            const string args = "DayOfWeek? dayOfWeek";
+            const string args = "CoinFlip? coinFlip";
             const string test = @"
-        ◊1⟦switch⟧ (dayOfWeek)
+        var result = coinFlip ◊1⟦switch⟧
         {
-            default:
-                throw ExhaustiveMatch.Failed(dayOfWeek);
-            case DayOfWeek.Monday:
-            case DayOfWeek.Tuesday:
-            case DayOfWeek.Wednesday:
-            case DayOfWeek.Thursday:
-                // Omitted Friday
-                Console.WriteLine(""Weekday"");
-            break;
-            case DayOfWeek.Saturday:
-                // Omitted Sunday
-                Console.WriteLine(""Weekend"");
-                break;
-        }";
+            CoinFlip.Heads => ""Heads!"",
+            _ => throw ExhaustiveMatch.Failed(coinFlip),
+        };";
 
-            var source = CodeContext.Basic(args, test);
-            var expectedNull = DiagnosticResult
-                               .Error("EM0002", "null value not handled by switch")
-                               .AddLocation(source, 1);
-            var expectedFriday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Friday")
-                                 .AddLocation(source, 1);
-            var expectedSunday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Sunday")
-                                 .AddLocation(source, 1);
+            var source = CodeContext.CoinFlip(args, test);
+            var expectedNull = DiagnosticResult.Error("EM0002", "null value not handled by switch")
+                                               .AddLocation(source, 1);
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+                                                .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(CodeContext.Basic(args, test), expectedNull, expectedFriday, expectedSunday);
+            await VerifyCSharpDiagnosticsAsync(source, expectedNull, expectedTails);
         }
 
 
@@ -117,14 +71,11 @@ namespace ExhaustiveMatching.Analyzer.Tests
         {
             const string args = "Shape shape";
             const string test = @"
-        ◊1⟦switch⟧ (shape)
+        var result = shape ◊1⟦switch⟧
         {
-            case Square square:
-                Console.WriteLine(""Square: "" + square);
-                break;
-            default:
-                throw ExhaustiveMatch.Failed(shape);
-        }";
+            Square square => ""Square: "" + square,
+            _ => throw ExhaustiveMatch.Failed(shape)
+        };";
 
             var source = CodeContext.Shapes(args, test);
             var expectedCircle = DiagnosticResult
@@ -142,23 +93,14 @@ namespace ExhaustiveMatching.Analyzer.Tests
         {
             const string args = "Shape shape";
             const string test = @"
-        switch (shape)
+        var result = shape switch
         {
-            case Square square:
-                Console.WriteLine(""Square: "" + square);
-                break;
-            case Circle circle:
-                Console.WriteLine(""Circle: "" + circle);
-                break;
-            case Triangle triangle:
-                Console.WriteLine(""Triangle: "" + triangle);
-                break;
-            case null: // checking this is allowed
-                Console.WriteLine(""null"");
-                break;
-            default:
-                throw ExhaustiveMatch.Failed(shape);
-        }";
+            Square square => ""Square: "" + square,
+            Circle circle => ""Circle: "" + circle,
+            Triangle triangle => ""Triangle: "" + triangle,
+            null => ""null"",
+            _ => throw ExhaustiveMatch.Failed(shape),
+        };";
 
             await VerifyCSharpDiagnosticsAsync(CodeContext.Shapes(args, test));
         }
@@ -168,22 +110,14 @@ namespace ExhaustiveMatching.Analyzer.Tests
         {
             const string args = "Shape shape";
             const string test = @"
-        switch (shape)
+        var result = shape switch
         {
-            case Square square:
-                Console.WriteLine(""Square: "" + square);
-                break;
-            case Circle circle:
-                Console.WriteLine(""Circle: "" + circle);
-                break;
-            case Triangle triangle ◊1⟦when true⟧:
-                Console.WriteLine(""Triangle: "" + triangle);
-                break;
-            case ◊2⟦12⟧:
-                break;
-            default:
-                throw ExhaustiveMatch.Failed(shape);
-        }";
+            Square square => ""Square: "" + square,
+            Circle circle => ""Circle: "" + circle,
+            Triangle triangle ◊1⟦when true⟧ => ""Triangle: "" + triangle,
+            ◊2⟦12⟧ => null,
+            _  => throw ExhaustiveMatch.Failed(shape),
+        };";
 
             var source = CodeContext.Shapes(args, test);
             var expected1 = DiagnosticResult
@@ -204,19 +138,13 @@ namespace ExhaustiveMatching.Analyzer.Tests
         {
             const string args = "object o";
             const string test = @"
-        switch (◊1⟦o⟧)
+        var result = ◊1⟦o⟧ switch
         {
-            case string s:
-                Console.WriteLine(""string: "" + s);
-                break;
-            case Triangle triangle ◊2⟦when true⟧:
-                Console.WriteLine(""Triangle: "" + triangle);
-                break;
-            case ◊3⟦12⟧:
-                break;
-            default:
-                throw ExhaustiveMatch.Failed(o);
-        }";
+            string s => ""string: "" + s,
+            Triangle triangle ◊2⟦when true⟧ => ""Triangle: "" + triangle,
+            ◊3⟦12⟧ => null,
+            _ => throw ExhaustiveMatch.Failed(o),
+        };";
 
             var source = CodeContext.Shapes(args, test);
             var expected1 = DiagnosticResult
@@ -239,26 +167,15 @@ namespace ExhaustiveMatching.Analyzer.Tests
         {
             const string args = "Shape shape";
             const string test = @"
-        switch (shape)
+        var result = shape switch
         {
-            case Square square:
-                Console.WriteLine(""Square: "" + square);
-                break;
-            case Circle circle:
-                Console.WriteLine(""Circle: "" + circle);
-                break;
-            case ◊1⟦EquilateralTriangle equilateralTriangle⟧:
-                Console.WriteLine(""EquilateralTriangle: "" + equilateralTriangle);
-                break;
-            case Triangle triangle:
-                Console.WriteLine(""Triangle: "" + triangle);
-                break;
-            case ◊2⟦string s⟧:
-                Console.WriteLine(""string: "" + s);
-                break;
-            default:
-                throw ExhaustiveMatch.Failed(shape);
-        }";
+            Square square => ""Square: "" + square,
+            Circle circle => ""Circle: "" + circle,
+            ◊1⟦EquilateralTriangle equilateralTriangle⟧ => ""EquilateralTriangle: "" + equilateralTriangle,
+            Triangle triangle => ""Triangle: "" + triangle,
+            ◊2⟦string s⟧ => ""string: "" + s,
+            _ => throw ExhaustiveMatch.Failed(shape),
+        };";
 
             var source = CodeContext.Shapes(args, test);
             var expected1 = DiagnosticResult
@@ -296,20 +213,13 @@ namespace TestNamespace
     {
         void TestMethod(Shape shape)
         {
-            switch (shape)
+            var result = shape switch
             {
-                default:
-                    throw ExhaustiveMatch.Failed(shape);
-                case Square square:
-                    Console.WriteLine(""Square: "" + square);
-                    break;
-                case Circle circle:
-                    Console.WriteLine(""Circle: "" + circle);
-                    break;
-                case Triangle triangle:
-                    Console.WriteLine(""Triangle: "" + triangle);
-                    break;
-            }
+                Square square => ""Square: "" + square,
+                Circle circle => ""Circle: "" + circle,
+                Triangle triangle => ""Triangle: "" + triangle,
+                _ => throw ExhaustiveMatch.Failed(shape),
+            };
         }
     }
 }";
@@ -342,17 +252,12 @@ namespace TestNamespace
     {
         void TestMethod(Shape shape)
         {
-            switch (shape)
+            _ = shape switch
             {
-                case Square square:
-                    Console.WriteLine(""Square: "" + square);
-                    break;
-                case Circle circle:
-                    Console.WriteLine(""Circle: "" + circle);
-                    break;
-                default:
-                    throw ExhaustiveMatch.Failed(shape);
-            }
+                Square square => ""Square: "" + square,
+                Circle circle => ""Circle: "" + circle,
+                _ => throw ExhaustiveMatch.Failed(shape),
+            };
         }
     }
 }";
@@ -386,14 +291,11 @@ namespace TestNamespace
     {
         void TestMethod(IToken token)
         {
-            switch (token)
+            _ = token switch
             {
-                default:
-                    throw ExhaustiveMatch.Failed(token);
-                case IKeywordToken _:
-                    Console.WriteLine(""foreach"");
-                    break;
-            }
+                IKeywordToken _ => ""foreach"",
+                _ => throw ExhaustiveMatch.Failed(token),
+            };
         }
     }
 }";
@@ -408,8 +310,7 @@ namespace TestNamespace
         [Fact]
         public async Task SelfTypeAsCaseType()
         {
-            const string source = @"using System;
-using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 
 namespace TestNamespace
 {
@@ -417,18 +318,16 @@ namespace TestNamespace
     public interface IToken { }
     public interface IKeywordToken : IToken { }
 
+
     class TestClass
     {
         void TestMethod(IToken token)
         {
-            switch (token)
+            _ = token switch
             {
-                case IKeywordToken _:
-                    Console.WriteLine(""foreach"");
-                    break;
-                default:
-                    throw ExhaustiveMatch.Failed(token);
-            }
+                IKeywordToken _ => ""foreach"",
+                _ => throw ExhaustiveMatch.Failed(token),
+            };
         }
     }
 }";

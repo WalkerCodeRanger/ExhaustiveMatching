@@ -1,6 +1,6 @@
+using System.Threading.Tasks;
 using ExhaustiveMatching.Analyzer.Tests.Helpers;
 using ExhaustiveMatching.Analyzer.Tests.Verifiers;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 
@@ -9,9 +9,9 @@ namespace ExhaustiveMatching.Analyzer.Tests
     public class TypeDeclarationAnalyzerTests : CodeFixVerifier
     {
         [Fact]
-        public void ConcreteSubtypeOfClosedTypeMustBeCase()
+        public async Task ConcreteSubtypeOfClosedTypeMustBeCase()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 namespace TestNamespace
 {
     [Closed(
@@ -20,24 +20,20 @@ namespace TestNamespace
     public abstract class Shape { }
     public class Square : Shape { }
     public class Circle : Shape { }
-    public class Triangle : Shape { }
+    public class ◊1⟦Triangle⟧ : Shape { }
 }";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "EM0011",
-                Message = "TestNamespace.Triangle is not a case of its closed supertype: TestNamespace.Shape",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 18, 8) }
-            };
+            var expected = DiagnosticResult
+                           .Error("EM0011", "TestNamespace.Triangle is not a case of its closed supertype: TestNamespace.Shape")
+                           .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         [Fact]
-        public void OpenInterfaceSubtypeOfClosedTypeMustBeCase()
+        public async Task OpenInterfaceSubtypeOfClosedTypeMustBeCase()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 namespace TestNamespace
 {
     [Closed(
@@ -46,24 +42,20 @@ namespace TestNamespace
     public interface IShape { }
     public interface ISquare : IShape { }
     public interface ICircle : IShape { }
-    public interface ITriangle : IShape { }
+    public interface ◊1⟦ITriangle⟧ : IShape { }
 }";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "EM0015",
-                Message = "Open interface TestNamespace.ITriangle is not a case of its closed supertype: TestNamespace.IShape",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 22, 9) }
-            };
+            var expected = DiagnosticResult
+                           .Error("EM0015", "Open interface TestNamespace.ITriangle is not a case of its closed supertype: TestNamespace.IShape")
+                           .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         [Fact]
-        public void CaseTypeMustBeSubtype()
+        public async Task CaseTypeMustBeSubtype()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 using System;
 
 namespace TestNamespace
@@ -71,55 +63,47 @@ namespace TestNamespace
     [Closed(
         typeof(Square),
         typeof(Circle),
-        typeof(String))]
+        typeof(◊1⟦String⟧))]
     public abstract class Shape { }
     public class Square : Shape { }
     public class Circle : Shape { }
 }";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "EM0013",
-                Message = "Closed type case is not a subtype: System.String",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 16, 6) }
-            };
+            var expected = DiagnosticResult
+                           .Error("EM0013", "Closed type case is not a subtype: System.String")
+                           .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         [Fact]
-        public void CaseTypeMustBeDirectSubtype()
+        public async Task CaseTypeMustBeDirectSubtype()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 using System;
 
 namespace TestNamespace
 {
     [Closed(
         typeof(Rectangle),
-        typeof(Square))]
+        typeof(◊1⟦Square⟧))]
     public abstract class Shape { }
     public class Rectangle : Shape { }
     public class Square : Rectangle { }
 }";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "EM0012",
-                Message = "Closed type case is not a direct subtype: TestNamespace.Square",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 16, 6) }
-            };
+            var expected = DiagnosticResult
+                           .Error("EM0012", "Closed type case is not a direct subtype: TestNamespace.Square")
+                           .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         [Fact]
-        public void SingleCaseTypeSupported()
+        public async Task SingleCaseTypeSupported()
         {
-            const string test = @"using ExhaustiveMatching;
-using System;
+            const string test = @"using System;
+using ExhaustiveMatching;
 
 namespace TestNamespace
 {
@@ -128,31 +112,27 @@ namespace TestNamespace
     public class Square : Shape { }
 }";
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticsAsync(test);
         }
 
         [Fact(Skip = "Check not yet implemented")]
-        public void CaseTypeMustBeUnique()
+        public async Task CaseTypeMustBeUnique()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 using System;
 
 namespace TestNamespace
 {
-    [Closed(typeof(Square), typeof(Square))]
+    [Closed(typeof(Square), typeof(◊1⟦Square⟧))]
     public abstract class Shape { }
     public class Square : Shape { }
 }";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "EM0012",
-                Message = "Closed type case is not a direct subtype: TestNamespace.Square",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 16, 6) }
-            };
+            var expected = DiagnosticResult
+                .Error("EM0012", "Case type must be unique")
+                .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         /// <summary>
@@ -160,39 +140,46 @@ namespace TestNamespace
         /// invalid arguments to <see cref="ClosedAttribute"/>.
         /// </summary>
         [Fact]
-        public void EmptyTypeofArgumentToClosedAttributeHandled()
+        public async Task EmptyTypeofArgumentToClosedAttributeHandled()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 using System;
 
 namespace TestNamespace
 {
-    [Closed(typeof())]
+    [Closed(typeof(◊1⟦⟧))]
     public abstract class Shape { }
 }";
 
-            VerifyCSharpDiagnostic(test);
+            var compileError = DiagnosticResult
+                               .Error("CS1031", "Type expected")
+                               .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, compileError);
         }
 
         [Fact]
-        public void PrimitiveArgumentToClosedAttributeHandled()
+        public async Task PrimitiveArgumentToClosedAttributeHandled()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 using System;
 
 namespace TestNamespace
 {
-    [Closed(5)]
+    [Closed(◊1⟦5⟧)]
     public abstract class Shape { }
 }";
+            var compileError = DiagnosticResult
+                               .Error("CS1503", "Argument 1: cannot convert from 'int' to 'System.Type'")
+                               .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticsAsync(source, compileError);
         }
 
         [Fact]
-        public void MultiLevelHierarchy()
+        public async Task MultiLevelHierarchy()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 namespace TestNamespace
 {
     [Closed(
@@ -211,13 +198,13 @@ namespace TestNamespace
     public class IsoscelesTriangle : Triangle { }
 }";
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticsAsync(source);
         }
 
         [Fact]
-        public void MultiLevelHierarchyWithConcreteInteriorTypes()
+        public async Task MultiLevelHierarchyWithConcreteInteriorTypes()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 namespace TestNamespace
 {
     [Closed(
@@ -236,13 +223,13 @@ namespace TestNamespace
     public class IsoscelesTriangle : Triangle { }
 }";
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticsAsync(source);
         }
 
         [Fact]
-        public void MirrorHierarchy()
+        public async Task MirrorHierarchy()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 namespace TestNamespace
 {
     [Closed(
@@ -260,13 +247,13 @@ namespace TestNamespace
     public class Circle : Shape, ICircle { }
 }";
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticsAsync(source);
         }
 
         [Fact]
-        public void MirrorHierarchyMustBeCovered()
+        public async Task MirrorHierarchyMustBeCovered()
         {
-            const string test = @"using ExhaustiveMatching;
+            const string source = @"using ExhaustiveMatching;
 namespace TestNamespace
 {
     [Closed(
@@ -281,18 +268,14 @@ namespace TestNamespace
         typeof(Circle))]
     public abstract class Shape : IShape { }
     public class Square : Shape, ISquare { }
-    public class Circle : Shape { }
+    public class ◊1⟦Circle⟧ : Shape { }
 }";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "EM0014",
-                Message = "An exhaustive match on TestNamespace.IShape might not cover the type TestNamespace.Circle. It must be a subtype of a leaf type of the case type tree.",
-                Severity = DiagnosticSeverity.Error,
-                Locations = new[] { new DiagnosticResultLocation("Test0.cs", 16, 18, 6) }
-            };
+            var expected = DiagnosticResult
+                           .Error("EM0014", "An exhaustive match on TestNamespace.IShape might not cover the type TestNamespace.Circle. It must be a subtype of a leaf type of the case type tree.")
+                           .AddLocation(source, 1);
 
-            VerifyCSharpDiagnostic(test, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
