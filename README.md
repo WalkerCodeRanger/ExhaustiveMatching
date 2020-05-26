@@ -96,10 +96,10 @@ This example shows how to declare a closed class `Shape` that can be either a ci
 
 ```csharp
 [Closed(typeof(Circle), typeof(Square))]
-public abstract class Shape { }
+public abstract class Shape { … }
 
-public class Circle : Shape {}
-public class Square : Shape {}
+public class Circle : Shape { … }
+public class Square : Shape { … }
 ```
 
 A switch on the type of a shape can then be checked for exhaustiveness.

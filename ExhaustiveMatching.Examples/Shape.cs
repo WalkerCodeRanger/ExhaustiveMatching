@@ -33,11 +33,11 @@ namespace Examples
     }
 
     [Closed(typeof(Square), typeof(Circle), typeof(Triangle))]
-    public abstract class Shape { }
+    public abstract class Shape { /* … */ }
 
-    public class Square : Shape { }
+    public class Square : Shape { /* … */ }
 
-    public class Circle : Shape { }
+    public class Circle : Shape { /* … */ }
 
     // abstract to show abstract leaf types are checked
     public abstract class Triangle : Shape { }
