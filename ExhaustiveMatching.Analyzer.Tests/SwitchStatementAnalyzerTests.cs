@@ -23,7 +23,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case DayOfWeek.Thursday:
                 // Omitted Friday
                 Console.WriteLine(""Weekday"");
-            break;
+                break;
             case DayOfWeek.Saturday:
                 // Omitted Sunday
                 Console.WriteLine(""Weekend"");
@@ -56,7 +56,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case DayOfWeek.Thursday:
                 // Omitted Friday
                 Console.WriteLine(""Weekday"");
-            break;
+                break;
             case DayOfWeek.Saturday:
                 // Omitted Sunday
                 Console.WriteLine(""Weekend"");
@@ -90,7 +90,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case DayOfWeek.Thursday:
                 // Omitted Friday
                 Console.WriteLine(""Weekday"");
-            break;
+                break;
             case DayOfWeek.Saturday:
                 // Omitted Sunday
                 Console.WriteLine(""Weekend"");
@@ -440,6 +440,109 @@ namespace TestNamespace
                            .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expected);
+        }
+
+
+        [Fact]
+        public async Task SwitchOnStruct()
+        {
+            const string args = "HashCode hashCode";
+            const string test = @"
+        switch (◊1⟦hashCode⟧)
+        {
+            default:
+                throw ExhaustiveMatch.Failed(hashCode);
+            case HashCode code:
+                Console.WriteLine(""Hashcode: "" + code);
+                break;
+        }";
+
+            var source = CodeContext.Basic(args, test);
+            var expected = DiagnosticResult.Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.HashCode")
+                                                 .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expected);
+        }
+
+        [Fact]
+        public async Task SwitchOnNullableStruct()
+        {
+            const string args = "HashCode? hashCode";
+            const string test = @"
+        switch (◊1⟦hashCode⟧)
+        {
+            default:
+                throw ExhaustiveMatch.Failed(hashCode);
+            case null:
+                Console.WriteLine(""null"");
+                break;
+            case HashCode code:
+                Console.WriteLine(""Hashcode: "" + code);
+                break;
+        }";
+
+            var source = CodeContext.Basic(args, test);
+            var expected = DiagnosticResult
+                           .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.Nullable")
+                           .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expected);
+        }
+
+        [Fact]
+        public async Task SwitchOnTuple()
+        {
+            const string args = "Shape shape1, Shape shape2";
+            const string test = @"
+        switch (◊1⟦(shape1, shape2)⟧)
+        {
+            case ◊2⟦(Square square1, Square square2)⟧:
+                Console.WriteLine(""Square: "" + square1);
+                Console.WriteLine(""Square: "" + square2);
+                break;
+            default:
+                throw ExhaustiveMatch.Failed((shape1, shape2));
+        }";
+
+            var source = CodeContext.Shapes(args, test);
+            // TODO type name is bad
+            var expected1 = DiagnosticResult
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.")
+                            .AddLocation(source, 1);
+            var expected2 = DiagnosticResult
+                            .Error("EM0101", "Case pattern not supported in exhaustive switch: (Square square1, Square square2)")
+                            .AddLocation(source, 2);
+
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
+        }
+
+        [Fact]
+        public async Task SwitchOnNullableTuple()
+        {
+            const string args = "Shape shape1, Shape shape2";
+            const string test = @"
+        (Shape, Shape)? value = (shape1, shape2);
+        switch (◊1⟦value⟧)
+        {
+            case ◊2⟦(Square square1, Square square2)⟧:
+                Console.WriteLine(""Square: "" + square1);
+                Console.WriteLine(""Square: "" + square2);
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(value);
+        }";
+
+            var source = CodeContext.Shapes(args, test);
+            // TODO type name is bad
+            var expected1 = DiagnosticResult
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.Nullable")
+                            .AddLocation(source, 1);
+            var expected2 = DiagnosticResult
+                            .Error("EM0101",
+                                "Case pattern not supported in exhaustive switch: (Square square1, Square square2)")
+                            .AddLocation(source, 2);
+
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

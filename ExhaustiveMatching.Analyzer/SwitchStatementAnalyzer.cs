@@ -26,8 +26,7 @@ namespace ExhaustiveMatching.Analyzer
             else if (!switchKind.ThrowsInvalidEnum)
                 AnalyzeSwitchOnClosed(context, switchStatement, switchOnType);
 
-            // TODO what about the else case here?
-            // i.e. switch on struct or throw invalid enum on closed type?
+            // TODO report warning that throws invalid enum isn't checked for exhaustiveness
         }
 
         private static void ReportWhenGuardNotSupported(
