@@ -215,4 +215,8 @@ The analyzer reports various errors for incorrect code. The table below gives a 
         <th>EM0104</th>
         <td>Duplicate 'Closed' attribute on type</td>
     </tr>
+    <tr>
+        <th>EM0105</th>
+        <td>Duplicate case type</td>
+    </tr>
 </table>

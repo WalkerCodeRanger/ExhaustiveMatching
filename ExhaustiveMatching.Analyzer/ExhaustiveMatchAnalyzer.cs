@@ -64,6 +64,10 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM0104Message = LoadString(nameof(Resources.EM0104Message));
         private static readonly LocalizableString EM0104Description = LoadString(Resources.EM0104Description);
 
+        private static readonly LocalizableString EM0105Title = LoadString(nameof(Resources.EM0105Title));
+        private static readonly LocalizableString EM0105Message = LoadString(nameof(Resources.EM0105Message));
+        private static readonly LocalizableString EM0105Description = LoadString(Resources.EM0105Description);
+
         private const string Category = "Logic";
 
         public static readonly DiagnosticDescriptor NotExhaustiveEnumSwitch =
@@ -118,13 +122,17 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0104", EM0104Title, EM0104Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0104Description);
 
+        public static readonly DiagnosticDescriptor DuplicateCaseType =
+            new DiagnosticDescriptor("EM0105", EM0105Title, EM0105Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0105Description);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveNullableEnumSwitch,
                 NotExhaustiveObjectSwitch, ConcreteSubtypeMustBeCaseOfClosedType,
                 MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered,
                 OpenInterfaceSubtypeMustBeCaseOfClosedType, WhenGuardNotSupported,
                 CasePatternNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType,
-                DuplicateClosedAttribute);
+                DuplicateClosedAttribute, DuplicateCaseType);
 
         public override void Initialize(AnalysisContext context)
         {

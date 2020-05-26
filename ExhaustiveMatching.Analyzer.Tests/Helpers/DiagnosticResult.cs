@@ -36,9 +36,9 @@ namespace ExhaustiveMatching.Analyzer.Tests.Helpers
 
         public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
 
-        public DiagnosticResult AddLocation(string source, int marker, int? length = null)
+        public DiagnosticResult AddLocation(string source, int marker)
         {
-            var newLocation = DiagnosticResultLocation.FromMarker(source, marker, length);
+            var newLocation = DiagnosticResultLocation.FromMarker(source, marker);
             Locations = Locations.Append(newLocation).ToArray();
             return this;
         }

@@ -410,5 +410,32 @@ namespace ExhaustiveMatching.Analyzer {
                 return ResourceManager.GetString("EM0104Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A case type can be specified only once for a given closed type declaration..
+        /// </summary>
+        internal static string EM0105Description {
+            get {
+                return ResourceManager.GetString("EM0105Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate case type: {0}.
+        /// </summary>
+        internal static string EM0105Message {
+            get {
+                return ResourceManager.GetString("EM0105Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Case Type.
+        /// </summary>
+        internal static string EM0105Title {
+            get {
+                return ResourceManager.GetString("EM0105Title", resourceCulture);
+            }
+        }
     }
 }

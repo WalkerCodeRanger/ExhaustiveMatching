@@ -115,7 +115,7 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(test);
         }
 
-        [Fact(Skip = "Check not yet implemented")]
+        [Fact]
         public async Task CaseTypeMustBeUnique()
         {
             const string source = @"using ExhaustiveMatching;
@@ -129,11 +129,60 @@ namespace TestNamespace
 }";
 
             var expected = DiagnosticResult
-                .Error("EM0012", "Case type must be unique")
-                .AddLocation(source, 1);
+                           .Error("EM0105", "Duplicate case type: TestNamespace.Square")
+                           .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expected);
         }
+
+        [Fact]
+        public async Task CaseTypeMustBeUniqueWithMultipleCloseAttributes()
+        {
+            const string source = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof(Square))]
+    [◊1⟦Closed(typeof(◊2⟦Square⟧))⟧]
+    public abstract class Shape { }
+    public class Square : Shape { }
+}";
+
+            var expected1 = DiagnosticResult
+                            .Error("EM0104", "Duplicate 'Closed' attribute")
+                            .AddLocation(source, 1);
+            var expected2 = DiagnosticResult
+                           .Error("EM0105", "Duplicate case type: TestNamespace.Square")
+                           .AddLocation(source, 2);
+
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
+        }
+
+        /// <summary>
+        /// Case types are allowed to be duplicated across parts of a partial class.
+        /// This is similar to how different parts of a partial class can declare
+        /// the same base class or interfaces.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task DuplicateCaseTypeWithPartialClasses()
+        {
+            const string source = @"using ExhaustiveMatching;
+using System;
+
+namespace TestNamespace
+{
+    [Closed(typeof(Square))]
+    public abstract partial class Shape { }
+    [Closed(typeof(Square))]
+    public abstract partial class Shape { }
+    public class Square : Shape { }
+}";
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
 
         /// <summary>
         /// Previous versions of the analyzer would throw an exception when encountering

@@ -234,4 +234,13 @@
   <data name="EM0104Title" xml:space="preserve">
     <value>Duplicate Closed Attribute</value>
   </data>
+  <data name="EM0105Description" xml:space="preserve">
+    <value>A case type can be specified only once for a given closed type declaration.</value>
+  </data>
+  <data name="EM0105Message" xml:space="preserve">
+    <value>Duplicate case type: {0}</value>
+  </data>
+  <data name="EM0105Title" xml:space="preserve">
+    <value>Duplicate Case Type</value>
+  </data>
 </root>

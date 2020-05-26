@@ -107,12 +107,31 @@ namespace ExhaustiveMatching.Analyzer
 
         private static void CheckClosedAttributes(
             SyntaxNodeAnalysisContext context,
-            IList<AttributeSyntax> closedAttributesOnType)
+            IList<AttributeSyntax> closedAttributes)
         {
-            foreach (var attribute in closedAttributesOnType.Skip(1))
+            foreach (var attribute in closedAttributes.Skip(1))
             {
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.DuplicateClosedAttribute,
+                var diagnostic = Diagnostic.Create(
+                    ExhaustiveMatchAnalyzer.DuplicateClosedAttribute,
                     attribute.GetLocation());
+                context.ReportDiagnostic(diagnostic);
+            }
+
+            var typeSyntaxes = closedAttributes
+                        .SelectMany(a => a.ArgumentList.Arguments)
+                        .Select(arg => arg.Expression)
+                        .OfType<TypeOfExpressionSyntax>()
+                        .Select(e => e.Type);
+
+            var duplicates = typeSyntaxes
+                             .GroupBy(t => context.GetSymbol(t))
+                             .SelectMany(g => g.Skip(1).Select(type => (g.Key, type)));
+
+            foreach (var (symbol, syntax) in duplicates)
+            {
+                var diagnostic = Diagnostic.Create(
+                    ExhaustiveMatchAnalyzer.DuplicateCaseType,
+                    syntax.GetLocation(), symbol.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
         }

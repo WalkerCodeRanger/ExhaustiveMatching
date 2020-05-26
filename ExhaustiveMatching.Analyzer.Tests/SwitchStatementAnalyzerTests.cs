@@ -253,7 +253,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             case Triangle triangle:
                 Console.WriteLine(""Triangle: "" + triangle);
                 break;
-            case ◊2⟦string s⟧:
+            case ◊3⟦◊2⟦string⟧ s⟧:
                 Console.WriteLine(""string: "" + s);
                 break;
             default:
@@ -266,10 +266,10 @@ namespace ExhaustiveMatching.Analyzer.Tests
                             .AddLocation(source, 1);
             var compileError = DiagnosticResult
                                .Error("CS8121", "An expression of type 'Shape' cannot be handled by a pattern of type 'string'.")
-                               .AddLocation(source, 2, length: 6);
+                               .AddLocation(source, 2);
             var expected2 = DiagnosticResult
                             .Error("EM0103", "System.String is not a case type inheriting from type being matched: TestNamespace.Shape")
-                            .AddLocation(source, 2);
+                            .AddLocation(source, 3);
 
             await VerifyCSharpDiagnosticsAsync(source, expected1, compileError, expected2);
         }

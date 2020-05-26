@@ -9,28 +9,54 @@ namespace ExhaustiveMatching.Analyzer.Tests.Helpers
     /// </summary>
     public readonly struct DiagnosticResultLocation
     {
-        private static readonly Regex MarkerRegex = new Regex(@"◊(?<number>\d)+⟦(?<content>[^⟧]*)⟧", RegexOptions.Compiled);
-        public static DiagnosticResultLocation FromMarker(string source, int marker, int? length)
+        /// <summary>
+        /// This uses the special balanced matching feature to allow markers to be nested. It
+        /// also uses positive lookahead so that the nested marker won't be consumed and can
+        /// then be matched.
+        /// </summary>
+        private static readonly Regex NestedMarkerRegex
+            = new Regex(@"◊(?<number>\d)+(?=⟦(?<content>([^⟦⟧]|(?<open>⟦)|(?<-open>⟧))*(?(open)(?!)))⟧)",
+                RegexOptions.Compiled|RegexOptions.ExplicitCapture);
+
+        /// <summary>
+        /// Marker regex without nesting. Needed for find replace to work correctly
+        /// </summary>
+        private static readonly Regex MarkerRegex
+            = new Regex(@"◊(?<number>\d)+⟦(?<content>([^⟦⟧]|(?<open>⟦)|(?<-open>⟧))*(?(open)(?!)))⟧",
+                RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+
+        /// <summary>
+        /// Just the first part of the marker for use when removing for line and column
+        /// </summary>
+        private static readonly Regex MarkerStart
+            = new Regex(@"◊(?<number>\d)+⟦", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+
+        public static DiagnosticResultLocation FromMarker(string source, int marker)
         {
             var markerString = marker.ToString();
-            var match = MarkerRegex.Matches(source).Single(m => m.Groups["number"].Value == markerString);
-
+            var match = NestedMarkerRegex.Matches(source).Single(m => m.Groups["number"].Value == markerString);
             var (line, column) = LineAndColumn(source, match.Index);
-            return new DiagnosticResultLocation("Test.cs", line, column, length ?? match.Groups["content"].Length);
+            // Get the length, requires we remove any nested markers
+            var length = RemoveMakers(match.Groups["content"].Value).Length;
+            return new DiagnosticResultLocation("Test.cs", line, column, length);
         }
 
         private static (int, int) LineAndColumn(string val, int index)
         {
             var upToIndex = val.Substring(0, index + 1);
             var lines = upToIndex.Split('\n');
-            var lineNumber = lines.Count();
-            var columnNumber = lines.Last().Length;
+            var lineNumber = lines.Length;
+            var lastLine = lines.Last();
+            // Take out any parts of previous markers so column is correct
+            lastLine = MarkerStart.Replace(lastLine, "").Replace("⟧", "");
+            var columnNumber = lastLine.Length;
             return (lineNumber, columnNumber);
         }
 
         public static string RemoveMakers(string source)
         {
-            return MarkerRegex.Replace(source, m => m.Groups["content"].Value);
+            // Have to recursively remove markers because of nesting
+            return MarkerRegex.Replace(source, m => RemoveMakers(m.Groups["content"].Value));
         }
 
         private DiagnosticResultLocation(string path, int line, int column, int length = -1)
