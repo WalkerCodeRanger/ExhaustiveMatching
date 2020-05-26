@@ -26,6 +26,13 @@ namespace Examples.ReadMe
                     Console.WriteLine("Heads!");
                     break;
             }
+
+            // ERROR Enum value not handled by switch: Tails
+            _ = coinFlip switch
+            {
+                CoinFlip.Heads => "Heads!",
+                _ => throw ExhaustiveMatch.Failed(coinFlip),
+            };
             #endregion
         }
     }
