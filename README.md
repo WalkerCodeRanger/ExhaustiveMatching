@@ -58,6 +58,8 @@ The latest stable release of ExhaustiveMatching.Analyzer is [available on NuGet]
 
 Install the ExhaustiveMatching.Analyzer package into each project that will contain exhaustive switch statements, switch expressions, or the classes and interfaces that will be switched on. Additionally, *install the package in any project that will reference a project containing types marked with the `Closed` attribute*. This is important because the analyzer enforces rules about inheriting from and implementing closed types. If the analyzer isn't in a project then those rules may be violated without an error being reported. Most of the time, the ExhaustiveMatching.Analyzer can be added to every project in a solution.
 
+As soon as you add the NuGet package to your project, the IDE (Microsoft Visual Studio, Jetbrains Rider and possibly others) should automatically enable the analyzer and start marking non-exhaustive switches in your code. Analogously, MSBuild and dotnet CLI should report the errors with no additional set up. Mind that ExhaustiveMatching.Analyzer is based on .NET standard 2.0 and will not be automatically enabled if the target framework of your project is not compatible. Please also see [this issue](https://github.com/WalkerCodeRanger/ExhaustiveMatching/issues/34) for more hints if the analyzer is not running out-of-the-box.
+
 ### Exhaustive Switch on Enum Values
 
 To enable exhaustiveness checking for a switch on an enum, throw an `ExhaustiveMatchFailedException` from the default case. That exception is constructed using the `ExhaustiveMatch.Failed(…)` factory method which should be passed the value being switched on. For switches with exhaustiveness checking, the analyzer will report an error for any missing enum cases.
