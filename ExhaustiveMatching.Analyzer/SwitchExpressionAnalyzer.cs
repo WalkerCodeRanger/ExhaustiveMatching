@@ -42,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer
             SwitchExpressionSyntax switchExpression)
         {
             var discardArm = switchExpression.Arms
-                            .LastOrDefault(a => a.Pattern is DiscardPatternSyntax);
+                            .LastOrDefault(a => a.Pattern is DiscardPatternSyntax || a.Pattern is VarPatternSyntax);
 
             // If there is no discard arm or it doesn't throw, we assume the
             // dev doesn't want an exhaustive match

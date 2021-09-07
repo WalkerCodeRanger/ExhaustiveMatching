@@ -431,6 +431,55 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
         }
 
+        [Fact]
+        public async Task EnsureThatDiscardPatternIsUnreachableIfVarPatternIsPresent()
+        {
+            const string source = @"using System;
+using ExhaustiveMatching;
+
+namespace TestNamespace
+{
+    public enum Test { Value1, Value2 }
+
+    class TestClass
+    {
+        void TestMethod(Test test)
+        {
+            var _ = test switch
+            {
+                Test.Value1 => 1,
+                var v => 2,
+                ◊1⟦_⟧ => 3
+            };
+        }
+    }
+}";
+
+            var compileError = DiagnosticResult
+                .Error("CS8510", "The pattern has already been handled by a previous arm of the switch expression.")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, compileError);
+        }
+
+        [Fact]
+        public async Task NotExhaustiveEnumWorksWithVarPatternAsWellAsWithDiscardPattern()
+        {
+            const string args = "CoinFlip coinFlip";
+            const string test = @"
+        var result = coinFlip ◊1⟦switch⟧
+        {
+            CoinFlip.Heads => ""Heads!"",
+            var f => throw ExhaustiveMatch.Failed(f),
+        };";
+
+            var source = CodeContext.CoinFlip(args, test);
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expectedTails);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();
