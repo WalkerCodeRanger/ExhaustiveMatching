@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,7 +128,7 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                         $"Expected diagnostic severity to be \"{expected.Severity}\" was \"{actual.Severity}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
                 }
 
-                if (actual.GetMessage() != expected.Message)
+                if (actual.GetMessage(CultureInfo.InvariantCulture) != expected.Message)
                 {
                     Assert.True(false,
                         $"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
