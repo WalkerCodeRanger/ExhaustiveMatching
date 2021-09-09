@@ -53,7 +53,7 @@ namespace ExhaustiveMatching.Analyzer
             if (defaultSectionBlock != null)
                 defaultSectionStatements = defaultSectionBlock.Statements;
 
-            var throwStatement = defaultSectionStatements
+            var throwStatement = defaultSectionStatements?
                                     .OfType<ThrowStatementSyntax>().FirstOrDefault();
 
             // If there is no default section or it doesn't throw, we assume the

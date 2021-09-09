@@ -571,6 +571,26 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(source, expectedTriangle);
         }
 
+        [Fact]
+        public async Task SwitchWithoutDefaultCaseShouldNotFail()
+        {
+            const string args = "Shape shape";
+            const string test = @"
+        ◊1⟦switch⟧ (shape)
+        {
+            case Square square:
+                Console.WriteLine(""Square: "" + square);
+                break;
+            case Circle circle:
+                Console.WriteLine(""Circle: "" + circle);
+                break;
+        }";
+
+            var source = CodeContext.Shapes(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();
