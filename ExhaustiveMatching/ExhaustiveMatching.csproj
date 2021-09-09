@@ -2,15 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
     <Version>0.5.0</Version>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Collections.Immutable">
-      <HintPath>..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\system.collections.immutable\1.5.0\lib\netstandard1.3\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
 </Project>

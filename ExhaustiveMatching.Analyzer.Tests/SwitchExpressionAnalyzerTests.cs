@@ -357,7 +357,7 @@ namespace TestNamespace
                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.HashCode")
                            .AddLocation(source, 1);
             var compileError = DiagnosticResult
-                               .Error("CS8510", "The pattern has already been handled by a previous arm of the switch expression.")
+                               .Error("CS8510", "The pattern is unreachable. It has already been handled by a previous arm of the switch expression or it is impossible to match.")
                                .AddLocation(source, 2);
 
             await VerifyCSharpDiagnosticsAsync(source, expected, compileError);
@@ -396,7 +396,7 @@ namespace TestNamespace
             var source = CodeContext.Shapes(args, test);
             // TODO type name is bad
             var expected1 = DiagnosticResult
-                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.")
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.ValueTuple")
                             .AddLocation(source, 1);
             var expected2 = DiagnosticResult
                             .Error("EM0101",
@@ -456,7 +456,7 @@ namespace TestNamespace
 }";
 
             var compileError = DiagnosticResult
-                .Error("CS8510", "The pattern has already been handled by a previous arm of the switch expression.")
+                .Error("CS8510", "The pattern is unreachable. It has already been handled by a previous arm of the switch expression or it is impossible to match.")
                 .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, compileError);

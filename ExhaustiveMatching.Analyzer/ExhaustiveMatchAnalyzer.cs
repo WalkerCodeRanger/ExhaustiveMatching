@@ -70,6 +70,7 @@ namespace ExhaustiveMatching.Analyzer
 
         private const string Category = "Logic";
 
+#pragma warning disable RS2008 // Enable analyzer release tracking
         public static readonly DiagnosticDescriptor NotExhaustiveEnumSwitch =
             new DiagnosticDescriptor("EM0001", EM0001Title, EM0001Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0001Description);
@@ -125,6 +126,7 @@ namespace ExhaustiveMatching.Analyzer
         public static readonly DiagnosticDescriptor DuplicateCaseType =
             new DiagnosticDescriptor("EM0105", EM0105Title, EM0105Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0105Description);
+#pragma warning restore RS2008 // Enable analyzer release tracking
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveNullableEnumSwitch,

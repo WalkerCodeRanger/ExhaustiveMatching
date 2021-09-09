@@ -131,7 +131,7 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                 if (actual.GetMessage(CultureInfo.InvariantCulture) != expected.Message)
                 {
                     Assert.True(false,
-                        $"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage()}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
+                        $"Expected diagnostic message to be \"{expected.Message}\" was \"{actual.GetMessage(CultureInfo.InvariantCulture)}\"\r\n\r\nDiagnostic:\r\n    {FormatDiagnostics(analyzer, actual)}\r\n");
                 }
             }
         }

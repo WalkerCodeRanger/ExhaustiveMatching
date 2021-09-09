@@ -20,7 +20,9 @@ namespace Examples.ReadMe
         {
             #region snippet
             // ERROR Subtype not handled by switch: IPv6Address
+#pragma warning disable EM0003
             switch (ipAddress)
+#pragma warning restore EM0003
             {
                 default:
                     throw ExhaustiveMatch.Failed(ipAddress);

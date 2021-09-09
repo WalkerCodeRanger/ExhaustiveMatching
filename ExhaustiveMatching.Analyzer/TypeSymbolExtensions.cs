@@ -10,12 +10,12 @@ namespace ExhaustiveMatching.Analyzer
     {
         public static bool IsSubtypeOf(this ITypeSymbol symbol, ITypeSymbol type)
         {
-            return symbol.Equals(type) || symbol.Implements(type) || symbol.InheritsFrom(type);
+            return symbol.Equals(type, SymbolEqualityComparer.Default) || symbol.Implements(type) || symbol.InheritsFrom(type);
         }
 
         public static bool IsDirectSubtypeOf(this ITypeSymbol symbol, ITypeSymbol type)
         {
-            return symbol.DirectlyImplements(type) || Equals(symbol.BaseType, type);
+            return symbol.DirectlyImplements(type) || SymbolEqualityComparer.Default.Equals(symbol.BaseType, type);
         }
 
         public static bool DirectlyImplements(this ITypeSymbol symbol, ITypeSymbol type)
@@ -40,7 +40,7 @@ namespace ExhaustiveMatching.Analyzer
 
         public static bool InheritsFrom(this ITypeSymbol symbol, ITypeSymbol type)
         {
-            return symbol.BaseClasses().Any(t => t.Equals(type));
+            return symbol.BaseClasses().Any(t => t.Equals(type, SymbolEqualityComparer.Default));
         }
 
         public static bool IsDirectSubtypeOfTypeWithAttribute(
@@ -53,7 +53,7 @@ namespace ExhaustiveMatching.Analyzer
 
         public static bool HasAttribute(this ITypeSymbol symbol, INamedTypeSymbol attributeType)
         {
-            return symbol.GetAttributes().Any(a => a.AttributeClass.Equals(attributeType));
+            return symbol.GetAttributes().Any(a => a.AttributeClass.Equals(attributeType, SymbolEqualityComparer.Default));
         }
 
         public static IEnumerable<TypeSyntax> GetCaseTypeSyntaxes(
@@ -61,7 +61,7 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttributeType)
         {
             return type.GetAttributes()
-                       .Where(attr => attr.AttributeClass.Equals(closedAttributeType))
+                       .Where(attr => attr.AttributeClass.Equals(closedAttributeType, SymbolEqualityComparer.Default))
                        .Select(attr => attr.ApplicationSyntaxReference.GetSyntax()).Cast<AttributeSyntax>()
                        .SelectMany(attr => attr.ArgumentList.Arguments)
                        .Select(arg => arg.Expression)
@@ -77,7 +77,7 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttributeType)
         {
             return type.GetAttributes()
-                       .Where(a => a.AttributeClass.Equals(closedAttributeType))
+                       .Where(a => a.AttributeClass.Equals(closedAttributeType, SymbolEqualityComparer.Default))
                        .SelectMany(a => a.ConstructorArguments)
                        .SelectMany(GetTypeConstants)
                        .Select(arg => arg.Value)
@@ -142,7 +142,7 @@ namespace ExhaustiveMatching.Analyzer
                     return true;
                 case TypeKind.Struct:
                     var nullableType = context.Compilation.GetTypeByMetadataName(TypeNames.Nullable);
-                    if (type.OriginalDefinition.Equals(nullableType))
+                    if (type.OriginalDefinition.Equals(nullableType, SymbolEqualityComparer.Default))
                     {
                         type = ((INamedTypeSymbol)type).TypeArguments.Single();
                         if (type.TypeKind == TypeKind.Enum)
@@ -164,7 +164,9 @@ namespace ExhaustiveMatching.Analyzer
             this ITypeSymbol rootType,
             INamedTypeSymbol closedAttributeType)
         {
-            var types = new HashSet<ITypeSymbol>();
+#pragma warning disable RS1024
+            var types = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+#pragma warning restore RS1024
             var queue = new Queue<ITypeSymbol>();
             queue.Enqueue(rootType);
 

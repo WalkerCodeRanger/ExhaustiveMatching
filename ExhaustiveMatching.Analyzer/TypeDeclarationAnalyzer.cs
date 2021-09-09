@@ -50,7 +50,7 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var superType in closedSuperTypes)
             {
                 var isMember = superType.GetCaseTypes(closedAttribute)
-                                .Any(t => t.Equals(typeSymbol));
+                                .Any(t => t.Equals(typeSymbol, SymbolEqualityComparer.Default));
                 if (isMember)
                     continue;
 
@@ -99,7 +99,7 @@ namespace ExhaustiveMatching.Analyzer
               {
                   var constructorSymbol = context.GetSymbol(a);
                   var attributeSymbol = constructorSymbol?.ContainingSymbol;
-                  return closedAttribute.Equals(attributeSymbol);
+                  return closedAttribute.Equals(attributeSymbol, SymbolEqualityComparer.Default);
               }).ToList();
 
             return closedAttributes;
@@ -168,12 +168,12 @@ namespace ExhaustiveMatching.Analyzer
                     var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
 
                     if (caseType == null
-                        || typeSymbol.Equals(caseType.BaseType) // BaseType is null for interfaces, avoid calling method on it
-                        || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
+                        || typeSymbol.Equals(caseType.BaseType, SymbolEqualityComparer.Default) // BaseType is null for interfaces, avoid calling method on it
+                        || caseType.Interfaces.Any(i => i.Equals(typeSymbol, SymbolEqualityComparer.Default)))
                         continue;
 
                     if (caseType.InheritsFrom(typeSymbol)
-                        || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol)))
+                        || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol, SymbolEqualityComparer.Default)))
                     {
                         // It's a subtype, just not a direct one
                         var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,

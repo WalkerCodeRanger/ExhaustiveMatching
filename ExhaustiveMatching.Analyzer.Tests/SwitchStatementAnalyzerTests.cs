@@ -507,7 +507,7 @@ namespace TestNamespace
             var source = CodeContext.Shapes(args, test);
             // TODO type name is bad
             var expected1 = DiagnosticResult
-                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.")
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.ValueTuple")
                             .AddLocation(source, 1);
             var expected2 = DiagnosticResult
                             .Error("EM0101", "Case pattern not supported in exhaustive switch: (Square square1, Square square2)")
