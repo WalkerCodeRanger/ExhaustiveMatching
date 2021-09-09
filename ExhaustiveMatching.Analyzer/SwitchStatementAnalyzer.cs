@@ -47,7 +47,13 @@ namespace ExhaustiveMatching.Analyzer
             var defaultSection = switchStatement.Sections
                 .FirstOrDefault(s => s.Labels.OfType<DefaultSwitchLabelSyntax>().Any());
 
-            var throwStatement = defaultSection?.Statements
+            var defaultSectionStatements = defaultSection?.Statements;
+
+            var defaultSectionBlock = defaultSectionStatements?.OfType<BlockSyntax>().FirstOrDefault();
+            if (defaultSectionBlock != null)
+                defaultSectionStatements = defaultSectionBlock.Statements;
+
+            var throwStatement = defaultSectionStatements
                                     .OfType<ThrowStatementSyntax>().FirstOrDefault();
 
             // If there is no default section or it doesn't throw, we assume the

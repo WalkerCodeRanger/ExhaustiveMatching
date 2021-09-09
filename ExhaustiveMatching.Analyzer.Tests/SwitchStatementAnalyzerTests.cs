@@ -545,6 +545,32 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
         }
 
+        [Fact]
+        public async Task DefaultCaseWithBracesShouldBeSupportedToo()
+        {
+            const string args = "Shape shape";
+            const string test = @"
+        ◊1⟦switch⟧ (shape)
+        {
+            case Square square:
+                Console.WriteLine(""Square: "" + square);
+                break;
+            case Circle circle:
+                Console.WriteLine(""Circle: "" + circle);
+                break;
+            default: {
+                throw ExhaustiveMatch.Failed(shape);
+            }
+        }";
+
+            var source = CodeContext.Shapes(args, test);
+            var expectedTriangle = DiagnosticResult
+                .Error("EM0003", "Subtype not handled by switch: TestNamespace.Triangle")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expectedTriangle);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();
