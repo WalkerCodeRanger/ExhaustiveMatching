@@ -20,6 +20,7 @@ namespace ExhaustiveMatching.Analyzer
                 case DeclarationPatternSyntax declarationPattern:
                     symbolUsed = context.GetDeclarationType(declarationPattern);
                     break;
+                case VarPatternSyntax _:
                 case DiscardPatternSyntax _:
                     // Ignored
                     return null;
@@ -35,7 +36,6 @@ namespace ExhaustiveMatching.Analyzer
 
                     symbolUsed = patternSymbol;
                     break;
-                case VarPatternSyntax _:
                 case RecursivePatternSyntax _:
                 default:
                     context.ReportCasePatternNotSupported(pattern);
