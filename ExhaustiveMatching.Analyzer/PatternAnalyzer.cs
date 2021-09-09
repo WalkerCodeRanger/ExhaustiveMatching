@@ -21,10 +21,20 @@ namespace ExhaustiveMatching.Analyzer
                     symbolUsed = context.GetDeclarationType(declarationPattern);
                     break;
                 case DiscardPatternSyntax _:
-                case ConstantPatternSyntax constantPattern
-                    when constantPattern.IsNull():
                     // Ignored
                     return null;
+                case ConstantPatternSyntax constantPattern:
+                    if (constantPattern.IsNull()) {
+                        // Ignored
+                        return null;
+                    }
+
+                    var patternSymbol = context.SemanticModel.GetSymbolInfo(constantPattern.Expression).Symbol as ITypeSymbol;
+                    if (patternSymbol == null)
+                        goto default;
+
+                    symbolUsed = patternSymbol;
+                    break;
                 case VarPatternSyntax _:
                 case RecursivePatternSyntax _:
                 default:

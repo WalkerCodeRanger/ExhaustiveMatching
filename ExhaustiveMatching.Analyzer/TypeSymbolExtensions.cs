@@ -164,9 +164,9 @@ namespace ExhaustiveMatching.Analyzer
             this ITypeSymbol rootType,
             INamedTypeSymbol closedAttributeType)
         {
-#pragma warning disable RS1024
+#pragma warning disable RS1024 // Compare symbols correctly
             var types = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
-#pragma warning restore RS1024
+#pragma warning restore RS1024 // Compare symbols correctly
             var queue = new Queue<ITypeSymbol>();
             queue.Enqueue(rootType);
 

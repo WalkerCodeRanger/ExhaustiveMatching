@@ -480,6 +480,26 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(source, expectedTails);
         }
 
+        [Fact]
+        public async Task MatchOnTypeShouldNotRequireToDeclareAVariable()
+        {
+            const string args = "Shape shape";
+            const string test = @"
+        var result = shape ◊1⟦switch⟧
+        {
+            Square square => ""Square: "" + square,
+            Circle => ""Circle"",
+            _ => throw ExhaustiveMatch.Failed(shape)
+        };";
+
+            var source = CodeContext.Shapes(args, test);
+            var expectedTriangle = DiagnosticResult
+                .Error("EM0003", "Subtype not handled by switch: TestNamespace.Triangle")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expectedTriangle);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();
