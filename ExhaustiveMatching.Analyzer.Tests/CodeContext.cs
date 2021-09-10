@@ -40,6 +40,7 @@ enum CoinFlip {{ Heads, Tails }}";
 using System.ComponentModel; // InvalidEnumArgumentException
 using ExhaustiveMatching;
 using TestNamespace;
+using Nisse;
 
 class TestClass
 {{
@@ -60,7 +61,15 @@ namespace TestNamespace
     public abstract class Triangle : Shape {{ }} // abstract to show abstract leaf types are checked
     public class EquilateralTriangle : Triangle {{ }}
     public class IsoscelesTriangle : Triangle {{ }}
-}}";
+}}
+
+namespace Nisse {{
+    public sealed class ValueOutOfRangeException: Exception {{
+        public ValueOutOfRangeException(string what, object? value) {{
+        }}
+    }}
+}}
+";
             return string.Format(context, args, body);
         }
     }

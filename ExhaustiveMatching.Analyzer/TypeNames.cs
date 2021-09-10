@@ -10,6 +10,7 @@ namespace ExhaustiveMatching.Analyzer
     public static class TypeNames
     {
         public const string ExhaustiveMatchFailedException = "ExhaustiveMatching.ExhaustiveMatchFailedException";
+        public const string ValueOutOfRangeException = "Nisse.ValueOutOfRangeException";
         public const string ClosedAttribute = "ExhaustiveMatching.ClosedAttribute";
         public static readonly string InvalidEnumArgumentException = typeof(InvalidEnumArgumentException).FullName;
         public static readonly string Nullable = typeof(System.Nullable<>).FullName;

@@ -520,6 +520,26 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(source, expectedTriangle);
         }
 
+        [Fact]
+        public async Task TestValueOutOfRangeExceptionIsAlsoSupported()
+        {
+            const string args = "Shape shape";
+            const string test = @"
+        var result = shape ◊1⟦switch⟧
+        {
+            Square square => ""Square: "" + square,
+            Circle => ""Circle"",
+            var s => throw new ValueOutOfRangeException(""Shape"", shape)
+        };";
+
+            var source = CodeContext.Shapes(args, test);
+            var expectedTriangle = DiagnosticResult
+                .Error("EM0003", "Subtype not handled by switch: TestNamespace.Triangle")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expectedTriangle);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();
