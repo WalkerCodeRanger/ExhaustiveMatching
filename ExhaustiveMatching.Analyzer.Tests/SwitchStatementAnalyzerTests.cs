@@ -219,16 +219,19 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }";
 
             var source = CodeContext.Shapes(args, test);
+            var expected1 = DiagnosticResult
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.Object")
+                            .AddLocation(source, 1);
 
             // Still reports these errors
-            var expected1 = DiagnosticResult
+            var expected2 = DiagnosticResult
                             .Error("EM0100", "When guard is not supported in an exhaustive switch")
                             .AddLocation(source, 2);
-            var expected2 = DiagnosticResult
+            var expected3 = DiagnosticResult
                             .Error("EM0101", "Case pattern not supported in exhaustive switch: 12")
                             .AddLocation(source, 3);
 
-            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2, expected3);
         }
 
         [Fact]
@@ -455,8 +458,10 @@ namespace TestNamespace
         }";
 
             var source = CodeContext.Basic(args, test);
+            var expected = DiagnosticResult.Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.HashCode")
+                                                 .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(source);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         [Fact]
@@ -477,8 +482,11 @@ namespace TestNamespace
         }";
 
             var source = CodeContext.Basic(args, test);
+            var expected = DiagnosticResult
+                           .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.Nullable")
+                           .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(source);
+            await VerifyCSharpDiagnosticsAsync(source, expected);
         }
 
         [Fact]
@@ -497,12 +505,15 @@ namespace TestNamespace
         }";
 
             var source = CodeContext.Shapes(args, test);
-
-            var expected = DiagnosticResult
+            // TODO type name is bad
+            var expected1 = DiagnosticResult
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.ValueTuple")
+                            .AddLocation(source, 1);
+            var expected2 = DiagnosticResult
                             .Error("EM0101", "Case pattern not supported in exhaustive switch: (Square square1, Square square2)")
                             .AddLocation(source, 2);
 
-            await VerifyCSharpDiagnosticsAsync(source, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
         }
 
         [Fact]
@@ -522,13 +533,16 @@ namespace TestNamespace
         }";
 
             var source = CodeContext.Shapes(args, test);
-
-            var expected = DiagnosticResult
+            // TODO type name is bad
+            var expected1 = DiagnosticResult
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.Nullable")
+                            .AddLocation(source, 1);
+            var expected2 = DiagnosticResult
                             .Error("EM0101",
                                 "Case pattern not supported in exhaustive switch: (Square square1, Square square2)")
                             .AddLocation(source, 2);
 
-            await VerifyCSharpDiagnosticsAsync(source, expected);
+            await VerifyCSharpDiagnosticsAsync(source, expected1, expected2);
         }
 
         [Fact]

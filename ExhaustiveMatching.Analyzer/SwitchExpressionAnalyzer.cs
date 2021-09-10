@@ -103,6 +103,7 @@ namespace ExhaustiveMatching.Analyzer
             // we still needed to check the switch cases
             if (!isClosed)
             {
+                context.ReportOpenTypeNotSupported(type, switchExpression.GoverningExpression);
                 return; // No point in trying to check for uncovered types, this isn't closed
             }
 

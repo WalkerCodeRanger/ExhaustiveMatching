@@ -69,6 +69,17 @@ namespace ExhaustiveMatching.Analyzer
             context.ReportDiagnostic(diagnostic);
         }
 
+        public static void ReportOpenTypeNotSupported(
+            this SyntaxNodeAnalysisContext context,
+            ITypeSymbol type,
+            ExpressionSyntax switchStatementExpression)
+        {
+            var diagnostic = Diagnostic.Create(
+                ExhaustiveMatchAnalyzer.OpenTypeNotSupported,
+                switchStatementExpression.GetLocation(), type.GetFullName());
+            context.ReportDiagnostic(diagnostic);
+        }
+
         public static void ReportWhenClauseNotSupported(
             this SyntaxNodeAnalysisContext context,
             WhenClauseSyntax whenClause)
