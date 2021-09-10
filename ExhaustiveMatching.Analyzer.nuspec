@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExhaustiveMatching.Analyzer.Stek</id>
-    <version>0.5.4</version>
+    <version>0.5.5</version>
     <authors>Jeff Walker</authors>
     <owners>Jeff Walker</owners>
     <license type="expression">BSD-3-Clause</license>
