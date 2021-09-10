@@ -52,10 +52,6 @@ namespace ExhaustiveMatching.Analyzer
         private static readonly LocalizableString EM0101Message = LoadString(nameof(Resources.EM0101Message));
         private static readonly LocalizableString EM0101Description = LoadString(Resources.EM0101Description);
 
-        private static readonly LocalizableString EM0102Title = LoadString(nameof(Resources.EM0102Title));
-        private static readonly LocalizableString EM0102Message = LoadString(nameof(Resources.EM0102Message));
-        private static readonly LocalizableString EM0102Description = LoadString(Resources.EM0102Description);
-
         private static readonly LocalizableString EM0103Title = LoadString(nameof(Resources.EM0103Title));
         private static readonly LocalizableString EM0103Message = LoadString(nameof(Resources.EM0103Message));
         private static readonly LocalizableString EM0103Description = LoadString(Resources.EM0103Description);
@@ -111,10 +107,6 @@ namespace ExhaustiveMatching.Analyzer
             new DiagnosticDescriptor("EM0101", EM0101Title, EM0101Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0101Description);
 
-        public static readonly DiagnosticDescriptor OpenTypeNotSupported =
-            new DiagnosticDescriptor("EM0102", EM0102Title, EM0102Message, Category,
-                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0102Description);
-
         public static readonly DiagnosticDescriptor MatchMustBeOnCaseType =
             new DiagnosticDescriptor("EM0103", EM0103Title, EM0103Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0103Description);
@@ -133,8 +125,8 @@ namespace ExhaustiveMatching.Analyzer
                 NotExhaustiveObjectSwitch, ConcreteSubtypeMustBeCaseOfClosedType,
                 MustBeDirectSubtype, MustBeSubtype, SubtypeMustBeCovered,
                 OpenInterfaceSubtypeMustBeCaseOfClosedType, WhenGuardNotSupported,
-                CasePatternNotSupported, OpenTypeNotSupported, MatchMustBeOnCaseType,
-                DuplicateClosedAttribute, DuplicateCaseType);
+                CasePatternNotSupported, MatchMustBeOnCaseType, DuplicateClosedAttribute,
+                DuplicateCaseType);
 
         public override void Initialize(AnalysisContext context)
         {

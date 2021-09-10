@@ -31,8 +31,10 @@ namespace ExhaustiveMatching.Analyzer
                     }
 
                     var patternSymbol = context.SemanticModel.GetSymbolInfo(constantPattern.Expression).Symbol as ITypeSymbol;
-                    if (patternSymbol == null)
-                        goto default;
+                    if (patternSymbol == null) {
+                        // Ignored
+                        return null;
+                    }
 
                     symbolUsed = patternSymbol;
                     break;
