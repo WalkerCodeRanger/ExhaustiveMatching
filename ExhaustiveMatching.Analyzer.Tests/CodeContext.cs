@@ -65,6 +65,8 @@ namespace TestNamespace
 
 namespace Nisse {{
     public sealed class ValueOutOfRangeException: Exception {{
+        public bool DoNotValidate;
+
         public ValueOutOfRangeException(string what, object? value) {{
         }}
     }}

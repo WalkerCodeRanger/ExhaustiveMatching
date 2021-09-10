@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,9 +28,26 @@ namespace ExhaustiveMatching.Analyzer
             var isValueOutOfRangeException = exceptionType.Equals(valueOutOfRangeExceptionType, SymbolEqualityComparer.Default);
             var isInvalidEnumArgumentException = exceptionType.Equals(invalidEnumArgumentExceptionType, SymbolEqualityComparer.Default);
 
+            var dotNotValidate = false;
+
+            if (isValueOutOfRangeException) {
+                if (thrownExpression is ObjectCreationExpressionSyntax {
+                    Initializer: { Expressions: { Count: 1 } } initializerExpression
+                }) {
+                    if (initializerExpression.Expressions[0] is AssignmentExpressionSyntax {
+                        Left: IdentifierNameSyntax { Identifier: { Text: "DoNotValidate" } },
+                        Right: LiteralExpressionSyntax { Token: { } tokenExpression }
+                    }) {
+                        if (tokenExpression.Kind() == SyntaxKind.TrueKeyword) {
+                            dotNotValidate = true;
+                        }
+                    }
+                }
+            }
+
             var isExhaustive = isExhaustiveMatchFailedException || isValueOutOfRangeException || isInvalidEnumArgumentException;
 
-            return new SwitchStatementKind(isExhaustive, isInvalidEnumArgumentException);
+            return new SwitchStatementKind(isExhaustive && !dotNotValidate, isInvalidEnumArgumentException);
         }
     }
 }

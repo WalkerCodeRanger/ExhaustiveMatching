@@ -540,6 +540,23 @@ namespace TestNamespace
             await VerifyCSharpDiagnosticsAsync(source, expectedTriangle);
         }
 
+        [Fact]
+        public async Task SwitchOnStringsShouldNotReportAnything()
+        {
+            const string args = "string str";
+            const string test = @"
+        var result = str switch
+        {
+            ""1"" => 1,
+            ""2"" => 2,
+            var s => throw new ValueOutOfRangeException(""String"", str) { DoNotValidate = true }
+        };";
+
+            var source = CodeContext.Shapes(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new ExhaustiveMatchAnalyzer();
