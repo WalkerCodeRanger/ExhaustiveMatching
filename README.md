@@ -339,4 +339,6 @@ directly into the project. This classes are marked `internal` and will not be
 visible from outside of the project.
 
 This package does not support the `ClosedAttribute` because it would not be safe
-to do so. If a closed class were publicly exposed from
+to do so. If a closed class were publicly exposed from your project, then other
+code could create new subclasses of the closed class thereby making switches on
+the closed class non-exhaustive.
