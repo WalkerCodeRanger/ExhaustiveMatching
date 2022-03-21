@@ -67,10 +67,10 @@ three packages available for different situations.
 * [ExhaustiveMatching.Analyzer](https://www.nuget.org/packages/ExhaustiveMatching.Analyzer/):
   The standard package that includes all analyzers. Adds a dependency on
   `ExhaustiveMatching.Analyzer` to your project.
-* ExhaustiveMatching.Analyzer.Enums *(Not Yet Implemented)*: Only includes the
+* `ExhaustiveMatching.Analyzer.Enums` *(Not Yet Implemented)*: Only includes the
   exhaustive matching analyzer for enums using `InvalidEnumArgumentException`.
   Avoids adding any dependencies or additional code to your project.
-* ExhaustiveMatching.Analyzer.Source *(Not Yet Implemented)*: For advanced
+* `ExhaustiveMatching.Analyzer.Source` *(Not Yet Implemented)*: For advanced
   scenarios, avoids adding dependencies to your project while supporting most
   analyzers by injecting code into your project. See [Dependency Free
   Usage](#dependency-free-usage) for details.
@@ -333,7 +333,7 @@ complete list of them along with a description.
 In some situations, it isn't desirable to add a dependency to your project. For
 example, a published NuGet package may want to use exhaustive matching without
 adding a dependency on `ExhaustiveMatching.Analyzer` to their project. The
-`ExhaustiveMatching.Analyzer.Private` package supports these cases. It does so
+`ExhaustiveMatching.Analyzer.Source` package supports these cases. It does so
 by injecting the source for the `ExhaustiveMatch` and `InternalClosedAttribute`
 directly into the project. This classes are marked `internal` and will not be
 visible from outside of the project.
