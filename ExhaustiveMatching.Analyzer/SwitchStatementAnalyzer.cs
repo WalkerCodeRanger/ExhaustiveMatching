@@ -106,6 +106,15 @@ namespace ExhaustiveMatching.Analyzer
             var isClosed = type.HasAttribute(closedAttributeType);
 
             var allCases = type.GetClosedTypeCases(closedAttributeType);
+            var allConcreteTypes = allCases
+                .Where(t => t.IsConcreteOrLeaf(closedAttributeType));
+
+            if (!isClosed && type.TryGetStructurallyClosedTypeCases(context, out allCases))
+            {
+                isClosed = true;
+                allConcreteTypes = allCases
+                    .Where(t => t.IsConcrete());
+            }
 
             var typesUsed = switchLabels
                 .OfType<CasePatternSwitchLabelSyntax>()
@@ -121,8 +130,7 @@ namespace ExhaustiveMatching.Analyzer
                 return; // No point in trying to check for uncovered types, this isn't closed
             }
 
-            var uncoveredTypes = allCases
-                .Where(t => t.IsConcreteOrLeaf(closedAttributeType))
+            var uncoveredTypes = allConcreteTypes
                 .Where(t => !typesUsed.Any(t.IsSubtypeOf))
                 .ToArray();
 
