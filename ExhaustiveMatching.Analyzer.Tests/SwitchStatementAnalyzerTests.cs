@@ -164,6 +164,28 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [Fact]
+        public async Task ExhaustiveObjectSwitchAllowsLabelSyntax() {
+            const string args = "Shape shape";
+            const string test = @"
+        switch (shape)
+        {
+            case Square square:
+                Console.WriteLine(""Square: "" + square);
+                break;
+            case Circle circle:
+                Console.WriteLine(""Circle: "" + circle);
+                break;
+            case Triangle: // label syntax
+                Console.WriteLine(""Triangle!"");
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(shape);
+        }";
+
+            await VerifyCSharpDiagnosticsAsync(CodeContext.Shapes(args, test));
+        }
+
+        [Fact]
         public async Task UnsupportedCaseClauses()
         {
             const string args = "Shape shape";

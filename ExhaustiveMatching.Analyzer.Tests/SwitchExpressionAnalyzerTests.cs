@@ -106,6 +106,21 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [Fact]
+        public async Task ExhaustiveObjectSwitchAllowsLiteralTypeExpressionSyntax() {
+            const string args = "Shape shape";
+            const string test = @"
+        var result = shape switch
+        {
+            Square square => ""Square: "" + square,
+            Circle circle => ""Circle: "" + circle,
+            Triangle => ""Triangle!"", // type name
+            _ => throw ExhaustiveMatch.Failed(shape),
+        };";
+
+            await VerifyCSharpDiagnosticsAsync(CodeContext.Shapes(args, test));
+        }
+
+        [Fact]
         public async Task UnsupportedCaseClauses()
         {
             const string args = "Shape shape";
