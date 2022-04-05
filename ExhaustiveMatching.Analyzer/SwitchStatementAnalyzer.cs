@@ -142,7 +142,7 @@ namespace ExhaustiveMatching.Analyzer
         {
             foreach (var switchLabel in switchLabels.OfType<CaseSwitchLabelSyntax>())
             {
-                if (!IsNullCase(switchLabel) && switchLabel.Value.IsTypeIdentifier(context, out _))
+                if (!IsNullCase(switchLabel) && !switchLabel.Value.IsTypeIdentifier(context, out _))
                     context.ReportCasePatternNotSupported(switchLabel);
                 // `case null:` is allowed
             }

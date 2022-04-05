@@ -15,8 +15,7 @@ namespace ExhaustiveMatching.Analyzer
 
         public static bool IsTypeIdentifier(this ExpressionSyntax expression, SyntaxNodeAnalysisContext context, out ITypeSymbol typeSymbol)
         {
-            if (expression is IdentifierNameSyntax identifierName
-                && context.GetSymbol(identifierName) is ITypeSymbol t)
+            if (context.GetSymbol(expression) is ITypeSymbol t)
             {
                 typeSymbol = t;
                 return true;

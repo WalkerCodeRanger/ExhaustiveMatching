@@ -510,6 +510,28 @@ namespace TestNamespace
         }
 
         [Fact]
+        public async Task SwitchOnStructurallyClosedWithLabelThrowingExhaustiveMatchDoesNotReportsDiagnostic()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        ◊1⟦switch⟧ (result)
+        {
+            case Result<string, string>.Error error:
+                Console.WriteLine(""Error: "" + error);
+                break;
+            case Result<string, string>.Success.AAb:
+                Console.WriteLine(""Success!"");
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(result);
+        }";
+
+            var source = CodeContext.Result(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
         public async Task SwitchOnStructurallyClosedThrowingExhaustiveMatchAllowNull()
         {
             const string args = "Result<string, string> result";
