@@ -167,7 +167,10 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
                 solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
                 count++;
             }
-            return solution.GetProject(projectId);
+
+            var project = solution.GetProject(projectId);
+            project = project?.WithParseOptions(((CSharpParseOptions) project.ParseOptions ?? new CSharpParseOptions()).WithLanguageVersion(LanguageVersion.CSharp9));
+            return project;
         }
         #endregion
     }

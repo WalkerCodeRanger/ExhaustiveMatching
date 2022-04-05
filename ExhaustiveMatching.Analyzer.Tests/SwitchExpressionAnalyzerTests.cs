@@ -396,6 +396,60 @@ namespace TestNamespace
         }
 
         [Fact]
+        public async Task SwitchOnStructurallyClosedRecordThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        var x = result ◊1⟦switch⟧
+        {
+            Result<string, string>.Error error => ""Error: "" + error,
+            _ => throw ExhaustiveMatch.Failed(result),
+        };";
+
+            var source = CodeContext.ResultRecord(args, test);
+            var expectedSuccess = DiagnosticResult
+                .Error("EM0003", "Subtype not handled by switch: TestNamespace.Success")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expectedSuccess);
+        }
+
+        [Fact]
+        public async Task SwitchOnStructurallyClosedRecordThrowingExhaustiveMatchDoesNotReportsDiagnostic()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        var x = result ◊1⟦switch⟧
+        {
+            Result<string, string>.Error error => ""Error: "" + error,
+            Result<string, string>.Success success => ""Success: "" + success,
+            _ => throw ExhaustiveMatch.Failed(result),
+        };";
+
+            var source = CodeContext.ResultRecord(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
+        public async Task SwitchOnStructurallyClosedRecordThrowingExhaustiveMatchAllowNull()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        var x = result ◊1⟦switch⟧
+        {
+            Result<string, string>.Error error => ""Error: "" + error,
+            Result<string, string>.Success success => ""Success: "" + success,
+            null => ""null"",
+            _ => throw ExhaustiveMatch.Failed(result),
+        };";
+
+            var source = CodeContext.ResultRecord(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
         public async Task SwitchOnStruct()
         {
             const string args = "HashCode hashCode";

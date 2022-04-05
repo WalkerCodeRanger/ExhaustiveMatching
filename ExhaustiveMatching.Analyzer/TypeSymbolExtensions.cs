@@ -211,7 +211,9 @@ namespace ExhaustiveMatching.Analyzer
 
             if (rootType is INamedTypeSymbol namedType
                 && rootType.TypeKind != TypeKind.Error
-                && namedType.InstanceConstructors.All(c => c.DeclaredAccessibility == Accessibility.Private)) {
+                && namedType.InstanceConstructors
+                    .All(c => c.DeclaredAccessibility == Accessibility.Private
+                    || rootType.IsRecord && c.DeclaredAccessibility == Accessibility.Protected && c.Parameters.Length == 1 && SymbolEqualityComparer.Default.Equals(c.Parameters[0].Type, rootType))) {
 
                 var nestedTypes = context.SemanticModel.LookupSymbols(0, rootType)
                     .OfType<ITypeSymbol>()
