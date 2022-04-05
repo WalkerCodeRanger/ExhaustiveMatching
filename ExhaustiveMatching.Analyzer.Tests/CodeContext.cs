@@ -97,5 +97,42 @@ namespace TestNamespace
 }}";
             return string.Format(context, args, body);
         }
+
+        public static string ResultRecord(string args, string body)
+        {
+            const string context = @"using System; // Result type
+using System;
+using System.Collections.Generic;
+using ExhaustiveMatching;
+using TestNamespace;
+
+class TestClass
+{{
+    void TestMethod({0})
+    {{{1}
+    }}
+}}
+
+namespace TestNamespace
+{{
+    public abstract record Result<TSuccess, TError> {{
+        private Result() {{ }}
+
+        public sealed record Success(TSuccess Value) : Result<TSuccess, TError>;
+
+        public sealed record Error(TError value) : Result<TSuccess, TError>;
+    }}
+}}
+
+namespace System.Runtime.CompilerServices {{
+    /// <summary>
+    /// Reserved to be used by the compiler for tracking metadata.
+    /// This class should not be used by developers in source code.
+    /// </summary>
+    internal static class IsExternalInit {{
+    }}
+}}";
+            return string.Format(context, args, body);
+        }
     }
 }
