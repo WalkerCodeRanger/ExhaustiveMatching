@@ -444,6 +444,75 @@ namespace TestNamespace
 
 
         [Fact]
+        public async Task SwitchOnStructurallyClosedThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        ◊1⟦switch⟧ (result)
+        {
+            case Result<string, string>.Error error:
+                Console.WriteLine(""Error: "" + error);
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(result);
+        }";
+
+            var source = CodeContext.Result(args, test);
+            var expectedSuccess = DiagnosticResult
+                .Error("EM0003", "Subtype not handled by switch: TestNamespace.Success")
+                .AddLocation(source, 1);
+
+            await VerifyCSharpDiagnosticsAsync(source, expectedSuccess);
+        }
+
+        [Fact]
+        public async Task SwitchOnStructurallyClosedThrowingExhaustiveMatchDoesNotReportsDiagnostic()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        ◊1⟦switch⟧ (result)
+        {
+            case Result<string, string>.Error error:
+                Console.WriteLine(""Error: "" + error);
+                break;
+            case Result<string, string>.Success success:
+                Console.WriteLine(""Success: "" + success);
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(result);
+        }";
+
+            var source = CodeContext.Result(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
+        public async Task SwitchOnStructurallyClosedThrowingExhaustiveMatchAllowNull()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        ◊1⟦switch⟧ (result)
+        {
+            case Result<string, string>.Error error:
+                Console.WriteLine(""Error: "" + error);
+                break;
+            case Result<string, string>.Success success:
+                Console.WriteLine(""Success: "" + success);
+                break;
+            case null:
+                Console.WriteLine(""null"");
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(result);
+        }";
+
+            var source = CodeContext.Result(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
         public async Task SwitchOnStruct()
         {
             const string args = "HashCode hashCode";

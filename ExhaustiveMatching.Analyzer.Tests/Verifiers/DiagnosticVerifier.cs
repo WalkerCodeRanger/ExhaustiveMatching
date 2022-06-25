@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,12 @@ namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
+        static DiagnosticVerifier()
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+        }
+
         #region To be implemented by Test classes
         /// <summary>
         /// Get the CSharp analyzer being tested - to be implemented in non-abstract class

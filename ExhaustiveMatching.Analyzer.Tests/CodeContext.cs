@@ -63,5 +63,39 @@ namespace TestNamespace
 }}";
             return string.Format(context, args, body);
         }
+
+        public static string Result(string args, string body)
+        {
+            const string context = @"using System; // Result type
+using System;
+using System.Collections.Generic;
+using ExhaustiveMatching;
+using TestNamespace;
+
+class TestClass
+{{
+    void TestMethod({0})
+    {{{1}
+    }}
+}}
+
+namespace TestNamespace
+{{
+    public abstract class Result<TSuccess, TError> {{
+        private Result() {{ }}
+
+        public sealed class Success : Result<TSuccess, TError> {{
+            public TSuccess Value {{ get; }}
+            public Success(TSuccess value) {{ Value = value; }}
+        }}
+
+        public sealed class Error : Result<TSuccess, TError> {{
+            public TError Value {{ get; }}
+            public Error(TError value) {{ Value = value; }}
+        }}
+    }}
+}}";
+            return string.Format(context, args, body);
+        }
     }
 }

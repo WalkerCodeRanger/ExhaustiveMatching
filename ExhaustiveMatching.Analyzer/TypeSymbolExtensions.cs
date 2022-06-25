@@ -190,12 +190,43 @@ namespace ExhaustiveMatching.Analyzer
             return types;
         }
 
+        public static bool IsConcrete(this ITypeSymbol type)
+        {
+            return type != null
+                   && type.TypeKind != TypeKind.Error
+                   && !type.IsAbstract;
+        }
+
         public static bool IsConcreteOrLeaf(this ITypeSymbol type, INamedTypeSymbol closedAttributeType)
         {
             return type != null
                    && type.TypeKind != TypeKind.Error
                    && (!type.IsAbstract
                        || !type.HasAttribute(closedAttributeType));
+        }
+
+        public static bool TryGetStructurallyClosedTypeCases(this ITypeSymbol rootType, SyntaxNodeAnalysisContext context, out HashSet<ITypeSymbol> allCases)
+        {
+            allCases = new HashSet<ITypeSymbol>();
+
+            if (rootType is INamedTypeSymbol namedType
+                && rootType.TypeKind != TypeKind.Error
+                && namedType.InstanceConstructors.All(c => c.DeclaredAccessibility == Accessibility.Private)) {
+
+                var nestedTypes = context.SemanticModel.LookupSymbols(0, rootType)
+                    .OfType<ITypeSymbol>()
+                    .Where(t => t.IsSubtypeOf(rootType))
+                    .ToArray();
+
+                if (nestedTypes.All(t => t.IsSealed || t is INamedTypeSymbol n && n.InstanceConstructors.All(c => c.DeclaredAccessibility == Accessibility.Private))) {
+                    allCases.Add(rootType);
+                    allCases.UnionWith(nestedTypes);
+
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
