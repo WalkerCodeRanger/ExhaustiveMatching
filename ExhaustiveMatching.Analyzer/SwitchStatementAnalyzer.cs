@@ -117,8 +117,7 @@ namespace ExhaustiveMatching.Analyzer
             }
 
             var typesUsed = switchLabels
-                .OfType<CasePatternSwitchLabelSyntax>()
-                .Select(patternLabel => patternLabel.Pattern.GetMatchedTypeSymbol(context, type, allCases, isClosed))
+                .Select(switchLabel => switchLabel.GetMatchedTypeSymbol(context, type, allCases, isClosed))
                 .Where(t => t != null) // returns null for invalid case clauses
                 .ToImmutableHashSet();
 
@@ -143,7 +142,7 @@ namespace ExhaustiveMatching.Analyzer
         {
             foreach (var switchLabel in switchLabels.OfType<CaseSwitchLabelSyntax>())
             {
-                if (!IsNullCase(switchLabel))
+                if (!IsNullCase(switchLabel) && !switchLabel.Value.IsTypeIdentifier(context, out _))
                     context.ReportCasePatternNotSupported(switchLabel);
                 // `case null:` is allowed
             }

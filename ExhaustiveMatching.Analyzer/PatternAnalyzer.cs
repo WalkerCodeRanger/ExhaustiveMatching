@@ -8,6 +8,24 @@ namespace ExhaustiveMatching.Analyzer
     internal static class PatternAnalyzer
     {
         public static ITypeSymbol GetMatchedTypeSymbol(
+            this SwitchLabelSyntax switchLabel,
+            SyntaxNodeAnalysisContext context,
+            ITypeSymbol type,
+            HashSet<ITypeSymbol> allCases,
+            bool isClosed)
+        {
+            switch (switchLabel)
+            {
+                case CaseSwitchLabelSyntax labelSyntax:
+                    return labelSyntax.Value.IsTypeIdentifier(context, out var result) ? result : null;
+                case CasePatternSwitchLabelSyntax patternSyntax:
+                    return patternSyntax.Pattern.GetMatchedTypeSymbol(context, type, allCases, isClosed);
+                default:
+                    return null;
+            }
+        }
+
+        public static ITypeSymbol GetMatchedTypeSymbol(
             this PatternSyntax pattern,
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type,
@@ -19,6 +37,9 @@ namespace ExhaustiveMatching.Analyzer
             {
                 case DeclarationPatternSyntax declarationPattern:
                     symbolUsed = context.GetDeclarationType(declarationPattern);
+                    break;
+                case ConstantPatternSyntax constantTypePattern
+                    when constantTypePattern.Expression.IsTypeIdentifier(context, out symbolUsed):
                     break;
                 case DiscardPatternSyntax _:
                 case ConstantPatternSyntax constantPattern

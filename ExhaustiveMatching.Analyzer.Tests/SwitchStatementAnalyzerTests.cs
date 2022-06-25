@@ -164,6 +164,28 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [Fact]
+        public async Task ExhaustiveObjectSwitchAllowsLabelSyntax() {
+            const string args = "Shape shape";
+            const string test = @"
+        switch (shape)
+        {
+            case Square square:
+                Console.WriteLine(""Square: "" + square);
+                break;
+            case Circle circle:
+                Console.WriteLine(""Circle: "" + circle);
+                break;
+            case Triangle: // label syntax
+                Console.WriteLine(""Triangle!"");
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(shape);
+        }";
+
+            await VerifyCSharpDiagnosticsAsync(CodeContext.Shapes(args, test));
+        }
+
+        [Fact]
         public async Task UnsupportedCaseClauses()
         {
             const string args = "Shape shape";
@@ -477,6 +499,28 @@ namespace TestNamespace
                 break;
             case Result<string, string>.Success success:
                 Console.WriteLine(""Success: "" + success);
+                break;
+            default:
+                throw ExhaustiveMatch.Failed(result);
+        }";
+
+            var source = CodeContext.Result(args, test);
+
+            await VerifyCSharpDiagnosticsAsync(source);
+        }
+
+        [Fact]
+        public async Task SwitchOnStructurallyClosedWithLabelThrowingExhaustiveMatchDoesNotReportsDiagnostic()
+        {
+            const string args = "Result<string, string> result";
+            const string test = @"
+        ◊1⟦switch⟧ (result)
+        {
+            case Result<string, string>.Error error:
+                Console.WriteLine(""Error: "" + error);
+                break;
+            case Result<string, string>.Success.AAb:
+                Console.WriteLine(""Success!"");
                 break;
             default:
                 throw ExhaustiveMatch.Failed(result);
