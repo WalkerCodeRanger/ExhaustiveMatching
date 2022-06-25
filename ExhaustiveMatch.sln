@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29009.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32314.265
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Analyzer", "ExhaustiveMatching.Analyzer\ExhaustiveMatching.Analyzer.csproj", "{B6858B7F-9FE4-4047-A1C1-FEA6F4D22A78}"
 EndProject
@@ -13,11 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3244C1B5-79FB-4F75-AB2A-4877904D1A95}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		ExhaustiveMatching.Analyzer.nuspec = ExhaustiveMatching.Analyzer.nuspec
 		pack.bat = pack.bat
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhaustiveMatching.Examples", "ExhaustiveMatching.Examples\ExhaustiveMatching.Examples.csproj", "{DB0EFE16-B3AF-44F0-8139-B4AC1C4F1E99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Examples", "ExhaustiveMatching.Examples\ExhaustiveMatching.Examples.csproj", "{DB0EFE16-B3AF-44F0-8139-B4AC1C4F1E99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
