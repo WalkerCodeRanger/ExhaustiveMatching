@@ -92,6 +92,7 @@ depending on the version of the package you are using. See the table below.
 
 | Package Version      | Minimum Visual Studio Version                  | C# Language |
 | -------------------- | ---------------------------------------------- | ----------- |
+| 3.8.*major*.*minor*  | Visual Studio 2019 version 16.8, .NET 5        | C# 9        |
 | 3.3.*major*.*minor*  | Visual Studio 2019 version 16.3, .NET Core 3.0 | C# 8        |
 | 2.10.*major*.*minor* | Visual Studio 2017 version 15.9                | C# 7.3      |
 | 1.3.*major*.*minor*  | Visual Studio 2015 Update 3                    | C# 6.0      |
@@ -129,7 +130,7 @@ the analyzer will report an error for any missing enum cases.
 switch(dayOfWeek)
 {
     default:
-        throw ExhaustiveMatch.Failed(dayOfWeek);
+       throw ExhaustiveMatch.Failed(dayOfWeek);
     case DayOfWeek.Monday:
     case DayOfWeek.Tuesday:
     case DayOfWeek.Wednesday:
