@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Linq;
 
 namespace ExhaustiveMatching
@@ -104,21 +103,5 @@ namespace ExhaustiveMatching
         //   ArgumentOutOfRangeException
         //
         // Look for throw ExhaustiveMatching.ExhaustiveMatch.Failed....(...)
-
-        //public static ExhaustiveMatchFailedException Failed()
-        //{
-        //    return new ExhaustiveMatchFailedException();
-        //}
-
-        //public static ExhaustiveMatchFailedException Failed<T>(T value)
-        //{
-        //    return new ExhaustiveMatchFailedException(typeof(T), value);
-        //}
-
-        public static InvalidEnumArgumentException InvalidEnumArgument<TEnum>(TEnum value, string paramName)
-            where TEnum : struct, Enum, IConvertible
-        {
-            return new InvalidEnumArgumentException(paramName, value.ToInt32(CultureInfo.InvariantCulture), typeof(TEnum));
-        }
     }
 }

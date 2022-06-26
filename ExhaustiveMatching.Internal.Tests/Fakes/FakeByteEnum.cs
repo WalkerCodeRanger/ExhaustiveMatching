@@ -1,4 +1,4 @@
-namespace ExhaustiveMatching.Tests.Fakes
+namespace ExhaustiveMatching.Internal.Tests.Fakes
 {
     internal enum FakeByteEnum : byte
     {

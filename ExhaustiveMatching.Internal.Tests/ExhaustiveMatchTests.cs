@@ -1,8 +1,8 @@
 using System.ComponentModel;
-using ExhaustiveMatching.Tests.Fakes;
+using ExhaustiveMatching.Internal.Tests.Fakes;
 using Xunit;
 
-namespace ExhaustiveMatching.Tests
+namespace ExhaustiveMatching.Internal.Tests
 {
     public class ExhaustiveMatchTests
     {
