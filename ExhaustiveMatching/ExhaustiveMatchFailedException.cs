@@ -52,7 +52,7 @@ namespace ExhaustiveMatching
             if (failedValue == null)
                 return string.Format(NullObjectValueMessage, typeName);
 
-            return string.Format(ObjectValueMessage, typeName, failedValue?.GetType());
+            return string.Format(ObjectValueMessage, typeName, failedValue.GetType());
         }
 
         private static string GetTypeName(Type type)
