@@ -23,37 +23,36 @@ namespace ExhaustiveMatching.Tests
         {
             const string expectedMessage = "'ExhaustiveMatching.Tests.Fakes.ExampleEnum.Yes' was not matched. Match is supposed to be exhaustive.";
 
-            var ex = ExhaustiveMatch.Failed(ExampleEnum.Yes);
+            var ex = ExhaustiveMatch.Failed(FakeIntEnum.Yes);
 
             Assert.Equal(expectedMessage, ex.Message);
-            Assert.Equal(ExampleEnum.Yes, ex.FailedValue);
-            Assert.Equal(typeof(ExampleEnum), ex.MatchingType);
+            Assert.Equal(FakeIntEnum.Yes, ex.FailedValue);
+            Assert.Equal(typeof(FakeIntEnum), ex.MatchingType);
         }
 
         [Fact]
         public void InvalidEnumValueGivesInvalidEnumMessage()
         {
-            const ExampleEnum invalidValue = (ExampleEnum)123;
+            const FakeIntEnum invalidValue = (FakeIntEnum)123;
             const string expectedMessage = "The value 123 is not valid for enum type 'ExhaustiveMatching.Tests.Fakes.ExampleEnum'. Match is supposed to be exhaustive.";
 
             var ex = ExhaustiveMatch.Failed(invalidValue);
 
             Assert.Equal(expectedMessage, ex.Message);
             Assert.Equal(invalidValue, ex.FailedValue);
-            Assert.Equal(typeof(ExampleEnum), ex.MatchingType);
+            Assert.Equal(typeof(FakeIntEnum), ex.MatchingType);
         }
 
         [Fact]
         public void NullValueForNullableEnumGivesNullObjectMessage()
         {
             const string expectedMessage = "The value 'null' was not matched when matching a 'ExhaustiveMatching.Tests.Fakes.ExampleEnum?'. Match is supposed to be exhaustive.";
-            ExampleEnum? value = default;
 
-            var ex = ExhaustiveMatch.Failed(value);
+            var ex = ExhaustiveMatch.Failed((FakeIntEnum?)null);
 
             Assert.Equal(expectedMessage, ex.Message);
             Assert.Null(ex.FailedValue);
-            Assert.Equal(typeof(ExampleEnum?), ex.MatchingType);
+            Assert.Equal(typeof(FakeIntEnum?), ex.MatchingType);
         }
 
         [Fact]

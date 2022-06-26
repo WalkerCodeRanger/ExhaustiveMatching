@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -11,7 +11,7 @@ namespace ExhaustiveMatching
         private const string EnumValueMessage = "'{0}.{1}' was not matched. Match is supposed to be exhaustive.";
         private const string InvalidEnumMessage = "The value {1} is not valid for enum type '{0}'. Match is supposed to be exhaustive.";
         private const string ObjectValueMessage = "Object of type '{1}' was not matched when matching a '{0}'. Match is supposed to be exhaustive.";
-        private const string NUllObjectValueMessage = "The value 'null' was not matched when matching a '{0}'. Match is supposed to be exhaustive.";
+        private const string NullObjectValueMessage = "The value 'null' was not matched when matching a '{0}'. Match is supposed to be exhaustive.";
 
         /// <summary>
         /// The type of value that was being matched on
@@ -50,7 +50,7 @@ namespace ExhaustiveMatching
             }
 
             if (failedValue == null)
-                return string.Format(NUllObjectValueMessage, typeName);
+                return string.Format(NullObjectValueMessage, typeName);
 
             return string.Format(ObjectValueMessage, typeName, failedValue?.GetType());
         }

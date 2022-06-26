@@ -1,6 +1,6 @@
 namespace ExhaustiveMatching.Tests.Fakes
 {
-    internal enum ExampleEnum
+    internal enum FakeIntEnum
     {
         No = 0,
         Yes
