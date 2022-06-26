@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Semantics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,9 +24,9 @@ namespace ExhaustiveMatching.Analyzer.Enums
             SyntaxToken switchKeyword,
             IEnumerable<ISymbol> unusedSymbols)
         {
-            foreach (var unusedSymbol in unusedSymbols.OrderBy(s => s))
+            var unusedSymbolNames = unusedSymbols.Select(s => s.ToErrorDisplayString());
+            foreach (var symbolName in unusedSymbolNames.OrderBy(s => s))
             {
-                var symbolName = unusedSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
                 var diagnostic = Diagnostic.Create(NotExhaustiveEnumSwitch, switchKeyword.GetLocation(), symbolName);
                 context.ReportDiagnostic(diagnostic);
             }

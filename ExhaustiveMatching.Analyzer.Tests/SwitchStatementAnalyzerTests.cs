@@ -74,9 +74,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
             await VerifyCSharpDiagnosticsAsync(source, expectedFriday, expectedSunday);
         }
 
-
         [Fact]
-        public async Task SwitchOnNullableEnum()
+        public async Task SwitchOnNullableEnumIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "DayOfWeek? dayOfWeek";
             const string test = @"
@@ -110,7 +109,6 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             await VerifyCSharpDiagnosticsAsync(CodeContext.Basic(args, test), expectedNull, expectedFriday, expectedSunday);
         }
-
 
         [Fact]
         public async Task SwitchOnClosedThrowingExhaustiveMatchFailedIsNotExhaustiveReportsDiagnostic()
@@ -690,6 +688,7 @@ namespace TestNamespace
             var source = CodeContext.Shapes(args, test);
             // TODO type name is bad
             var expected1 = DiagnosticResult
+                            // TODO the type in this error message is wrong
                             .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.")
                             .AddLocation(source, 1);
             var expected2 = DiagnosticResult
