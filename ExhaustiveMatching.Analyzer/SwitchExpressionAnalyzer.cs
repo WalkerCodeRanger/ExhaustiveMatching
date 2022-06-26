@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Analysis;
 using ExhaustiveMatching.Analyzer.Enums.Semantics;
-using ExhaustiveMatching.Analyzer.Enums.Utility;
 using ExhaustiveMatching.Analyzer.Semantics;
 using ExhaustiveMatching.Analyzer.Syntax;
 using Microsoft.CodeAnalysis;
@@ -58,8 +58,8 @@ namespace ExhaustiveMatching.Analyzer
         private static void AnalyzeSwitchOnEnum(
             SyntaxNodeAnalysisContext context,
             SwitchExpressionSyntax switchExpression,
-            ITypeSymbol type,
-            bool nullRequired = false)
+            ITypeSymbol enumType,
+            bool nullRequired)
         {
             var patterns = switchExpression.Arms.Select(a => a.Pattern).ToList();
 
@@ -67,14 +67,8 @@ namespace ExhaustiveMatching.Analyzer
             if (nullRequired && !patterns.Any(PatternSyntaxExtensions.IsNullPattern))
                 Diagnostics.ReportNotExhaustiveNullableEnumSwitch(context, switchExpression);
 
-            var symbolsUsed = patterns.OfType<ConstantPatternSyntax>().Select(p => context.GetSymbol(p.Expression))
-                                      .ToHashSet();
-
-            var allSymbols = type.GetMembers().Where(m => m.Kind == SymbolKind.Field);
-
-            // Use where instead of Except because we have a set
-            var unusedSymbols = allSymbols.Where(m => !symbolsUsed.Contains(m));
-
+            var caseExpressions = patterns.OfType<ConstantPatternSyntax>().Select(p => p.Expression);
+            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, enumType, caseExpressions);
             Diagnostics.ReportNotExhaustiveEnumSwitch(context, switchExpression, unusedSymbols);
         }
 

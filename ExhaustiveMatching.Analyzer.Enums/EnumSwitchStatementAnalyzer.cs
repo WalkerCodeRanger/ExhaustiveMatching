@@ -52,8 +52,8 @@ namespace ExhaustiveMatching.Analyzer.Enums
         private static void AnalyzeSwitchOnEnum(
             SyntaxNodeAnalysisContext context,
             SwitchStatementSyntax switchStatement,
-            ITypeSymbol type,
-            bool nullRequired = false)
+            ITypeSymbol enumType,
+            bool nullRequired)
         {
             var caseSwitchLabels = switchStatement.CaseSwitchLabels().ToReadOnlyList();
 
@@ -61,7 +61,8 @@ namespace ExhaustiveMatching.Analyzer.Enums
             if (nullRequired && !caseSwitchLabels.Any(l => l.IsNullCase()))
                 Diagnostics.ReportNotExhaustiveNullableEnumSwitch(context, switchStatement);
 
-            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, type, caseSwitchLabels);
+            var caseExpressions = caseSwitchLabels.Select(l => l.Value);
+            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, enumType, caseExpressions);
             Diagnostics.ReportNotExhaustiveEnumSwitch(context, switchStatement, unusedSymbols);
         }
     }

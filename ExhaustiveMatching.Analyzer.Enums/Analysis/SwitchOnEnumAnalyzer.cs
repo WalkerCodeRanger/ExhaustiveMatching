@@ -13,9 +13,9 @@ namespace ExhaustiveMatching.Analyzer.Enums.Analysis
         public static IEnumerable<ISymbol> UnusedEnumValues(
             SyntaxNodeAnalysisContext context,
             ITypeSymbol enumType,
-            IReadOnlyList<CaseSwitchLabelSyntax> caseSwitchLabels)
+            IEnumerable<ExpressionSyntax> caseExpressions)
         {
-            var symbolsUsed = caseSwitchLabels.Select(l => context.GetSymbol(l.Value)).ToHashSet();
+            var symbolsUsed = caseExpressions.Select(e => context.GetSymbol(e)).ToHashSet();
 
             var allSymbols = enumType.GetMembers().Where(m => m.Kind == SymbolKind.Field).ToArray();
 

@@ -77,7 +77,8 @@ namespace ExhaustiveMatching.Analyzer
             if (nullRequired && !caseSwitchLabels.Any(CaseSwitchLabelSyntaxExtensions.IsNullCase))
                 Diagnostics.ReportNotExhaustiveNullableEnumSwitch(context, switchStatement);
 
-            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, enumType, caseSwitchLabels);
+            var caseExpressions = caseSwitchLabels.Select(l => l.Value);
+            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, enumType, caseExpressions);
             Diagnostics.ReportNotExhaustiveEnumSwitch(context, switchStatement, unusedSymbols);
         }
 
