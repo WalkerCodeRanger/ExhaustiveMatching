@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace ExhaustiveMatching.Analyzer
+namespace ExhaustiveMatching.Analyzer.Semantics
 {
     public static class SymbolExtensions
     {

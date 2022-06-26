@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using ExhaustiveMatching.Analyzer.Tests.Verifiers;
+using ExhaustiveMatching.Analyzer.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 

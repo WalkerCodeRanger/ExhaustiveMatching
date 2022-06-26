@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
 using Xunit;
 
-namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
+namespace ExhaustiveMatching.Analyzer.Testing.Verifiers
 {
     /// <summary>
     /// Superclass of all Unit tests made for diagnostics with code fixes.

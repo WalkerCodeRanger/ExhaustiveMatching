@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ExhaustiveMatching.Analyzer
+namespace ExhaustiveMatching.Analyzer.Syntax
 {
     public static class ExpressionSyntaxExtensions
     {

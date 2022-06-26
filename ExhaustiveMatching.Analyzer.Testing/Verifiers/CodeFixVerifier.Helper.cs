@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 
-namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
+namespace ExhaustiveMatching.Analyzer.Testing.Verifiers
 {
     /// <summary>
     /// Diagnostic Producer class with extra methods dealing with applying code fixes

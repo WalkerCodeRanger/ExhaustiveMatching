@@ -3,12 +3,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ExhaustiveMatching.Analyzer.Tests.Helpers;
+using ExhaustiveMatching.Analyzer.Testing.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 
-namespace ExhaustiveMatching.Analyzer.Tests.Verifiers
+namespace ExhaustiveMatching.Analyzer.Testing.Verifiers
 {
     /// <summary>
     /// Superclass of all Unit Tests for DiagnosticAnalyzers

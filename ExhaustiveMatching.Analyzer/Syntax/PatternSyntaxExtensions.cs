@@ -1,7 +1,7 @@
 using ExhaustiveMatching.Analyzer.Enums.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExhaustiveMatching.Analyzer
+namespace ExhaustiveMatching.Analyzer.Syntax
 {
     internal static class PatternSyntaxExtensions
     {

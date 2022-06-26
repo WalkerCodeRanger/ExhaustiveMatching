@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExhaustiveMatching.Analyzer
+namespace ExhaustiveMatching.Analyzer.Utility
 {
     public static class EnumerableExtensions
     {

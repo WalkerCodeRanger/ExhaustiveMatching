@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace ExhaustiveMatching.Analyzer.Tests.Helpers
+namespace ExhaustiveMatching.Analyzer.Testing.Helpers
 {
     /// <summary>
     /// Location where the diagnostic appears, as determined by path, line number, and column number.

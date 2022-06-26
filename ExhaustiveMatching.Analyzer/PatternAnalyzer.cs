@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using ExhaustiveMatching.Analyzer.Semantics;
+using ExhaustiveMatching.Analyzer.Syntax;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;

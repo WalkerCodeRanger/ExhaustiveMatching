@@ -2,6 +2,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using ExhaustiveMatching.Analyzer.Enums.Semantics;
 using ExhaustiveMatching.Analyzer.Enums.Utility;
+using ExhaustiveMatching.Analyzer.Semantics;
+using ExhaustiveMatching.Analyzer.Syntax;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;

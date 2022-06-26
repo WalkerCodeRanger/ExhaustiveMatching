@@ -1,4 +1,5 @@
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Semantics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;

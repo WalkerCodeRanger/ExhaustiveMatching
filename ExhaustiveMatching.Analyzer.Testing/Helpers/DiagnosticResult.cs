@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
-namespace ExhaustiveMatching.Analyzer.Tests.Helpers
+namespace ExhaustiveMatching.Analyzer.Testing.Helpers
 {
     /// <summary>
     /// Struct that stores information about a Diagnostic appearing in a source

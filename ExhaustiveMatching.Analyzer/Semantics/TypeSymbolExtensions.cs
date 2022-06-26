@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Utility;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ExhaustiveMatching.Analyzer
+namespace ExhaustiveMatching.Analyzer.Semantics
 {
     internal static class TypeSymbolExtensions
     {
@@ -98,7 +99,7 @@ namespace ExhaustiveMatching.Analyzer
             INamedTypeSymbol closedAttributeType)
         {
             return new[] { type }
-                .SelectRecursive(t => t.GetCaseTypes(closedAttributeType))
+                .SelectRecursive(t => GetCaseTypes(t, closedAttributeType))
                 .Where(t => !t.HasAttribute(closedAttributeType));
         }
 
