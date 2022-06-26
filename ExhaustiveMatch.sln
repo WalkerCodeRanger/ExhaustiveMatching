@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32314.265
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Analyzer", "ExhaustiveMatching.Analyzer\ExhaustiveMatching.Analyzer.csproj", "{B6858B7F-9FE4-4047-A1C1-FEA6F4D22A78}"
 EndProject
@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Examples", "ExhaustiveMatching.Examples\ExhaustiveMatching.Examples.csproj", "{DB0EFE16-B3AF-44F0-8139-B4AC1C4F1E99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhaustiveMatching.Analyzer.Enums", "ExhaustiveMatching.Analyzer.Enums\ExhaustiveMatching.Analyzer.Enums.csproj", "{CDA82710-7435-4B2C-96D4-9C53978338FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{DB0EFE16-B3AF-44F0-8139-B4AC1C4F1E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB0EFE16-B3AF-44F0-8139-B4AC1C4F1E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB0EFE16-B3AF-44F0-8139-B4AC1C4F1E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA82710-7435-4B2C-96D4-9C53978338FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA82710-7435-4B2C-96D4-9C53978338FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA82710-7435-4B2C-96D4-9C53978338FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA82710-7435-4B2C-96D4-9C53978338FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
