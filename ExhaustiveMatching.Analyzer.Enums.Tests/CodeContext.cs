@@ -4,7 +4,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Tests
     {
         public static string Basic(string args, string body)
         {
-            const string context = @"using System; // DayOfWeek
+            const string context = @"using System;
 using System.ComponentModel; // InvalidEnumArgumentException
 
 class TestClass
@@ -18,17 +18,17 @@ class TestClass
 
         public static string CoinFlip(string args, string body)
         {
-            const string context = @"using System; // DayOfWeek
+            const string context = @"using System;
 using System.ComponentModel; // InvalidEnumArgumentException
+
+enum CoinFlip {{ Heads = 1, Tails }}
 
 class TestClass
 {{
     void TestMethod({0})
     {{{1}
     }}
-}}
-
-enum CoinFlip {{ Heads, Tails }}";
+}}";
             return string.Format(context, args, body);
         }
     }

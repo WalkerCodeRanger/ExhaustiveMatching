@@ -4,7 +4,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
     {
         public static string Basic(string args, string body)
         {
-            const string context = @"using System; // DayOfWeek
+            const string context = @"using System;
 using System.ComponentModel; // InvalidEnumArgumentException
 using ExhaustiveMatching;
 
@@ -19,24 +19,24 @@ class TestClass
 
         public static string CoinFlip(string args, string body)
         {
-            const string context = @"using System; // DayOfWeek
+            const string context = @"using System;
 using System.ComponentModel; // InvalidEnumArgumentException
 using ExhaustiveMatching;
+
+enum CoinFlip {{ Heads = 1, Tails }}
 
 class TestClass
 {{
     void TestMethod({0})
     {{{1}
     }}
-}}
-
-enum CoinFlip {{ Heads, Tails }}";
+}}";
             return string.Format(context, args, body);
         }
 
         public static string Shapes(string args, string body)
         {
-            const string context = @"using System; // DayOfWeek
+            const string context = @"using System;
 using System.ComponentModel; // InvalidEnumArgumentException
 using ExhaustiveMatching;
 using TestNamespace;
@@ -66,7 +66,7 @@ namespace TestNamespace
 
         public static string Result(string args, string body)
         {
-            const string context = @"using System; // Result type
+            const string context = @"using System;
 using System;
 using System.Collections.Generic;
 using ExhaustiveMatching;
@@ -100,7 +100,7 @@ namespace TestNamespace
 
         public static string ResultRecord(string args, string body)
         {
-            const string context = @"using System; // Result type
+            const string context = @"using System;
 using System;
 using System.Collections.Generic;
 using ExhaustiveMatching;

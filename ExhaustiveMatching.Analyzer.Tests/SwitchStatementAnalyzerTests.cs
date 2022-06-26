@@ -107,7 +107,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
                                  .Error("EM0001", "Enum value not handled by switch: Sunday")
                                  .AddLocation(source, 1);
 
-            await VerifyCSharpDiagnosticsAsync(CodeContext.Basic(args, test), expectedNull, expectedFriday, expectedSunday);
+            await VerifyCSharpDiagnosticsAsync(source, expectedNull, expectedFriday, expectedSunday);
         }
 
         [Fact]

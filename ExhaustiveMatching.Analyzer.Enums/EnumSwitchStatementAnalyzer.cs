@@ -15,7 +15,7 @@ namespace ExhaustiveMatching.Analyzer.Enums
         {
             if (!IsExhaustive(context, switchStatement)) return;
 
-            //ReportWhenGuardNotSupported(context, switchStatement);
+            ReportCasePatternsNotSupported(context, switchStatement);
 
             var switchOnType = context.GetExpressionType(switchStatement.Expression);
 
@@ -38,16 +38,14 @@ namespace ExhaustiveMatching.Analyzer.Enums
                    ?? false;
         }
 
-        //private static void ReportWhenGuardNotSupported(
-        //    SyntaxNodeAnalysisContext context,
-        //    SwitchStatementSyntax switchStatement)
-        //{
-        //    var unsupportedLabels = switchStatement.Labels().Where(l => !l.IsTraditional());
-        //    foreach (var label in unsupportedLabels)
-        //        context.ReportDiagnostic();
-        //    if (patternLabel.WhenClause != null)
-        //        context.ReportWhenClauseNotSupported(patternLabel.WhenClause);
-        //}
+        private static void ReportCasePatternsNotSupported(
+            SyntaxNodeAnalysisContext context,
+            SwitchStatementSyntax switchStatement)
+        {
+            var unsupportedLabels = switchStatement.Labels().Where(l => !l.IsTraditional());
+            foreach (var label in unsupportedLabels)
+                Diagnostics.ReportCasePatternNotSupported(context, label);
+        }
 
         private static void AnalyzeSwitchOnEnum(
             SyntaxNodeAnalysisContext context,

@@ -121,7 +121,7 @@
     <value>A switch on an enum type marked as exhaustive by throwing InvalidEnumArgumentException is not exhustive. It omits one or more enum values from the cases.</value>
   </data>
   <data name="EM0001Message" xml:space="preserve">
-    <value>Enum value not handled by switch: {0}</value>
+    <value>Enum value not handled by switch '{0}'</value>
   </data>
   <data name="EM0001Title" xml:space="preserve">
     <value>Switch on Enum Not Exhaustive</value>
@@ -130,9 +130,18 @@
     <value>A switch on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException is not exhustive. It omits null from the cases.</value>
   </data>
   <data name="EM0002Message" xml:space="preserve">
-    <value>null value not handled by switch</value>
+    <value>'null' value not handled by switch</value>
   </data>
   <data name="EM0002Title" xml:space="preserve">
     <value>Switch on Nullable Enum Not Exhaustive</value>
+  </data>
+  <data name="EM0101Description" xml:space="preserve">
+    <value>This case patterns are not supported in exhaustive switchs on enum types.</value>
+  </data>
+  <data name="EM0101Message" xml:space="preserve">
+    <value>Case pattern not supported in exhaustive switch on enum type '{0}'</value>
+  </data>
+  <data name="EM0101Title" xml:space="preserve">
+    <value>Case Pattern Not Supported</value>
   </data>
 </root>

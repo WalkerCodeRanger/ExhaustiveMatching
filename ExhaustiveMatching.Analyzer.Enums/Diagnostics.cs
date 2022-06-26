@@ -10,8 +10,9 @@ namespace ExhaustiveMatching.Analyzer.Enums
 {
     internal static class Diagnostics
     {
-        public static ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveNullableEnumSwitch);
+        public static ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+            => ImmutableArray.Create(NotExhaustiveEnumSwitch, NotExhaustiveNullableEnumSwitch,
+                CasePatternNotSupported);
 
         public static void ReportNotExhaustiveEnumSwitch(
             SyntaxNodeAnalysisContext context,
@@ -27,16 +28,23 @@ namespace ExhaustiveMatching.Analyzer.Enums
             var unusedSymbolNames = unusedSymbols.Select(s => s.ToErrorDisplayString());
             foreach (var symbolName in unusedSymbolNames.OrderBy(s => s))
             {
-                var diagnostic = Diagnostic.Create(NotExhaustiveEnumSwitch, switchKeyword.GetLocation(), symbolName);
+                var diagnostic = Diagnostic.Create(NotExhaustiveEnumSwitch,
+                    switchKeyword.GetLocation(), symbolName);
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
         public static void ReportNotExhaustiveNullableEnumSwitch(
             SyntaxNodeAnalysisContext context,
-            SwitchStatementSyntax switchStatement) =>
-            context.ReportDiagnostic(Diagnostic.Create(NotExhaustiveNullableEnumSwitch,
+            SwitchStatementSyntax switchStatement)
+            => context.ReportDiagnostic(Diagnostic.Create(NotExhaustiveNullableEnumSwitch,
                 switchStatement.SwitchKeyword.GetLocation()));
+
+        public static void ReportCasePatternNotSupported(
+            SyntaxNodeAnalysisContext context,
+            SwitchLabelSyntax switchLabel)
+            => context.ReportDiagnostic(Diagnostic.Create(CasePatternNotSupported,
+                switchLabel.GetLocation(), switchLabel));
 
         private static readonly LocalizableString EM0001Title = LoadString(nameof(Resources.EM0001Title));
         private static readonly LocalizableString EM0001Message = LoadString(nameof(Resources.EM0001Message));
@@ -44,6 +52,9 @@ namespace ExhaustiveMatching.Analyzer.Enums
         private static readonly LocalizableString EM0002Title = LoadString(nameof(Resources.EM0002Title));
         private static readonly LocalizableString EM0002Message = LoadString(nameof(Resources.EM0002Message));
         private static readonly LocalizableString EM0002Description = LoadString(Resources.EM0002Description);
+        private static readonly LocalizableString EM0101Title = LoadString(nameof(Resources.EM0101Title));
+        private static readonly LocalizableString EM0101Message = LoadString(nameof(Resources.EM0101Message));
+        private static readonly LocalizableString EM0101Description = LoadString(Resources.EM0101Description);
 
         private const string Category = "Logic";
 
@@ -55,7 +66,13 @@ namespace ExhaustiveMatching.Analyzer.Enums
             = new DiagnosticDescriptor("EM0002", EM0002Title, EM0002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0002Description);
 
+        public static readonly DiagnosticDescriptor CasePatternNotSupported
+            = new DiagnosticDescriptor("EM0101", EM0101Title, EM0101Message, Category,
+                DiagnosticSeverity.Error, isEnabledByDefault: true, EM0101Description);
+
         private static LocalizableResourceString LoadString(string name)
             => new LocalizableResourceString(name, Resources.ResourceManager, typeof(Resources));
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace Examples.ReadMe
     public static class CoinFlipExample
     {
         #region snippet
-        public enum CoinFlip { Heads, Tails }
+        public enum CoinFlip { Heads = 1, Tails }
         #endregion
 
         public static void Example(CoinFlip coinFlip)

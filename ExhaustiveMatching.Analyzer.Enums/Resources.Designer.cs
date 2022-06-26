@@ -70,7 +70,7 @@ namespace ExhaustiveMatching.Analyzer.Enums {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum value not handled by switch: {0}.
+        ///   Looks up a localized string similar to Enum value not handled by switch &apos;{0}&apos;.
         /// </summary>
         internal static string EM0001Message {
             get {
@@ -97,7 +97,7 @@ namespace ExhaustiveMatching.Analyzer.Enums {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to null value not handled by switch.
+        ///   Looks up a localized string similar to &apos;null&apos; value not handled by switch.
         /// </summary>
         internal static string EM0002Message {
             get {
@@ -111,6 +111,33 @@ namespace ExhaustiveMatching.Analyzer.Enums {
         internal static string EM0002Title {
             get {
                 return ResourceManager.GetString("EM0002Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This case patterns are not supported in exhaustive switchs on enum types..
+        /// </summary>
+        internal static string EM0101Description {
+            get {
+                return ResourceManager.GetString("EM0101Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Case pattern not supported in exhaustive switch on enum type &apos;{0}&apos;.
+        /// </summary>
+        internal static string EM0101Message {
+            get {
+                return ResourceManager.GetString("EM0101Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Case Pattern Not Supported.
+        /// </summary>
+        internal static string EM0101Title {
+            get {
+                return ResourceManager.GetString("EM0101Title", resourceCulture);
             }
         }
     }
