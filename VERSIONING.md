@@ -16,7 +16,7 @@ version of the package to support.
 * `ArgumentOutOfRangeException`
 * `InvalidOperationException`
 
-### C# 7
+### C# 7.0
 
 * Pattern Matching
   * [Declaration Patterns](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/patterns#declaration-and-type-patterns)
