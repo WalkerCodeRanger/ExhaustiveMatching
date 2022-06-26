@@ -201,9 +201,6 @@ namespace ExhaustiveMatching.Analyzer
         }
 
         private static LocalizableResourceString LoadString(string name)
-        {
-            return new LocalizableResourceString(name,
-                Resources.ResourceManager, typeof(Resources));
-        }
+            => new LocalizableResourceString(name, Resources.ResourceManager, typeof(Resources));
     }
 }

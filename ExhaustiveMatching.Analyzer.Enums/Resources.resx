@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EM0001Description" xml:space="preserve">
-    <value>A switch on an enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits one or more enum values from the cases.</value>
+    <value>A switch on an enum type marked as exhaustive by throwing InvalidEnumArgumentException is not exhustive. It omits one or more enum values from the cases.</value>
   </data>
   <data name="EM0001Message" xml:space="preserve">
     <value>Enum value not handled by switch: {0}</value>
@@ -127,120 +127,12 @@
     <value>Switch on Enum Not Exhaustive</value>
   </data>
   <data name="EM0002Description" xml:space="preserve">
-    <value>A switch on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException or ExhaustiveMatchFailedException is not exhustive. It omits null from the cases.</value>
+    <value>A switch on a nullable enum type marked as exhaustive by throwing InvalidEnumArgumentException is not exhustive. It omits null from the cases.</value>
   </data>
   <data name="EM0002Message" xml:space="preserve">
     <value>null value not handled by switch</value>
   </data>
   <data name="EM0002Title" xml:space="preserve">
     <value>Switch on Nullable Enum Not Exhaustive</value>
-  </data>
-  <data name="EM0003Description" xml:space="preserve">
-    <value>A switch on a closed type marked as exhaustive by throwing ExhaustiveMatchFailedException is not exhaustive. It will fail to match one or more possible types.</value>
-  </data>
-  <data name="EM0003Message" xml:space="preserve">
-    <value>Subtype not handled by switch: {0}</value>
-  </data>
-  <data name="EM0003Title" xml:space="preserve">
-    <value>Switch on Closed Type Not Exhaustive</value>
-  </data>
-  <data name="EM0011Description" xml:space="preserve">
-    <value>A concrete subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
-  </data>
-  <data name="EM0011Message" xml:space="preserve">
-    <value>{0} is not a case of its closed supertype: {1}</value>
-  </data>
-  <data name="EM0011Title" xml:space="preserve">
-    <value>Concrete Subtype of a Closed Type Must Be a Case</value>
-  </data>
-  <data name="EM0012Description" xml:space="preserve">
-    <value>A closed type's case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface.</value>
-  </data>
-  <data name="EM0012Message" xml:space="preserve">
-    <value>Closed type case is not a direct subtype: {0}</value>
-  </data>
-  <data name="EM0012Title" xml:space="preserve">
-    <value>Closed Type Case Must Be a Direct Subtype</value>
-  </data>
-  <data name="EM0013Description" xml:space="preserve">
-    <value>A closed type's case must be a direct subtype of the closed type. That is, it must inherit from the class or implement the interface.</value>
-  </data>
-  <data name="EM0013Message" xml:space="preserve">
-    <value>Closed type case is not a subtype: {0}</value>
-  </data>
-  <data name="EM0013Title" xml:space="preserve">
-    <value>Closed Type Case Must Be a Subtype</value>
-  </data>
-  <data name="EM0014Description" xml:space="preserve">
-    <value>A concrete subtype of a type marked with the "Closed" attribute must be be covered by some leaf case type.</value>
-  </data>
-  <data name="EM0014Message" xml:space="preserve">
-    <value>An exhaustive match on {1} might not cover the type {0}. It must be a subtype of a leaf type of the case type tree.</value>
-  </data>
-  <data name="EM0014Title" xml:space="preserve">
-    <value>Concrete Subtype of a Closed Type Must Be a Covered</value>
-  </data>
-  <data name="EM0015Description" xml:space="preserve">
-    <value>An open interface subtype of a type marked with the "Closed" attribute must be a case of the closed type.</value>
-  </data>
-  <data name="EM0015Message" xml:space="preserve">
-    <value>Open interface {0} is not a case of its closed supertype: {1}</value>
-  </data>
-  <data name="EM0015Title" xml:space="preserve">
-    <value>Open Interface Subtype of a Closed Type Must Be a Case</value>
-  </data>
-  <data name="EM0100Description" xml:space="preserve">
-    <value>An exhaustive switch does not support cases with "when" guards</value>
-  </data>
-  <data name="EM0100Message" xml:space="preserve">
-    <value>When guard is not supported in an exhaustive switch</value>
-  </data>
-  <data name="EM0100Title" xml:space="preserve">
-    <value>When Guards Not Supported</value>
-  </data>
-  <data name="EM0101Description" xml:space="preserve">
-    <value>This type of case pattern is not supported in exhaustive switchs. Only "Type name" and "null" are supported.</value>
-  </data>
-  <data name="EM0101Message" xml:space="preserve">
-    <value>Case pattern not supported in exhaustive switch: {0}</value>
-  </data>
-  <data name="EM0101Title" xml:space="preserve">
-    <value>Case Pattern Not Supported</value>
-  </data>
-  <data name="EM0102Description" xml:space="preserve">
-    <value>An exhaustive switch on an open type is not supported. The expression being switched on must be an enum or closed.</value>
-  </data>
-  <data name="EM0102Message" xml:space="preserve">
-    <value>Exhaustive switch must be on enum or closed type, was on: {0}</value>
-  </data>
-  <data name="EM0102Title" xml:space="preserve">
-    <value>Open Type Not Supported</value>
-  </data>
-  <data name="EM0103Description" xml:space="preserve">
-    <value>Cases must match on types that are case types inheriting from the type being matched on</value>
-  </data>
-  <data name="EM0103Message" xml:space="preserve">
-    <value>{0} is not a case type inheriting from type being matched: {1}</value>
-  </data>
-  <data name="EM0103Title" xml:space="preserve">
-    <value>Match Must Be On Case Type</value>
-  </data>
-  <data name="EM0104Description" xml:space="preserve">
-    <value>It is not possible to specify the same 'Closed' attribute more than once on a type declaration.</value>
-  </data>
-  <data name="EM0104Message" xml:space="preserve">
-    <value>Duplicate 'Closed' attribute</value>
-  </data>
-  <data name="EM0104Title" xml:space="preserve">
-    <value>Duplicate Closed Attribute</value>
-  </data>
-  <data name="EM0105Description" xml:space="preserve">
-    <value>A case type can be specified only once for a given closed type declaration.</value>
-  </data>
-  <data name="EM0105Message" xml:space="preserve">
-    <value>Duplicate case type: {0}</value>
-  </data>
-  <data name="EM0105Title" xml:space="preserve">
-    <value>Duplicate Case Type</value>
   </data>
 </root>

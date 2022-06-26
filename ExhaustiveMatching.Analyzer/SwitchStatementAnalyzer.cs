@@ -52,11 +52,11 @@ namespace ExhaustiveMatching.Analyzer
 
             // If there is no default section or it doesn't throw, we assume the
             // dev doesn't want an exhaustive match
-            if (throwStatement != null)
-                return ExpressionAnalyzer.SwitchStatementKindForThrown(context,
-                    throwStatement.Expression);
+            if (throwStatement == null)
+                return new SwitchStatementKind(false, false);
 
-            return new SwitchStatementKind(false, false);
+            return ExpressionAnalyzer.SwitchStatementKindForThrown(context,
+                throwStatement.Expression);
         }
 
         private static void AnalyzeSwitchOnEnum(

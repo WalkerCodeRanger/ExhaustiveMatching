@@ -20,8 +20,8 @@ namespace ExhaustiveMatching.Analyzer
             var invalidEnumArgumentExceptionType =
                 context.Compilation.GetTypeByMetadataName(TypeNames.InvalidEnumArgumentException);
 
-            var isExhaustiveMatchFailedException = exceptionType.Equals(exhaustiveMatchFailedExceptionType);
-            var isInvalidEnumArgumentException = exceptionType.Equals(invalidEnumArgumentExceptionType);
+            var isExhaustiveMatchFailedException = exceptionType.Equals(exhaustiveMatchFailedExceptionType, SymbolEqualityComparer.IncludeNullability);
+            var isInvalidEnumArgumentException = exceptionType.Equals(invalidEnumArgumentExceptionType, SymbolEqualityComparer.IncludeNullability);
             var isExhaustive = isExhaustiveMatchFailedException || isInvalidEnumArgumentException;
 
             return new SwitchStatementKind(isExhaustive, isInvalidEnumArgumentException);

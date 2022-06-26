@@ -277,7 +277,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exhustive switch does not support cases with &quot;when&quot; guards.
+        ///   Looks up a localized string similar to An exhaustive switch does not support cases with &quot;when&quot; guards.
         /// </summary>
         internal static string EM0100Description {
             get {
@@ -331,7 +331,7 @@ namespace ExhaustiveMatching.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An exhuastive switch on an open type is not supported. The expression being switched on must be an enum or closed..
+        ///   Looks up a localized string similar to An exhaustive switch on an open type is not supported. The expression being switched on must be an enum or closed..
         /// </summary>
         internal static string EM0102Description {
             get {
