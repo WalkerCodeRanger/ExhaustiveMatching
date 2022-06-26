@@ -6,7 +6,7 @@ using Xunit;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    public class SwitchExpressionAnalyzerTests : CodeFixVerifier
+    public class SwitchExpressionAnalyzerTests : DiagnosticVerifier
     {
         [Fact]
         public async Task SwitchOnEnumThrowingInvalidEnumIsNotExhaustiveReportsDiagnostic()
@@ -106,7 +106,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         [Fact]
-        public async Task ExhaustiveObjectSwitchAllowsLiteralTypeExpressionSyntax() {
+        public async Task ExhaustiveObjectSwitchAllowsLiteralTypeExpressionSyntax()
+        {
             const string args = "Shape shape";
             const string test = @"
         var result = shape switch
@@ -572,8 +573,6 @@ namespace TestNamespace
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new ExhaustiveMatchAnalyzer();
-        }
+            => new ExhaustiveMatchAnalyzer();
     }
 }

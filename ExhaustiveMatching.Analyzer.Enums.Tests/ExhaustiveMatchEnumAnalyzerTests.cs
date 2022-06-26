@@ -3,9 +3,9 @@ using ExhaustiveMatching.Analyzer.Tests.Verifiers;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 
-namespace ExhaustiveMatching.Analyzer.Tests
+namespace ExhaustiveMatching.Analyzer.Enums.Tests
 {
-    public class ExhaustiveMatchAnalyzerTests : DiagnosticVerifier
+    public class ExhaustiveMatchEnumAnalyzerTests : DiagnosticVerifier
     {
         [Fact]
         public async Task EmptyFileReportsNoDiagnostics()
@@ -16,6 +16,8 @@ namespace ExhaustiveMatching.Analyzer.Tests
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-            => new ExhaustiveMatchAnalyzer();
+        {
+            return new ExhaustiveMatchEnumAnalyzer();
+        }
     }
 }

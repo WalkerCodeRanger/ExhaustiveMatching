@@ -6,7 +6,7 @@ using Xunit;
 
 namespace ExhaustiveMatching.Analyzer.Tests
 {
-    public class TypeDeclarationAnalyzerTests : CodeFixVerifier
+    public class TypeDeclarationAnalyzerTests : DiagnosticVerifier
     {
         [Fact]
         public async Task ConcreteSubtypeOfClosedTypeMustBeCase()
@@ -377,8 +377,6 @@ namespace TestNamespace
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return new ExhaustiveMatchAnalyzer();
-        }
+            => new ExhaustiveMatchAnalyzer();
     }
 }
