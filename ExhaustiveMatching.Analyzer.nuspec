@@ -12,7 +12,12 @@
     <description>
 ExhaustiveMatching.Analyzer adds exhaustive matching to C# switch statements and expressions.
 
-Get compiler errors for missing cases in a switch statement or expression. Mark which switches should have exhaustiveness checking by throwing an exception in the default case. Exhaustiveness checking works not just for enums, but for classes and interfaces. Turn them into discriminated unions (aka sum types) by marking them with the 'Closed' attribute and listing the cases. ExhaustiveMatching.Analyzer goes beyond what other languages support by handling full inheritance hierarchies.
+Get compiler errors for missing cases in a switch statement or expression. Mark which switches
+should have exhaustiveness checking by throwing an exception in the default case. Exhaustiveness
+checking works not just for enums, but for classes and interfaces. Turn them into discriminated
+unions (aka sum types) by marking them with the 'Closed' attribute and listing the cases.
+ExhaustiveMatching.Analyzer goes beyond what other languages support by handling full inheritance
+hierarchies.
     </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2019 Jeff Walker</copyright>
