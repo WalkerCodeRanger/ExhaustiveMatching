@@ -4,7 +4,7 @@ namespace ExhaustiveMatching.Analyzer
 {
     internal static class PatternSyntaxExtensions
     {
-        public static bool IsNull(this PatternSyntax pattern)
+        public static bool IsNullPattern(this PatternSyntax pattern)
         {
             return pattern is ConstantPatternSyntax constantPattern
                    && constantPattern.Expression.IsNullLiteral();

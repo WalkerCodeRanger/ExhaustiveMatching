@@ -1,11 +1,11 @@
 using System;
-using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ExhaustiveMatching.Analyzer.Enums
 {
-    public class EnumSwitchStatementAnalyzer
+    internal class EnumSwitchStatementAnalyzer
     {
         public static void Analyze(SyntaxNodeAnalysisContext context, SwitchStatementSyntax switchStatement)
         {
@@ -28,10 +28,7 @@ namespace ExhaustiveMatching.Analyzer.Enums
             SyntaxNodeAnalysisContext context,
             SwitchStatementSyntax switchStatement)
         {
-            var defaultSection =
-                switchStatement.Sections.FirstOrDefault(s => s.Labels.OfType<DefaultSwitchLabelSyntax>().Any());
-
-            var throwStatement = defaultSection?.Statements.OfType<ThrowStatementSyntax>().FirstOrDefault();
+            var throwStatement = switchStatement.DefaultSection()?.FirstThrowStatement();
 
             // If there is no default section or it doesn't throw, we assume the
             // dev doesn't want an exhaustive match

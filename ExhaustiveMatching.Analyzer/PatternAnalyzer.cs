@@ -43,7 +43,7 @@ namespace ExhaustiveMatching.Analyzer
                     break;
                 case DiscardPatternSyntax _:
                 case ConstantPatternSyntax constantPattern
-                    when constantPattern.IsNull():
+                    when constantPattern.IsNullPattern():
                     // Ignored
                     return null;
                 case VarPatternSyntax _:

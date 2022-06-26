@@ -66,7 +66,7 @@ namespace ExhaustiveMatching.Analyzer
                               .ToImmutableHashSet();
 
             // If null were not required, and there were a null case, that would already be a compile error
-            if (nullRequired && !patterns.Any(PatternSyntaxExtensions.IsNull))
+            if (nullRequired && !patterns.Any(PatternSyntaxExtensions.IsNullPattern))
                 context.ReportNotExhaustiveNullableEnumSwitch(switchExpression.SwitchKeyword);
 
             var allSymbols = type.GetMembers()
