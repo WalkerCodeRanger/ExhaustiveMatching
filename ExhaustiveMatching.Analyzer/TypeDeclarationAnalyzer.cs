@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Semantics;
+using ExhaustiveMatching.Analyzer.Semantics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,7 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ExhaustiveMatching.Analyzer
 {
-    public class TypeDeclarationAnalyzer
+    internal class TypeDeclarationAnalyzer
     {
         public static void Analyze(
             SyntaxNodeAnalysisContext context,
@@ -55,9 +57,9 @@ namespace ExhaustiveMatching.Analyzer
                     continue;
 
                 var descriptor = isConcrete
-                    ? ExhaustiveMatchAnalyzer.ConcreteSubtypeMustBeCaseOfClosedType
+                    ? Diagnostics.ConcreteSubtypeMustBeCaseOfClosedType
                     // else isOpenInterface is always true
-                    : ExhaustiveMatchAnalyzer.OpenInterfaceSubtypeMustBeCaseOfClosedType;
+                    : Diagnostics.OpenInterfaceSubtypeMustBeCaseOfClosedType;
 
                 var diagnostic = Diagnostic.Create(descriptor, typeDeclaration.Identifier.GetLocation(),
                     typeSymbol.GetFullName(), superType.GetFullName());
@@ -82,7 +84,7 @@ namespace ExhaustiveMatching.Analyzer
                 if (isCovered)
                     continue;
 
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.SubtypeMustBeCovered,
+                var diagnostic = Diagnostic.Create(Diagnostics.SubtypeMustBeCovered,
                     typeDeclaration.Identifier.GetLocation(), typeSymbol.GetFullName(), superType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
@@ -112,7 +114,7 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var attribute in closedAttributes.Skip(1))
             {
                 var diagnostic = Diagnostic.Create(
-                    ExhaustiveMatchAnalyzer.DuplicateClosedAttribute,
+                    Diagnostics.DuplicateClosedAttribute,
                     attribute.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
@@ -130,7 +132,7 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var (symbol, syntax) in duplicates)
             {
                 var diagnostic = Diagnostic.Create(
-                    ExhaustiveMatchAnalyzer.DuplicateCaseType,
+                    Diagnostics.DuplicateCaseType,
                     syntax.GetLocation(), symbol.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
@@ -176,14 +178,14 @@ namespace ExhaustiveMatching.Analyzer
                         || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol)))
                     {
                         // It's a subtype, just not a direct one
-                        var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeDirectSubtype,
+                        var diagnostic = Diagnostic.Create(Diagnostics.MustBeDirectSubtype,
                             caseTypeSyntax.GetLocation(), caseType.GetFullName());
                         context.ReportDiagnostic(diagnostic);
                     }
                     else
                     {
                         // Not even a subtype
-                        var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MustBeSubtype,
+                        var diagnostic = Diagnostic.Create(Diagnostics.MustBeSubtype,
                             caseTypeSyntax.GetLocation(), caseType.GetFullName());
                         context.ReportDiagnostic(diagnostic);
                     }

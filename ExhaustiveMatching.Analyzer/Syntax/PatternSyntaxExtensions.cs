@@ -1,3 +1,4 @@
+using ExhaustiveMatching.Analyzer.Enums.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExhaustiveMatching.Analyzer

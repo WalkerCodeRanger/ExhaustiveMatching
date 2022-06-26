@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace ExhaustiveMatching.Analyzer
 {
@@ -7,7 +7,7 @@ namespace ExhaustiveMatching.Analyzer
     /// </summary>
     /// <remarks>Types in the ExhaustiveMatching assembly are not referenced to prevent needing to
     /// distribute that assembly as part of the analyzer in addition to the actual dependencies.</remarks>
-    public static class TypeNames
+    internal static class TypeNames
     {
         public const string ExhaustiveMatchFailedException = "ExhaustiveMatching.ExhaustiveMatchFailedException";
         public const string ClosedAttribute = "ExhaustiveMatching.ClosedAttribute";

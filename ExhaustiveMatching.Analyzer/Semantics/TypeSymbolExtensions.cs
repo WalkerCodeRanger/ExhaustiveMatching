@@ -132,34 +132,6 @@ namespace ExhaustiveMatching.Analyzer
             return type.AllInterfaces.Concat(type.BaseClasses());
         }
 
-        public static bool IsEnum(this ITypeSymbol type, SyntaxNodeAnalysisContext context, out ITypeSymbol enumType, out bool nullable)
-        {
-            switch (type.TypeKind)
-            {
-                case TypeKind.Enum:
-                    enumType = type;
-                    nullable = false;
-                    return true;
-                case TypeKind.Struct:
-                    var nullableType = context.Compilation.GetTypeByMetadataName(TypeNames.Nullable);
-                    if (type.OriginalDefinition.Equals(nullableType))
-                    {
-                        type = ((INamedTypeSymbol)type).TypeArguments.Single();
-                        if (type.TypeKind == TypeKind.Enum)
-                        {
-                            enumType = type;
-                            nullable = true;
-                            return true;
-                        }
-                    }
-                    break;
-            }
-
-            enumType = null;
-            nullable = false;
-            return false;
-        }
-
         public static HashSet<ITypeSymbol> GetClosedTypeCases(
             this ITypeSymbol rootType,
             INamedTypeSymbol closedAttributeType)
@@ -213,14 +185,16 @@ namespace ExhaustiveMatching.Analyzer
                 && rootType.TypeKind != TypeKind.Error
                 && namedType.InstanceConstructors
                     .All(c => c.DeclaredAccessibility == Accessibility.Private
-                    || rootType.IsRecord && c.DeclaredAccessibility == Accessibility.Protected && c.Parameters.Length == 1 && SymbolEqualityComparer.Default.Equals(c.Parameters[0].Type, rootType))) {
+                    || rootType.IsRecord && c.DeclaredAccessibility == Accessibility.Protected && c.Parameters.Length == 1 && SymbolEqualityComparer.Default.Equals(c.Parameters[0].Type, rootType)))
+            {
 
                 var nestedTypes = context.SemanticModel.LookupSymbols(0, rootType)
                     .OfType<ITypeSymbol>()
                     .Where(t => t.IsSubtypeOf(rootType))
                     .ToArray();
 
-                if (nestedTypes.All(t => t.IsSealed || t is INamedTypeSymbol n && n.InstanceConstructors.All(c => c.DeclaredAccessibility == Accessibility.Private))) {
+                if (nestedTypes.All(t => t.IsSealed || t is INamedTypeSymbol n && n.InstanceConstructors.All(c => c.DeclaredAccessibility == Accessibility.Private)))
+                {
                     allCases.Add(rootType);
                     allCases.UnionWith(nestedTypes);
 

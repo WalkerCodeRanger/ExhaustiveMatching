@@ -9,7 +9,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Tests
     public class SwitchStatementAnalyzerTests : DiagnosticVerifier
     {
         [Fact]
-        public async Task SwitchOnEnumThrowingInvalidEnumIsNotExhaustiveReportsDiagnostic()
+        public async Task SwitchOnEnumIsNotExhaustiveReportsDiagnostic()
         {
             const string args = "DayOfWeek dayOfWeek";
             const string test = @"

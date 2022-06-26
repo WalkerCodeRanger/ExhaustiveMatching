@@ -1,3 +1,4 @@
+using ExhaustiveMatching.Analyzer.Enums.Semantics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -13,8 +14,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Syntax
         /// be determined (e.g. compile error).</returns>
         public static ITypeSymbol ThrowsType(this ThrowStatementSyntax throwStatement, SyntaxNodeAnalysisContext context)
         {
-            var thrownExpression = throwStatement.Expression;
-            var exceptionType = context.SemanticModel.GetTypeInfo(thrownExpression, context.CancellationToken).Type;
+            var exceptionType = context.GetExpressionType(throwStatement.Expression);
             if (exceptionType == null || exceptionType.TypeKind == TypeKind.Error)
                 return null;
 

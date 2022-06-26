@@ -8,30 +8,6 @@ namespace ExhaustiveMatching.Analyzer
     public static class SyntaxNodeAnalysisContextExtensions
     {
         #region Report Not Exhuastive Diagnostics
-        public static void ReportNotExhaustiveEnumSwitch(
-            this SyntaxNodeAnalysisContext context,
-            SyntaxToken switchKeyword,
-            string[] unusedSymbols)
-        {
-            foreach (var unusedSymbol in unusedSymbols.OrderBy(s => s))
-            {
-                var diagnostic = Diagnostic.Create(
-                    ExhaustiveMatchAnalyzer.NotExhaustiveEnumSwitch,
-                    switchKeyword.GetLocation(), unusedSymbol);
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        public static void ReportNotExhaustiveNullableEnumSwitch(
-            this SyntaxNodeAnalysisContext context,
-            SyntaxToken switchKeyword)
-        {
-            var diagnostic = Diagnostic.Create(
-                ExhaustiveMatchAnalyzer.NotExhaustiveNullableEnumSwitch,
-                switchKeyword.GetLocation());
-            context.ReportDiagnostic(diagnostic);
-        }
-
         public static void ReportNotExhaustiveObjectSwitch(
             this SyntaxNodeAnalysisContext context,
             SyntaxToken switchKeyword,
@@ -40,14 +16,11 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var uncoveredType in uncoveredTypes.OrderBy(t => t.Name))
             {
                 var diagnostic = Diagnostic.Create(
-                    ExhaustiveMatchAnalyzer.NotExhaustiveObjectSwitch,
+                    Diagnostics.NotExhaustiveObjectSwitch,
                     switchKeyword.GetLocation(), uncoveredType.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }
         }
-        #endregion
-
-        #region Report Type Diagnostics
         #endregion
 
         #region Report Switch Diagnostics
@@ -56,7 +29,7 @@ namespace ExhaustiveMatching.Analyzer
             CaseSwitchLabelSyntax switchLabel)
         {
             var diagnostic = Diagnostic.Create(
-                ExhaustiveMatchAnalyzer.CasePatternNotSupported,
+                Diagnostics.CasePatternNotSupported,
                 switchLabel.Value.GetLocation(), switchLabel.Value.ToString());
             context.ReportDiagnostic(diagnostic);
         }
@@ -64,7 +37,7 @@ namespace ExhaustiveMatching.Analyzer
         public static void ReportCasePatternNotSupported(this SyntaxNodeAnalysisContext context, PatternSyntax pattern)
         {
             var diagnostic = Diagnostic.Create(
-                ExhaustiveMatchAnalyzer.CasePatternNotSupported,
+                Diagnostics.CasePatternNotSupported,
                 pattern.GetLocation(), pattern.ToString());
             context.ReportDiagnostic(diagnostic);
         }
@@ -75,7 +48,7 @@ namespace ExhaustiveMatching.Analyzer
             ExpressionSyntax switchStatementExpression)
         {
             var diagnostic = Diagnostic.Create(
-                ExhaustiveMatchAnalyzer.OpenTypeNotSupported,
+                Diagnostics.OpenTypeNotSupported,
                 switchStatementExpression.GetLocation(), type.GetFullName());
             context.ReportDiagnostic(diagnostic);
         }
@@ -85,38 +58,18 @@ namespace ExhaustiveMatching.Analyzer
             WhenClauseSyntax whenClause)
         {
             var diagnostic = Diagnostic.Create(
-                                ExhaustiveMatchAnalyzer.WhenGuardNotSupported,
+                                Diagnostics.WhenGuardNotSupported,
                                 whenClause.GetLocation());
             context.ReportDiagnostic(diagnostic);
         }
         #endregion
 
-        public static ISymbol GetSymbol(
-            this SyntaxNodeAnalysisContext context,
-            SyntaxNode node)
-        {
-            return context.SemanticModel
-                          .GetSymbolInfo(node, context.CancellationToken)
-                          .Symbol;
-        }
-
         public static INamedTypeSymbol GetClosedAttributeType(this SyntaxNodeAnalysisContext context)
-        {
-            return context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
-        }
-
-        public static ITypeSymbol GetExpressionType(
-            this SyntaxNodeAnalysisContext context,
-            ExpressionSyntax switchStatementExpression)
-        {
-            return context.SemanticModel.GetTypeInfo(switchStatementExpression, context.CancellationToken).Type;
-        }
+            => context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
 
         public static ITypeSymbol GetDeclarationType(
             this SyntaxNodeAnalysisContext context,
             DeclarationPatternSyntax declarationPattern)
-        {
-            return context.SemanticModel.GetTypeInfo(declarationPattern.Type, context.CancellationToken).Type;
-        }
+            => context.SemanticModel.GetTypeInfo(declarationPattern.Type, context.CancellationToken).Type;
     }
 }

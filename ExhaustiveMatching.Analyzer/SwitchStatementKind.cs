@@ -1,6 +1,6 @@
 namespace ExhaustiveMatching.Analyzer
 {
-    public readonly struct SwitchStatementKind
+    internal readonly struct SwitchStatementKind
     {
         public readonly bool IsExhaustive;
         public readonly bool ThrowsInvalidEnum;

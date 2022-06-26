@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Analysis;
+using ExhaustiveMatching.Analyzer.Enums.Semantics;
+using ExhaustiveMatching.Analyzer.Enums.Syntax;
+using ExhaustiveMatching.Analyzer.Enums.Utility;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ExhaustiveMatching.Analyzer
 {
-    public static class SwitchStatementAnalyzer
+    internal static class SwitchStatementAnalyzer
     {
         public static void Analyze(
             SyntaxNodeAnalysisContext context,
@@ -29,17 +33,6 @@ namespace ExhaustiveMatching.Analyzer
             // TODO report warning that throws invalid enum isn't checked for exhaustiveness
         }
 
-        private static void ReportWhenGuardNotSupported(
-            SyntaxNodeAnalysisContext context,
-            SwitchStatementSyntax switchStatement)
-        {
-            var patternLabels = switchStatement.Sections.SelectMany(s => s.Labels)
-                                               .OfType<CasePatternSwitchLabelSyntax>();
-            foreach (var patternLabel in patternLabels)
-                if (patternLabel.WhenClause != null)
-                    context.ReportWhenClauseNotSupported(patternLabel.WhenClause);
-        }
-
         private static SwitchStatementKind IsExhaustive(
             SyntaxNodeAnalysisContext context,
             SwitchStatementSyntax switchStatement)
@@ -59,37 +52,31 @@ namespace ExhaustiveMatching.Analyzer
                 throwStatement.Expression);
         }
 
+        private static void ReportWhenGuardNotSupported(
+            SyntaxNodeAnalysisContext context,
+            SwitchStatementSyntax switchStatement)
+        {
+            var patternLabels = switchStatement.Sections.SelectMany(s => s.Labels)
+                                               .OfType<CasePatternSwitchLabelSyntax>();
+            foreach (var patternLabel in patternLabels)
+                if (patternLabel.WhenClause != null)
+                    context.ReportWhenClauseNotSupported(patternLabel.WhenClause);
+        }
+
         private static void AnalyzeSwitchOnEnum(
             SyntaxNodeAnalysisContext context,
             SwitchStatementSyntax switchStatement,
-            ITypeSymbol type,
-            bool nullRequired = false)
+            ITypeSymbol enumType,
+            bool nullRequired)
         {
-            var caseSwitchLabels = switchStatement
-                                    .Sections
-                                    .SelectMany(s => s.Labels)
-                                    .OfType<CaseSwitchLabelSyntax>()
-                                    .ToList();
-
-            var symbolsUsed = caseSwitchLabels
-                              .Select(l => context.GetSymbol(l.Value))
-                              .ToImmutableHashSet();
+            var caseSwitchLabels = switchStatement.CaseSwitchLabels().ToReadOnlyList();
 
             // If null were not required, and there were a null case, that would already be a compile error
-            if (nullRequired && !caseSwitchLabels.Any(IsNullCase))
-                context.ReportNotExhaustiveNullableEnumSwitch(switchStatement.SwitchKeyword);
+            if (nullRequired && !caseSwitchLabels.Any(CaseSwitchLabelSyntaxExtensions.IsNullCase))
+                Diagnostics.ReportNotExhaustiveNullableEnumSwitch(context, switchStatement);
 
-            var allSymbols = type.GetMembers()
-                                 .Where(m => m.Kind == SymbolKind.Field)
-                                 .ToArray();
-
-            var unusedSymbols = allSymbols
-                                // Use where instead of Except because we have a dictionary
-                                .Where(m => !symbolsUsed.Contains(m))
-                                .Select(m => m.Name)
-                                .ToArray();
-
-            context.ReportNotExhaustiveEnumSwitch(switchStatement.SwitchKeyword, unusedSymbols);
+            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, enumType, caseSwitchLabels);
+            Diagnostics.ReportNotExhaustiveEnumSwitch(context, switchStatement, unusedSymbols);
         }
 
         private static void AnalyzeSwitchOnClosed(
@@ -142,15 +129,10 @@ namespace ExhaustiveMatching.Analyzer
         {
             foreach (var switchLabel in switchLabels.OfType<CaseSwitchLabelSyntax>())
             {
-                if (!IsNullCase(switchLabel) && !switchLabel.Value.IsTypeIdentifier(context, out _))
+                if (!switchLabel.IsNullCase() && !switchLabel.Value.IsTypeIdentifier(context, out _))
                     context.ReportCasePatternNotSupported(switchLabel);
                 // `case null:` is allowed
             }
-        }
-
-        private static bool IsNullCase(CaseSwitchLabelSyntax switchLabel)
-        {
-            return switchLabel.Value.IsNullLiteral();
         }
     }
 }

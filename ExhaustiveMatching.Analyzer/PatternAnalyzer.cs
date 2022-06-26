@@ -55,7 +55,7 @@ namespace ExhaustiveMatching.Analyzer
 
             if (isClosed && !allCases.Contains(symbolUsed))
             {
-                var diagnostic = Diagnostic.Create(ExhaustiveMatchAnalyzer.MatchMustBeOnCaseType,
+                var diagnostic = Diagnostic.Create(Diagnostics.MatchMustBeOnCaseType,
                     pattern.GetLocation(), symbolUsed.GetFullName(), type.GetFullName());
                 context.ReportDiagnostic(diagnostic);
             }

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ExhaustiveMatching.Analyzer
 {
-    public static class ExpressionAnalyzer
+    internal static class ExpressionAnalyzer
     {
         public static SwitchStatementKind SwitchStatementKindForThrown(
             SyntaxNodeAnalysisContext context,

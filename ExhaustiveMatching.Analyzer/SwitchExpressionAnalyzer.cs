@@ -1,12 +1,14 @@
 using System.Collections.Immutable;
 using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Semantics;
+using ExhaustiveMatching.Analyzer.Enums.Utility;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ExhaustiveMatching.Analyzer
 {
-    public static class SwitchExpressionAnalyzer
+    internal static class SwitchExpressionAnalyzer
     {
         public static void Analyze(
             SyntaxNodeAnalysisContext context,
@@ -28,6 +30,20 @@ namespace ExhaustiveMatching.Analyzer
             // TODO report warning that throws invalid enum isn't checked for exhaustiveness
         }
 
+        private static SwitchStatementKind IsExhaustive(
+            SyntaxNodeAnalysisContext context,
+            SwitchExpressionSyntax switchExpression)
+        {
+            var discardArm = switchExpression.Arms.LastOrDefault(a => a.Pattern is DiscardPatternSyntax);
+
+            // If there is no discard arm or it doesn't throw, we assume the
+            // dev doesn't want an exhaustive match
+            if (discardArm?.Expression is ThrowExpressionSyntax throwExpression)
+                return ExpressionAnalyzer.SwitchStatementKindForThrown(context, throwExpression.Expression);
+
+            return new SwitchStatementKind(false, false);
+        }
+
         private static void ReportWhenGuardNotSupported(
             SyntaxNodeAnalysisContext context,
             SwitchExpressionSyntax switchExpression)
@@ -35,22 +51,6 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var arm in switchExpression.Arms)
                 if (arm.WhenClause != null)
                     context.ReportWhenClauseNotSupported(arm.WhenClause);
-        }
-
-        private static SwitchStatementKind IsExhaustive(
-            SyntaxNodeAnalysisContext context,
-            SwitchExpressionSyntax switchExpression)
-        {
-            var discardArm = switchExpression.Arms
-                            .LastOrDefault(a => a.Pattern is DiscardPatternSyntax);
-
-            // If there is no discard arm or it doesn't throw, we assume the
-            // dev doesn't want an exhaustive match
-            if (discardArm?.Expression is ThrowExpressionSyntax throwExpression)
-                return ExpressionAnalyzer.SwitchStatementKindForThrown(context,
-                    throwExpression.Expression);
-
-            return new SwitchStatementKind(false, false);
         }
 
         private static void AnalyzeSwitchOnEnum(
@@ -61,25 +61,19 @@ namespace ExhaustiveMatching.Analyzer
         {
             var patterns = switchExpression.Arms.Select(a => a.Pattern).ToList();
 
-            var symbolsUsed = patterns.OfType<ConstantPatternSyntax>()
-                              .Select(p => context.GetSymbol(p.Expression))
-                              .ToImmutableHashSet();
-
             // If null were not required, and there were a null case, that would already be a compile error
             if (nullRequired && !patterns.Any(PatternSyntaxExtensions.IsNullPattern))
-                context.ReportNotExhaustiveNullableEnumSwitch(switchExpression.SwitchKeyword);
+                Diagnostics.ReportNotExhaustiveNullableEnumSwitch(context, switchExpression);
 
-            var allSymbols = type.GetMembers()
-                                 .Where(m => m.Kind == SymbolKind.Field)
-                                 .ToArray();
+            var symbolsUsed = patterns.OfType<ConstantPatternSyntax>().Select(p => context.GetSymbol(p.Expression))
+                                      .ToHashSet();
 
-            var unusedSymbols = allSymbols.Except(symbolsUsed)
-                                // Use where instead of Except because we have a dictionary
-                                .Where(m => !symbolsUsed.Contains(m))
-                                .Select(m => m.Name)
-                                .ToArray();
+            var allSymbols = type.GetMembers().Where(m => m.Kind == SymbolKind.Field);
 
-            context.ReportNotExhaustiveEnumSwitch(switchExpression.SwitchKeyword, unusedSymbols);
+            // Use where instead of Except because we have a set
+            var unusedSymbols = allSymbols.Where(m => !symbolsUsed.Contains(m));
+
+            Diagnostics.ReportNotExhaustiveEnumSwitch(context, switchExpression, unusedSymbols);
         }
 
         private static void AnalyzeSwitchOnClosed(

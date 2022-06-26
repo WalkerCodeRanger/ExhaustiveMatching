@@ -1,6 +1,9 @@
-using System;
+using System.Linq;
+using ExhaustiveMatching.Analyzer.Enums.Analysis;
 using ExhaustiveMatching.Analyzer.Enums.Semantics;
 using ExhaustiveMatching.Analyzer.Enums.Syntax;
+using ExhaustiveMatching.Analyzer.Enums.Utility;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,15 +15,12 @@ namespace ExhaustiveMatching.Analyzer.Enums
         {
             if (!IsExhaustive(context, switchStatement)) return;
 
-            throw new NotImplementedException();
-
             //ReportWhenGuardNotSupported(context, switchStatement);
 
-            //var switchOnType = context.GetExpressionType(switchStatement.Expression);
+            var switchOnType = context.GetExpressionType(switchStatement.Expression);
 
-            //if (switchOnType != null && switchOnType.IsEnum(context, out var enumType, out var nullable))
-            //    AnalyzeSwitchOnEnum(context, switchStatement, enumType, nullable);
-            //else if (!switchKind.ThrowsInvalidEnum) AnalyzeSwitchOnClosed(context, switchStatement, switchOnType);
+            if (switchOnType != null && switchOnType.IsEnum(context, out var enumType, out var nullable))
+                AnalyzeSwitchOnEnum(context, switchStatement, enumType, nullable);
 
             // TODO report warning that throws invalid enum isn't checked for exhaustiveness
         }
@@ -36,6 +36,33 @@ namespace ExhaustiveMatching.Analyzer.Enums
                                   ?.ThrowsType(context)
                                   ?.IsInvalidEnumArgumentException()
                    ?? false;
+        }
+
+        //private static void ReportWhenGuardNotSupported(
+        //    SyntaxNodeAnalysisContext context,
+        //    SwitchStatementSyntax switchStatement)
+        //{
+        //    var unsupportedLabels = switchStatement.Labels().Where(l => !l.IsTraditional());
+        //    foreach (var label in unsupportedLabels)
+        //        context.ReportDiagnostic();
+        //    if (patternLabel.WhenClause != null)
+        //        context.ReportWhenClauseNotSupported(patternLabel.WhenClause);
+        //}
+
+        private static void AnalyzeSwitchOnEnum(
+            SyntaxNodeAnalysisContext context,
+            SwitchStatementSyntax switchStatement,
+            ITypeSymbol type,
+            bool nullRequired = false)
+        {
+            var caseSwitchLabels = switchStatement.CaseSwitchLabels().ToReadOnlyList();
+
+            // If null were not required, and there were a null case, that would already be a compile error
+            if (nullRequired && !caseSwitchLabels.Any(l => l.IsNullCase()))
+                Diagnostics.ReportNotExhaustiveNullableEnumSwitch(context, switchStatement);
+
+            var unusedSymbols = SwitchOnEnumAnalyzer.UnusedEnumValues(context, type, caseSwitchLabels);
+            Diagnostics.ReportNotExhaustiveEnumSwitch(context, switchStatement, unusedSymbols);
         }
     }
 }
