@@ -23,13 +23,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Examples
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Analyzer.Enums", "ExhaustiveMatching.Analyzer.Enums\ExhaustiveMatching.Analyzer.Enums.csproj", "{CDA82710-7435-4B2C-96D4-9C53978338FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhaustiveMatching.Internal", "ExhaustiveMatching.Internal\ExhaustiveMatching.Internal.csproj", "{A24593CA-E7E6-47E8-AF22-5B8639705F32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Internal", "ExhaustiveMatching.Internal\ExhaustiveMatching.Internal.csproj", "{A24593CA-E7E6-47E8-AF22-5B8639705F32}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{6315164B-24BA-4C8E-9800-ED7CA782F056}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{539D20C4-D188-432A-B063-6FEDDDFDF6CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhaustiveMatching.Internal.Tests", "ExhaustiveMatching.Internal.Tests\ExhaustiveMatching.Internal.Tests.csproj", "{A8F44A64-2D0C-4398-AAC9-6AEE21EEB849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExhaustiveMatching.Internal.Tests", "ExhaustiveMatching.Internal.Tests\ExhaustiveMatching.Internal.Tests.csproj", "{A8F44A64-2D0C-4398-AAC9-6AEE21EEB849}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhaustiveMatching.Analyzer.Enums.Tests", "ExhaustiveMatching.Analyzer.Enums.Tests\ExhaustiveMatching.Analyzer.Enums.Tests.csproj", "{ADE686DC-5C89-400F-85E1-BACAF03D42DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExhaustiveMatching.Analyzer.Testing", "ExhaustiveMatching.Analyzer.Testing\ExhaustiveMatching.Analyzer.Testing.csproj", "{ADB96365-D9DF-484B-9E02-0DC4EFEAEF04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{A8F44A64-2D0C-4398-AAC9-6AEE21EEB849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8F44A64-2D0C-4398-AAC9-6AEE21EEB849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8F44A64-2D0C-4398-AAC9-6AEE21EEB849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE686DC-5C89-400F-85E1-BACAF03D42DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE686DC-5C89-400F-85E1-BACAF03D42DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE686DC-5C89-400F-85E1-BACAF03D42DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE686DC-5C89-400F-85E1-BACAF03D42DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB96365-D9DF-484B-9E02-0DC4EFEAEF04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB96365-D9DF-484B-9E02-0DC4EFEAEF04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB96365-D9DF-484B-9E02-0DC4EFEAEF04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB96365-D9DF-484B-9E02-0DC4EFEAEF04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +93,8 @@ Global
 		{CDA82710-7435-4B2C-96D4-9C53978338FF} = {6315164B-24BA-4C8E-9800-ED7CA782F056}
 		{A24593CA-E7E6-47E8-AF22-5B8639705F32} = {539D20C4-D188-432A-B063-6FEDDDFDF6CB}
 		{A8F44A64-2D0C-4398-AAC9-6AEE21EEB849} = {539D20C4-D188-432A-B063-6FEDDDFDF6CB}
+		{ADE686DC-5C89-400F-85E1-BACAF03D42DD} = {6315164B-24BA-4C8E-9800-ED7CA782F056}
+		{ADB96365-D9DF-484B-9E02-0DC4EFEAEF04} = {6315164B-24BA-4C8E-9800-ED7CA782F056}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24F89666-4837-41C9-BABE-8EA63BF3F5BC}

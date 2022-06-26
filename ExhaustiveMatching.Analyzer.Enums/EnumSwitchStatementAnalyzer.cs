@@ -32,9 +32,11 @@ namespace ExhaustiveMatching.Analyzer.Enums
 
             // If there is no default section or it doesn't throw, we assume the
             // dev doesn't want an exhaustive match
-            if (throwStatement == null)
+            if (throwStatement is null)
                 return false;
 
+            var exceptionType = throwStatement.ThrowsType(context);
+            if (exceptionType is null) return false;
             throw new NotImplementedException();
             //return ExpressionAnalyzer.SwitchStatementKindForThrown(context, throwStatement.Expression);
         }
