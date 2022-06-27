@@ -47,5 +47,22 @@ class TestClass
 }}";
             return string.Format(context, args, body);
         }
+
+        public static string FlagsEnum(string args, string body)
+        {
+            const string context = @"using System;
+using System.ComponentModel; // InvalidEnumArgumentException
+
+[Flags]
+enum FlagsEnum {{ Flag1 = 1, Flag2 = 2, }}
+
+class TestClass
+{{
+    void TestMethod({0})
+    {{{1}
+    }}
+}}";
+            return string.Format(context, args, body);
+        }
     }
 }

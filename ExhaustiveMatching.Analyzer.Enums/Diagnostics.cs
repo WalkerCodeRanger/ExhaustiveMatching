@@ -66,13 +66,11 @@ namespace ExhaustiveMatching.Analyzer.Enums
             = new DiagnosticDescriptor("EM0002", EM0002Title, EM0002Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0002Description);
 
-        public static readonly DiagnosticDescriptor CasePatternNotSupported
+        private static readonly DiagnosticDescriptor CasePatternNotSupported
             = new DiagnosticDescriptor("EM0101", EM0101Title, EM0101Message, Category,
                 DiagnosticSeverity.Error, isEnabledByDefault: true, EM0101Description);
 
         private static LocalizableResourceString LoadString(string name)
             => new LocalizableResourceString(name, Resources.ResourceManager, typeof(Resources));
-
-
     }
 }
