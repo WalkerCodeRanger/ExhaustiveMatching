@@ -15,7 +15,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Syntax
         public static ITypeSymbol ThrowsType(this ThrowStatementSyntax throwStatement, SyntaxNodeAnalysisContext context)
         {
             var exceptionType = context.GetExpressionType(throwStatement.Expression);
-            if (exceptionType == null || exceptionType.TypeKind == TypeKind.Error)
+            if (exceptionType == null || exceptionType is IErrorTypeSymbol)
                 return null;
 
             return exceptionType;

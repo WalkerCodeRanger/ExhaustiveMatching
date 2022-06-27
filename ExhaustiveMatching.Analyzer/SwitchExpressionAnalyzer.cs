@@ -21,7 +21,7 @@ namespace ExhaustiveMatching.Analyzer
 
             ReportWhenGuardNotSupported(context, switchExpression);
 
-            var switchOnType = context.GetExpressionType(switchExpression.GoverningExpression);
+            var switchOnType = context.GetExpressionConvertedType(switchExpression.GoverningExpression);
 
             if (switchOnType != null
                 && switchOnType.IsEnum(context, out var enumType, out var nullable))
@@ -58,7 +58,7 @@ namespace ExhaustiveMatching.Analyzer
         private static void AnalyzeSwitchOnEnum(
             SyntaxNodeAnalysisContext context,
             SwitchExpressionSyntax switchExpression,
-            ITypeSymbol enumType,
+            INamedTypeSymbol enumType,
             bool nullRequired)
         {
             var patterns = switchExpression.Arms.Select(a => a.Pattern).ToList();

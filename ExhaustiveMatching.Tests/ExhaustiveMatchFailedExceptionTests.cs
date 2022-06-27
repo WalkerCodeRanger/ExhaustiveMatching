@@ -21,7 +21,7 @@ namespace ExhaustiveMatching.Tests
         [Fact]
         public void EnumValueGivesEnumMessage()
         {
-            const string expectedMessage = "'ExhaustiveMatching.Tests.Fakes.ExampleEnum.Yes' was not matched. Match is supposed to be exhaustive.";
+            const string expectedMessage = "'ExhaustiveMatching.Tests.Fakes.FakeIntEnum.Yes' was not matched. Match is supposed to be exhaustive.";
 
             var ex = ExhaustiveMatch.Failed(FakeIntEnum.Yes);
 
@@ -34,7 +34,7 @@ namespace ExhaustiveMatching.Tests
         public void InvalidEnumValueGivesInvalidEnumMessage()
         {
             const FakeIntEnum invalidValue = (FakeIntEnum)123;
-            const string expectedMessage = "The value 123 is not valid for enum type 'ExhaustiveMatching.Tests.Fakes.ExampleEnum'. Match is supposed to be exhaustive.";
+            const string expectedMessage = "The value 123 is not valid for enum type 'ExhaustiveMatching.Tests.Fakes.FakeIntEnum'. Match is supposed to be exhaustive.";
 
             var ex = ExhaustiveMatch.Failed(invalidValue);
 
@@ -46,7 +46,7 @@ namespace ExhaustiveMatching.Tests
         [Fact]
         public void NullValueForNullableEnumGivesNullObjectMessage()
         {
-            const string expectedMessage = "The value 'null' was not matched when matching a 'ExhaustiveMatching.Tests.Fakes.ExampleEnum?'. Match is supposed to be exhaustive.";
+            const string expectedMessage = "The value 'null' was not matched when matching a 'ExhaustiveMatching.Tests.Fakes.FakeIntEnum?'. Match is supposed to be exhaustive.";
 
             var ex = ExhaustiveMatch.Failed((FakeIntEnum?)null);
 

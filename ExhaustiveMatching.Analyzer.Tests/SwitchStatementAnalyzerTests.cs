@@ -32,10 +32,10 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var source = CodeContext.Basic(args, test);
             var expectedFriday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Friday")
+                                 .Error("EM0001", "Enum value not handled by switch: System.DayOfWeek.Friday")
                                  .AddLocation(source, 1);
             var expectedSunday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Sunday")
+                                 .Error("EM0001", "Enum value not handled by switch: System.DayOfWeek.Sunday")
                                  .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expectedFriday, expectedSunday);
@@ -65,10 +65,10 @@ namespace ExhaustiveMatching.Analyzer.Tests
 
             var source = CodeContext.Basic(args, test);
             var expectedFriday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Friday")
+                                 .Error("EM0001", "Enum value not handled by switch: System.DayOfWeek.Friday")
                                  .AddLocation(source, 1);
             var expectedSunday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Sunday")
+                                 .Error("EM0001", "Enum value not handled by switch: System.DayOfWeek.Sunday")
                                  .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expectedFriday, expectedSunday);
@@ -101,10 +101,10 @@ namespace ExhaustiveMatching.Analyzer.Tests
                                .Error("EM0002", "null value not handled by switch")
                                .AddLocation(source, 1);
             var expectedFriday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Friday")
+                                 .Error("EM0001", "Enum value not handled by switch: System.DayOfWeek.Friday")
                                  .AddLocation(source, 1);
             var expectedSunday = DiagnosticResult
-                                 .Error("EM0001", "Enum value not handled by switch: Sunday")
+                                 .Error("EM0001", "Enum value not handled by switch: System.DayOfWeek.Sunday")
                                  .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expectedNull, expectedFriday, expectedSunday);
@@ -518,7 +518,7 @@ namespace TestNamespace
             case Result<string, string>.Error error:
                 Console.WriteLine(""Error: "" + error);
                 break;
-            case Result<string, string>.Success.AAb:
+            case Result<string, string>.Success:
                 Console.WriteLine(""Success!"");
                 break;
             default:
@@ -686,10 +686,8 @@ namespace TestNamespace
         }";
 
             var source = CodeContext.Shapes(args, test);
-            // TODO type name is bad
             var expected1 = DiagnosticResult
-                            // TODO the type in this error message is wrong
-                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.")
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.ValueTuple")
                             .AddLocation(source, 1);
             var expected2 = DiagnosticResult
                             .Error("EM0101", "Case pattern not supported in exhaustive switch: (Square square1, Square square2)")

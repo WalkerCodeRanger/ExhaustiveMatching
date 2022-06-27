@@ -20,7 +20,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         };";
 
             var source = CodeContext.CoinFlip(args, test);
-            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: CoinFlip.Tails")
                                                 .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expectedTails);
@@ -38,7 +38,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
         };";
 
             var source = CodeContext.CoinFlip(args, test);
-            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: CoinFlip.Tails")
                                                 .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expectedTails);
@@ -59,7 +59,7 @@ namespace ExhaustiveMatching.Analyzer.Tests
             var source = CodeContext.CoinFlip(args, test);
             var expectedNull = DiagnosticResult.Error("EM0002", "null value not handled by switch")
                                                .AddLocation(source, 1);
-            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: Tails")
+            var expectedTails = DiagnosticResult.Error("EM0001", "Enum value not handled by switch: CoinFlip.Tails")
                                                 .AddLocation(source, 1);
 
             await VerifyCSharpDiagnosticsAsync(source, expectedNull, expectedTails);
@@ -498,7 +498,7 @@ namespace TestNamespace
                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.HashCode")
                            .AddLocation(source, 1);
             var compileError = DiagnosticResult
-                               .Error("CS8510", "The pattern has already been handled by a previous arm of the switch expression.")
+                               .Error("CS8510", "The pattern is unreachable. It has already been handled by a previous arm of the switch expression or it is impossible to match.")
                                .AddLocation(source, 2);
 
             await VerifyCSharpDiagnosticsAsync(source, expected, compileError);
@@ -535,9 +535,8 @@ namespace TestNamespace
         };";
 
             var source = CodeContext.Shapes(args, test);
-            // TODO type name is bad
             var expected1 = DiagnosticResult
-                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.")
+                            .Error("EM0102", "Exhaustive switch must be on enum or closed type, was on: System.ValueTuple")
                             .AddLocation(source, 1);
             var expected2 = DiagnosticResult
                             .Error("EM0101",

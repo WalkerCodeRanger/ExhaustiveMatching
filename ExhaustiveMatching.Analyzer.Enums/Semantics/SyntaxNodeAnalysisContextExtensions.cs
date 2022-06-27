@@ -14,6 +14,14 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
             ExpressionSyntax switchStatementExpression)
             => context.SemanticModel.GetTypeInfo(switchStatementExpression, context.CancellationToken).Type;
 
+        /// <summary>
+        /// Get the converted type of an expression.
+        /// </summary>
+        public static ITypeSymbol GetExpressionConvertedType(
+            this SyntaxNodeAnalysisContext context,
+            ExpressionSyntax switchStatementExpression) =>
+            context.SemanticModel.GetTypeInfo(switchStatementExpression, context.CancellationToken).ConvertedType;
+
         public static ISymbol GetSymbol(this SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
             => context.SemanticModel.GetSymbolInfo(expression, context.CancellationToken).Symbol;
     }

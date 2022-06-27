@@ -20,13 +20,13 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
         public static bool IsEnum(
             this ITypeSymbol type,
             SyntaxNodeAnalysisContext context,
-            out ITypeSymbol enumType,
+            out INamedTypeSymbol enumType,
             out bool nullable)
         {
             switch (type.TypeKind)
             {
                 case TypeKind.Enum:
-                    enumType = type;
+                    enumType = (INamedTypeSymbol)type;
                     nullable = false;
                     return true;
                 case TypeKind.Struct:
@@ -36,7 +36,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
                         type = ((INamedTypeSymbol)type).TypeArguments.Single();
                         if (type.TypeKind == TypeKind.Enum)
                         {
-                            enumType = type;
+                            enumType = (INamedTypeSymbol)type;
                             nullable = true;
                             return true;
                         }

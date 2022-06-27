@@ -25,10 +25,7 @@ namespace ExhaustiveMatching.Analyzer.Testing.Verifiers
         /// <summary>
         /// Get the CSharp analyzer being tested - to be implemented in non-abstract class
         /// </summary>
-        protected virtual DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
-        {
-            return null;
-        }
+        protected abstract DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer();
         #endregion
 
         #region Verifier wrappers
