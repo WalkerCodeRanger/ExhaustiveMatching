@@ -17,6 +17,7 @@ namespace Examples.ReadMe
         public static void Example(CoinFlip coinFlip)
         {
             #region snippet
+            // EM0001: Switch on Enum Not Exhaustive
             // ERROR Enum value not handled by switch: Tails
             switch (coinFlip)
             {
@@ -27,11 +28,12 @@ namespace Examples.ReadMe
                     break;
             }
 
+            // EM0001: Switch on Enum Not Exhaustive
             // ERROR Enum value not handled by switch: Tails
             _ = coinFlip switch
             {
                 CoinFlip.Heads => "Heads!",
-                _ => throw ExhaustiveMatch.Failed(coinFlip),
+                    _ => throw ExhaustiveMatch.Failed(coinFlip),
             };
             #endregion
         }

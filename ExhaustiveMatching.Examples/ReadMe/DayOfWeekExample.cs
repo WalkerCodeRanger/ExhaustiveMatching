@@ -10,6 +10,7 @@ namespace Examples.ReadMe
         public static void Example(DayOfWeek dayOfWeek)
         {
             #region snippet
+            // EM0001: Switch on Enum Not Exhaustive
             // ERROR Enum value not handled by switch: Sunday
             switch (dayOfWeek)
             {

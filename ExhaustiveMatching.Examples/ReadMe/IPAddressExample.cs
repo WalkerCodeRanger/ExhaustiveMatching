@@ -19,6 +19,7 @@ namespace Examples.ReadMe
         public static IPv6Address Example(IPAddress ipAddress)
         {
             #region snippet
+            // EM0003: Switch on Closed Type Not Exhaustive
             // ERROR Subtype not handled by switch: IPv6Address
             switch (ipAddress)
             {
