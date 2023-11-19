@@ -54,7 +54,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
 
         public static bool HasAttribute(this ITypeSymbol symbol, INamedTypeSymbol attributeType)
         {
-            return symbol.GetAttributes().Any(a => a.AttributeClass.Equals(attributeType));
+            return symbol.GetAttributes().Any(a => a.AttributeClass != null && SymbolEqualityComparer.Default.Equals(a.AttributeClass, attributeType));
         }
 
         public static IEnumerable<TypeSyntax> GetCaseTypeSyntaxes(
@@ -62,9 +62,10 @@ namespace ExhaustiveMatching.Analyzer.Semantics
             INamedTypeSymbol closedAttributeType)
         {
             return type.GetAttributes()
-                       .Where(attr => attr.AttributeClass.Equals(closedAttributeType))
-                       .Select(attr => attr.ApplicationSyntaxReference.GetSyntax()).Cast<AttributeSyntax>()
-                       .SelectMany(attr => attr.ArgumentList.Arguments)
+                       .Where(attr => attr.AttributeClass != null && attr.ApplicationSyntaxReference != null)
+                       .Where(attr => SymbolEqualityComparer.Default.Equals(attr.AttributeClass, closedAttributeType))
+                       .Select(attr => attr.ApplicationSyntaxReference!.GetSyntax()).Cast<AttributeSyntax>()
+                       .SelectMany(attr => attr.ArgumentList?.Arguments ?? default)
                        .Select(arg => arg.Expression)
                        .OfType<TypeOfExpressionSyntax>()
                        .Select(s => s.Type);
@@ -78,7 +79,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
             INamedTypeSymbol closedAttributeType)
         {
             return type.GetAttributes()
-                       .Where(a => a.AttributeClass.Equals(closedAttributeType))
+                       .Where(a => a.AttributeClass != null && SymbolEqualityComparer.Default.Equals(a.AttributeClass, closedAttributeType))
                        .SelectMany(a => a.ConstructorArguments)
                        .SelectMany(GetTypeConstants)
                        .Select(arg => arg.Value)
@@ -150,7 +151,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
                     || !caseType.IsSubtypeOf(rootType))
                     continue;
 
-                types.Add(caseType);
+                _ = types.Add(caseType);
 
                 var caseTypes = caseType.GetValidCaseTypes(closedAttributeType);
 
@@ -185,8 +186,13 @@ namespace ExhaustiveMatching.Analyzer.Semantics
             if (rootType is INamedTypeSymbol namedType
                 && rootType.TypeKind != TypeKind.Error
                 && namedType.InstanceConstructors
-                    .All(c => c.DeclaredAccessibility == Accessibility.Private
-                    || rootType.IsRecord && c.DeclaredAccessibility == Accessibility.Protected && c.Parameters.Length == 1 && SymbolEqualityComparer.Default.Equals(c.Parameters[0].Type, rootType)))
+                    .All(c =>
+                        c.DeclaredAccessibility == Accessibility.Private
+                        || (rootType.IsRecord
+                            && c.DeclaredAccessibility == Accessibility.Protected
+                            && c.Parameters.Length == 1
+                            && SymbolEqualityComparer.Default.Equals(c.Parameters[0].Type, rootType))
+                    ))
             {
 
                 var nestedTypes = context.SemanticModel.LookupSymbols(0, rootType)
@@ -196,7 +202,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
 
                 if (nestedTypes.All(t => t.IsSealed || t is INamedTypeSymbol n && n.InstanceConstructors.All(c => c.DeclaredAccessibility == Accessibility.Private)))
                 {
-                    allCases.Add(rootType);
+                    _ = allCases.Add(rootType);
                     allCases.UnionWith(nestedTypes);
 
                     return true;

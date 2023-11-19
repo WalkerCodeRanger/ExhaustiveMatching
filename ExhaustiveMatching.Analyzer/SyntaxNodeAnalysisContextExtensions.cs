@@ -25,9 +25,7 @@ namespace ExhaustiveMatching.Analyzer
         #endregion
 
         #region Report Switch Diagnostics
-        public static void ReportCasePatternNotSupported(
-            this SyntaxNodeAnalysisContext context,
-            CaseSwitchLabelSyntax switchLabel)
+        public static void ReportCasePatternNotSupported(this SyntaxNodeAnalysisContext context, CaseSwitchLabelSyntax switchLabel)
         {
             var diagnostic = Diagnostic.Create(
                 Diagnostics.CasePatternNotSupported,
@@ -43,10 +41,7 @@ namespace ExhaustiveMatching.Analyzer
             context.ReportDiagnostic(diagnostic);
         }
 
-        public static void ReportOpenTypeNotSupported(
-            this SyntaxNodeAnalysisContext context,
-            ITypeSymbol type,
-            ExpressionSyntax switchStatementExpression)
+        public static void ReportOpenTypeNotSupported(this SyntaxNodeAnalysisContext context, ITypeSymbol type, ExpressionSyntax switchStatementExpression)
         {
             var diagnostic = Diagnostic.Create(
                 Diagnostics.OpenTypeNotSupported,
@@ -54,9 +49,7 @@ namespace ExhaustiveMatching.Analyzer
             context.ReportDiagnostic(diagnostic);
         }
 
-        public static void ReportWhenClauseNotSupported(
-            this SyntaxNodeAnalysisContext context,
-            WhenClauseSyntax whenClause)
+        public static void ReportWhenClauseNotSupported(this SyntaxNodeAnalysisContext context, WhenClauseSyntax whenClause)
         {
             var diagnostic = Diagnostic.Create(
                                 Diagnostics.WhenGuardNotSupported,
@@ -65,12 +58,10 @@ namespace ExhaustiveMatching.Analyzer
         }
         #endregion
 
-        public static INamedTypeSymbol GetClosedAttributeType(this SyntaxNodeAnalysisContext context)
+        public static INamedTypeSymbol? GetClosedAttributeType(this SyntaxNodeAnalysisContext context)
             => context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
 
-        public static ITypeSymbol GetDeclarationType(
-            this SyntaxNodeAnalysisContext context,
-            DeclarationPatternSyntax declarationPattern)
+        public static ITypeSymbol? GetDeclarationType(this SyntaxNodeAnalysisContext context, DeclarationPatternSyntax declarationPattern)
             => context.SemanticModel.GetTypeInfo(declarationPattern.Type, context.CancellationToken).Type;
     }
 }

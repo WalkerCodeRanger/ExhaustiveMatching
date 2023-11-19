@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using ExhaustiveMatching.Analyzer.Enums.Analysis;
 using ExhaustiveMatching.Analyzer.Enums.Semantics;
+using ExhaustiveMatching.Analyzer.Enums.Utility;
 using ExhaustiveMatching.Analyzer.Semantics;
 using ExhaustiveMatching.Analyzer.Syntax;
 using Microsoft.CodeAnalysis;
@@ -12,9 +13,7 @@ namespace ExhaustiveMatching.Analyzer
 {
     internal static class SwitchExpressionAnalyzer
     {
-        public static void Analyze(
-            SyntaxNodeAnalysisContext context,
-            SwitchExpressionSyntax switchExpression)
+        public static void Analyze(SyntaxNodeAnalysisContext context, SwitchExpressionSyntax switchExpression)
         {
             var switchKind = IsExhaustive(context, switchExpression);
             if (!switchKind.IsExhaustive) return;
@@ -22,14 +21,19 @@ namespace ExhaustiveMatching.Analyzer
             ReportWhenGuardNotSupported(context, switchExpression);
 
             var switchOnType = context.GetExpressionConvertedType(switchExpression.GoverningExpression);
+            if (switchOnType != null)
+            {
+                if (switchOnType.IsEnum(context, out var enumType, out var nullable))
+                {
+                    AnalyzeSwitchOnEnum(context, switchExpression, enumType, nullable);
+                }
+                else if (!switchKind.ThrowsInvalidEnum)
+                {
+                    AnalyzeSwitchOnClosed(context, switchExpression, switchOnType);
+                }
+            }
 
-            if (switchOnType != null
-                && switchOnType.IsEnum(context, out var enumType, out var nullable))
-                AnalyzeSwitchOnEnum(context, switchExpression, enumType, nullable);
-            else if (!switchKind.ThrowsInvalidEnum)
-                AnalyzeSwitchOnClosed(context, switchExpression, switchOnType);
-
-            // TODO report warning that throws invalid enum isn't checked for exhaustiveness
+            // TODO report warning that `throws <invalid enum>` isn't checked for exhaustiveness
         }
 
         private static SwitchStatementKind IsExhaustive(
@@ -80,6 +84,8 @@ namespace ExhaustiveMatching.Analyzer
             var patterns = switchExpression.Arms.Select(a => a.Pattern).ToList();
 
             var closedAttributeType = context.GetClosedAttributeType();
+            if (closedAttributeType is null) return;
+
             var isClosed = type.HasAttribute(closedAttributeType);
 
             var allCases = type.GetClosedTypeCases(closedAttributeType);
@@ -94,8 +100,8 @@ namespace ExhaustiveMatching.Analyzer
             }
 
             var typesUsed = patterns
-                .Select(pattern => pattern.GetMatchedTypeSymbol(context, type, allCases, isClosed))
-                .Where(t => t != null) // returns null for invalid case clauses
+                .Select(pattern => pattern.GetMatchedTypeSymbol(context, type, allCases, isClosed)!)  // returns null for invalid case clauses
+                .WhereNotNull()
                 .ToImmutableHashSet();
 
             // If it is an open type, we don't want to actually check for uncovered types, but

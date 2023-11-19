@@ -13,7 +13,7 @@ namespace ExhaustiveMatching.Analyzer
         {
             var exceptionType = context.SemanticModel.GetTypeInfo(thrownExpression, context.CancellationToken).Type;
             if (exceptionType == null || exceptionType.TypeKind == TypeKind.Error)
-                return new SwitchStatementKind(false, false);
+                return new SwitchStatementKind(isExhaustive: false, throwsInvalidEnum: false);
 
             // TODO GetTypeByMetadataName returns null if multiple types match. This isn't the way to do this
             var exhaustiveMatchFailedExceptionType =
