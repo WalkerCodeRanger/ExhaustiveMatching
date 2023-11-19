@@ -5,5 +5,11 @@
 # EM0001: Switch on Enum Not Exhaustive
 dotnet_diagnostic.EM0001.severity = suggestion
 
-# EM0002: Switch on Closed Type Not Exhaustive
+# EM0002: Switch on Nullable Enum Type Not Exhaustive
 dotnet_diagnostic.EM0002.severity = suggestion
+
+# EM0003: Switch on Closed Type Not Exhaustive
+dotnet_diagnostic.EM0003.severity = suggestion
+
+# EM0101: Case Pattern Not Supported
+#dotnet_diagnostic.EM0101.severity = suggestion

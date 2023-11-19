@@ -9,7 +9,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
         /// <summary>
         /// Get the type of an expression.
         /// </summary>
-        public static ITypeSymbol GetExpressionType(
+        public static ITypeSymbol? GetExpressionType(
             this SyntaxNodeAnalysisContext context,
             ExpressionSyntax switchStatementExpression)
             => context.SemanticModel.GetTypeInfo(switchStatementExpression, context.CancellationToken).Type;
@@ -17,12 +17,12 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
         /// <summary>
         /// Get the converted type of an expression.
         /// </summary>
-        public static ITypeSymbol GetExpressionConvertedType(
+        public static ITypeSymbol? GetExpressionConvertedType(
             this SyntaxNodeAnalysisContext context,
             ExpressionSyntax switchStatementExpression) =>
             context.SemanticModel.GetTypeInfo(switchStatementExpression, context.CancellationToken).ConvertedType;
 
-        public static ISymbol GetSymbol(this SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
+        public static ISymbol? GetSymbol(this SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
             => context.SemanticModel.GetSymbolInfo(expression, context.CancellationToken).Symbol;
     }
 }

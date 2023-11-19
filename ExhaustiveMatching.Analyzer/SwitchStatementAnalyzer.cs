@@ -25,14 +25,19 @@ namespace ExhaustiveMatching.Analyzer
             ReportWhenGuardNotSupported(context, switchStatement);
 
             var switchOnType = context.GetExpressionConvertedType(switchStatement.Expression);
+            if (switchOnType != null)
+            {
+                if (switchOnType.IsEnum(context, out var enumType, out var nullable))
+                {
+                    AnalyzeSwitchOnEnum(context, switchStatement, enumType, nullable);
+                }
+                else if (!switchKind.ThrowsInvalidEnum)
+                {
+                    AnalyzeSwitchOnClosed(context, switchStatement, switchOnType);
+                }
+            }
 
-            if (switchOnType != null
-                && switchOnType.IsEnum(context, out var enumType, out var nullable))
-                AnalyzeSwitchOnEnum(context, switchStatement, enumType, nullable);
-            else if (!switchKind.ThrowsInvalidEnum)
-                AnalyzeSwitchOnClosed(context, switchStatement, switchOnType);
-
-            // TODO report warning that throws invalid enum isn't checked for exhaustiveness
+            // TODO report warning that `throws <invalid enum>` isn't checked for exhaustiveness
         }
 
         private static SwitchStatementKind IsExhaustive(
@@ -42,16 +47,16 @@ namespace ExhaustiveMatching.Analyzer
             var defaultSection = switchStatement.Sections
                 .FirstOrDefault(s => s.Labels.OfType<DefaultSwitchLabelSyntax>().Any());
 
-            var throwStatement = defaultSection?.Statements
-                                    .OfType<ThrowStatementSyntax>().FirstOrDefault();
+            var throwStatement = defaultSection?.Statements.OfType<ThrowStatementSyntax>().FirstOrDefault();
 
             // If there is no default section or it doesn't throw, we assume the
             // dev doesn't want an exhaustive match
-            if (throwStatement == null)
-                return new SwitchStatementKind(false, false);
+            if (throwStatement == null || throwStatement.Expression is null)
+            {
+                return new SwitchStatementKind(isExhaustive: false, throwsInvalidEnum: false);
+            }
 
-            return ExpressionAnalyzer.SwitchStatementKindForThrown(context,
-                throwStatement.Expression);
+            return ExpressionAnalyzer.SwitchStatementKindForThrown(context, throwStatement.Expression);
         }
 
         private static void ReportWhenGuardNotSupported(
@@ -93,6 +98,8 @@ namespace ExhaustiveMatching.Analyzer
             CheckForNonPatternCases(context, switchLabels);
 
             var closedAttributeType = context.GetClosedAttributeType();
+            if (closedAttributeType is null) return;
+
             var isClosed = type.HasAttribute(closedAttributeType);
 
             var allCases = type.GetClosedTypeCases(closedAttributeType);
@@ -107,8 +114,8 @@ namespace ExhaustiveMatching.Analyzer
             }
 
             var typesUsed = switchLabels
-                .Select(switchLabel => switchLabel.GetMatchedTypeSymbol(context, type, allCases, isClosed))
-                .Where(t => t != null) // returns null for invalid case clauses
+                .Select(switchLabel => switchLabel.GetMatchedTypeSymbol(context, type, allCases, isClosed)) // returns null for invalid case clauses
+                .WhereNotNull()
                 .ToImmutableHashSet();
 
             // If it is an open type, we don't want to actually check for uncovered types, but

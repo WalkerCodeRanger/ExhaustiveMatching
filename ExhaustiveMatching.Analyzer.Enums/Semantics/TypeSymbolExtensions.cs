@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -20,7 +21,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
         public static bool IsEnum(
             this ITypeSymbol type,
             SyntaxNodeAnalysisContext context,
-            out INamedTypeSymbol enumType,
+            [NotNullWhen(true)] out INamedTypeSymbol? enumType,
             out bool nullable)
         {
             switch (type.TypeKind)
@@ -31,7 +32,7 @@ namespace ExhaustiveMatching.Analyzer.Enums.Semantics
                     return true;
                 case TypeKind.Struct:
                     var nullableType = context.Compilation.GetTypeByMetadataName(TypeNames.Nullable);
-                    if (type.OriginalDefinition.Equals(nullableType))
+                    if (SymbolEqualityComparer.IncludeNullability.Equals(type.OriginalDefinition, nullableType))
                     {
                         type = ((INamedTypeSymbol)type).TypeArguments.Single();
                         if (type.TypeKind == TypeKind.Enum)

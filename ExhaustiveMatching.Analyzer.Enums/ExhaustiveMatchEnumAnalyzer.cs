@@ -17,8 +17,7 @@ namespace ExhaustiveMatching.Analyzer.Enums
         public override void Initialize(AnalysisContext context)
         {
             context.EnableConcurrentExecution();
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze
-                                                   | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
             //context.RegisterSyntaxNodeAction(AnalyzeSwitchExpression, SyntaxKind.SwitchExpression);
         }
@@ -37,7 +36,7 @@ namespace ExhaustiveMatching.Analyzer.Enums
                 // Include stack trace info by ToString() the exception as part of the message.
                 // Only the first line is included, so we have to remove newlines
                 var exDetails = Regex.Replace(ex.ToString(), @"\r\n?|\n|\r", " ");
-                throw new Exception($"Uncaught exception in analyzer: {exDetails}");
+                throw new Exception($"Uncaught exception in analyzer: {exDetails}", innerException: ex);
             }
         }
     }

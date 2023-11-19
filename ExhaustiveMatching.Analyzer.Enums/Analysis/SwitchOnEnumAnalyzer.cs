@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ExhaustiveMatching.Analyzer.Enums.Semantics;
 using ExhaustiveMatching.Analyzer.Enums.Utility;
@@ -26,14 +27,19 @@ namespace ExhaustiveMatching.Analyzer.Enums.Analysis
             // SortedSet. Both of those use more memory and have more overhead. Hash of primitive
             // types is not normally well distributed. It is expected that the values used will
             // rarely contain duplicates.
-            var valuesUsed = caseExpressions.Select(e => GetEnumCaseValue(context, e, enumType))
-                                            .WhereNotNull().ToArray();
+            var valuesUsed = caseExpressions
+                .Select(e => GetEnumCaseValue(context, e, enumType))
+                .WhereNotNull()
+                .ToArray();
+
             Array.Sort(valuesUsed);
 
             var allSymbols = enumType.GetMembers().OfType<IFieldSymbol>();
 
-            // Use where instead of Except because we have a set
-            return allSymbols.Where(s => !SortedArrayContains(valuesUsed, s.ConstantValue));
+            // Use `Where` instead of `Except` because we have a set
+            return allSymbols
+                .Where(s => s.ConstantValue != null)
+                .Where(s => !SortedArrayContains(valuesUsed, s.ConstantValue!));
         }
 
         /// <summary>
@@ -42,16 +48,16 @@ namespace ExhaustiveMatching.Analyzer.Enums.Analysis
         /// <remarks>Case expressions can contain errors. They can also be various forms of literal
         /// zero where the type won't match the underlying type of the enum. This deals with all
         /// of that.</remarks>
-        private static object GetEnumCaseValue(
+        private static object? GetEnumCaseValue(
             SyntaxNodeAnalysisContext context,
             ExpressionSyntax expression,
             INamedTypeSymbol enumType)
         {
-            var underlyingType = enumType.EnumUnderlyingType.SpecialType;
+            var underlyingType = enumType.EnumUnderlyingType?.SpecialType ?? SpecialType.None;
             return GetEnumCaseValue(context.SemanticModel, expression, underlyingType.ToTypeCode());
         }
 
-        private static object GetEnumCaseValue(
+        private static object? GetEnumCaseValue(
             SemanticModel semanticModel,
             ExpressionSyntax expression,
             TypeCode typeCode)
@@ -78,12 +84,12 @@ namespace ExhaustiveMatching.Analyzer.Enums.Analysis
         /// <remarks>There seems to be no built in way to try a conversion. Without writing
         /// custom converter code for every pair of types, the only option is to catch the exception
         /// from <see cref="Convert.ChangeType(object,Type)"/></remarks>
-        private static bool TryChangeType(object value, TypeCode typeCode, out object converted)
+        private static bool TryChangeType(object value, TypeCode typeCode, [NotNullWhen(true)] out object? converted)
         {
             try
             {
                 converted = Convert.ChangeType(value, typeCode);
-                return true;
+                return converted != null;
             }
             catch
             {

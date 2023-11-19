@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ExhaustiveMatching.Analyzer.Enums.Semantics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -7,7 +8,7 @@ namespace ExhaustiveMatching.Analyzer.Syntax
 {
     public static class ExpressionSyntaxExtensions
     {
-        public static bool IsTypeIdentifier(this ExpressionSyntax expression, SyntaxNodeAnalysisContext context, out ITypeSymbol typeSymbol)
+        public static bool IsTypeIdentifier(this ExpressionSyntax expression, SyntaxNodeAnalysisContext context, [NotNullWhen(true)] out ITypeSymbol? typeSymbol)
         {
             if (context.GetSymbol(expression) is ITypeSymbol t)
             {

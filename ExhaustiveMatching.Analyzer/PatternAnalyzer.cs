@@ -9,7 +9,7 @@ namespace ExhaustiveMatching.Analyzer
 {
     internal static class PatternAnalyzer
     {
-        public static ITypeSymbol GetMatchedTypeSymbol(
+        public static ITypeSymbol? GetMatchedTypeSymbol(
             this SwitchLabelSyntax switchLabel,
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type,
@@ -27,14 +27,14 @@ namespace ExhaustiveMatching.Analyzer
             }
         }
 
-        public static ITypeSymbol GetMatchedTypeSymbol(
+        public static ITypeSymbol? GetMatchedTypeSymbol(
             this PatternSyntax pattern,
             SyntaxNodeAnalysisContext context,
             ITypeSymbol type,
             HashSet<ITypeSymbol> allCases,
             bool isClosed)
         {
-            ITypeSymbol symbolUsed;
+            ITypeSymbol? symbolUsed;
             switch (pattern)
             {
                 case DeclarationPatternSyntax declarationPattern:
@@ -55,7 +55,7 @@ namespace ExhaustiveMatching.Analyzer
                     return null;
             }
 
-            if (isClosed && !allCases.Contains(symbolUsed))
+            if (isClosed && symbolUsed != null && !allCases.Contains(symbolUsed))
             {
                 var diagnostic = Diagnostic.Create(Diagnostics.MatchMustBeOnCaseType,
                     pattern.GetLocation(), symbolUsed.GetFullName(), type.GetFullName());
