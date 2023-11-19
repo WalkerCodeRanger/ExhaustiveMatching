@@ -2,8 +2,8 @@
 <package>
   <metadata>
     <id>ExhaustiveMatching.Analyzer</id>
-    <version>0.5.0</version>
-    <authors>Jeff Walker</authors>
+    <version>0.6.0-dev</version>
+    <authors>Jeff Walker + Contributors</authors>
     <owners>Jeff Walker</owners>
     <license type="expression">BSD-3-Clause</license>
     <projectUrl>https://github.com/WalkerCodeRanger/ExhaustiveMatching</projectUrl>
@@ -20,7 +20,7 @@ ExhaustiveMatching.Analyzer goes beyond what other languages support by handling
 hierarchies.
     </description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2019 Jeff Walker</copyright>
+    <copyright>Copyright 2019-2023 Jeff Walker, Contributors</copyright>
     <tags>analyzers, switch, exhaustive, match, discriminated, union, sum-type</tags>
   </metadata>
   <files>
