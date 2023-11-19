@@ -17,8 +17,10 @@ namespace ExhaustiveMatching.Analyzer
             TypeDeclarationSyntax typeDeclaration)
         {
             var closedAttribute = context.Compilation.GetTypeByMetadataName(TypeNames.ClosedAttribute);
+            if (closedAttribute is null) return;
 
-            var typeSymbol = (ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
+            var typeSymbol = (ITypeSymbol?)context.SemanticModel.GetDeclaredSymbol(typeDeclaration);
+            if (typeSymbol is null) return;
 
             if (typeSymbol.IsDirectSubtypeOfTypeWithAttribute(closedAttribute))
                 MustBeCase(context, typeDeclaration, typeSymbol, closedAttribute);
@@ -52,7 +54,7 @@ namespace ExhaustiveMatching.Analyzer
             foreach (var superType in closedSuperTypes)
             {
                 var isMember = superType.GetCaseTypes(closedAttribute)
-                                .Any(t => t.Equals(typeSymbol));
+                                .Any(t => t.EqualsDisregardingNullability(typeSymbol));
                 if (isMember)
                     continue;
 
@@ -101,7 +103,7 @@ namespace ExhaustiveMatching.Analyzer
               {
                   var constructorSymbol = context.GetSymbol(a);
                   var attributeSymbol = constructorSymbol?.ContainingSymbol;
-                  return closedAttribute.Equals(attributeSymbol);
+                  return closedAttribute.EqualsDisregardingNullability(attributeSymbol);
               }).ToList();
 
             return closedAttributes;
@@ -120,14 +122,15 @@ namespace ExhaustiveMatching.Analyzer
             }
 
             var typeSyntaxes = closedAttributes
-                        .SelectMany(a => a.ArgumentList.Arguments)
-                        .Select(arg => arg.Expression)
-                        .OfType<TypeOfExpressionSyntax>()
-                        .Select(e => e.Type);
+                .Where(a => a.ArgumentList != null)
+                .SelectMany(a => a.ArgumentList!.Arguments)
+                .Select(arg => arg.Expression)
+                .OfType<TypeOfExpressionSyntax>()
+                .Select(e => e.Type);
 
             var duplicates = typeSyntaxes
-                             .GroupBy(t => context.GetSymbol(t))
-                             .SelectMany(g => g.Skip(1).Select(type => (g.Key, type)));
+                .GroupBy(t => context.GetSymbol(t)!)
+                .SelectMany(g => g.Skip(1).Select(type => (g.Key, type)));
 
             foreach (var (symbol, syntax) in duplicates)
             {
@@ -170,12 +173,12 @@ namespace ExhaustiveMatching.Analyzer
                     var caseType = context.SemanticModel.GetTypeInfo(caseTypeSyntax).Type;
 
                     if (caseType == null
-                        || typeSymbol.Equals(caseType.BaseType) // BaseType is null for interfaces, avoid calling method on it
-                        || caseType.Interfaces.Any(i => i.Equals(typeSymbol)))
+                        || typeSymbol.EqualsDisregardingNullability(caseType.BaseType) // BaseType is null for interfaces, avoid calling method on it
+                        || caseType.Interfaces.Any(i => i.EqualsDisregardingNullability(typeSymbol)))
                         continue;
 
                     if (caseType.InheritsFrom(typeSymbol)
-                        || caseType.AllInterfaces.Any(i => i.Equals(typeSymbol)))
+                        || caseType.AllInterfaces.Any(i => i.EqualsDisregardingNullability(typeSymbol)))
                     {
                         // It's a subtype, just not a direct one
                         var diagnostic = Diagnostic.Create(Diagnostics.MustBeDirectSubtype,

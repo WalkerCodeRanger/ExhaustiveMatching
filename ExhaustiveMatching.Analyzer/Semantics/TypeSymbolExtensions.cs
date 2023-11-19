@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ExhaustiveMatching.Analyzer.Utility;
 using Microsoft.CodeAnalysis;
@@ -11,12 +12,12 @@ namespace ExhaustiveMatching.Analyzer.Semantics
     {
         public static bool IsSubtypeOf(this ITypeSymbol symbol, ITypeSymbol type)
         {
-            return symbol.Equals(type) || symbol.Implements(type) || symbol.InheritsFrom(type);
+            return symbol.EqualsDisregardingNullability(type) || symbol.Implements(type) || symbol.InheritsFrom(type);
         }
 
         public static bool IsDirectSubtypeOf(this ITypeSymbol symbol, ITypeSymbol type)
         {
-            return symbol.DirectlyImplements(type) || Equals(symbol.BaseType, type);
+            return symbol.DirectlyImplements(type) || type.EqualsDisregardingNullability(symbol.BaseType);
         }
 
         public static bool DirectlyImplements(this ITypeSymbol symbol, ITypeSymbol type)
@@ -41,7 +42,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
 
         public static bool InheritsFrom(this ITypeSymbol symbol, ITypeSymbol type)
         {
-            return symbol.BaseClasses().Any(t => t.Equals(type));
+            return symbol.BaseClasses().Any(t => t.EqualsDisregardingNullability(type));
         }
 
         public static bool IsDirectSubtypeOfTypeWithAttribute(
@@ -54,7 +55,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
 
         public static bool HasAttribute(this ITypeSymbol symbol, INamedTypeSymbol attributeType)
         {
-            return symbol.GetAttributes().Any(a => a.AttributeClass != null && SymbolEqualityComparer.Default.Equals(a.AttributeClass, attributeType));
+            return symbol.GetAttributes().Any(a => attributeType.EqualsDisregardingNullability(a.AttributeClass));
         }
 
         public static IEnumerable<TypeSyntax> GetCaseTypeSyntaxes(
@@ -63,7 +64,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
         {
             return type.GetAttributes()
                        .Where(attr => attr.AttributeClass != null && attr.ApplicationSyntaxReference != null)
-                       .Where(attr => SymbolEqualityComparer.Default.Equals(attr.AttributeClass, closedAttributeType))
+                       .Where(attr => closedAttributeType.EqualsDisregardingNullability(attr.AttributeClass))
                        .Select(attr => attr.ApplicationSyntaxReference!.GetSyntax()).Cast<AttributeSyntax>()
                        .SelectMany(attr => attr.ArgumentList?.Arguments ?? default)
                        .Select(arg => arg.Expression)
@@ -79,7 +80,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
             INamedTypeSymbol closedAttributeType)
         {
             return type.GetAttributes()
-                       .Where(a => a.AttributeClass != null && SymbolEqualityComparer.Default.Equals(a.AttributeClass, closedAttributeType))
+                       .Where(a => closedAttributeType.EqualsDisregardingNullability(a.AttributeClass))
                        .SelectMany(a => a.ConstructorArguments)
                        .SelectMany(GetTypeConstants)
                        .Select(arg => arg.Value)
@@ -191,7 +192,7 @@ namespace ExhaustiveMatching.Analyzer.Semantics
                         || (rootType.IsRecord
                             && c.DeclaredAccessibility == Accessibility.Protected
                             && c.Parameters.Length == 1
-                            && SymbolEqualityComparer.Default.Equals(c.Parameters[0].Type, rootType))
+                            && rootType.EqualsDisregardingNullability(c.Parameters[0].Type))
                     ))
             {
 
